@@ -1,0 +1,96 @@
+﻿<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Cobro de liquidaciones de O.S.</span>
+                <loading *ngIf="isLoading"></loading>
+                <app-dynamic-filter [show]="!isLoading" [(controls)]="controlsToFilter" (filterChange)="onFilterChange($event)">
+                </app-dynamic-filter>
+                <table class="centered" *ngIf="!isLoading">
+                    <thead>
+                        <tr>
+                            <th class="text-left">O.S</th>
+                            <th>Código Liq.</th>
+                            <th>Fecha Liq.</th>
+                            <th>Periodo</th>
+                            <th>Estado</th>
+                            <th>Saldo</th>
+                            <th>Acciones</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let item of dataSource" class="hoverable">
+                        <tr class="center-align row-liquidation">
+                            <td class="text-left">{{item.medicalInsuranceName}}</td>
+                            <td>{{item.number}}</td>
+                            <td>{{item.dateGeneration | date:'dd/MM/yyyy'}}</td>
+                            <td>{{item.dateFrom | date:'dd/MM/yyyy' }} - {{item.dateTo | date:'dd/MM/yyyy'}}</td>
+                            <td>{{item.state}}</td>
+                            <td>${{item.saldo}}</td>
+                            <td style="white-space: nowrap;">
+                                <a (click)="openModal(item)" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Cobrar"><i class="fa fa-money"></i></a>
+                            </td>
+                            <td (click)="item.showPractices=!item.showPractices">
+                                <i *ngIf="item.showPractices" class="material-icons less">expand_less</i>
+                                <i *ngIf="!item.showPractices" class="material-icons more">expand_more</i>
+                            </td>
+                        </tr>
+                        <tr *ngIf="item.showPractices">
+                            <td [attr.colspan]="8">
+                                <table class="highlight centered">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left">Práctica</th>
+                                            <th>Código</th>
+                                            <th>O.S</th>
+                                            <th>Profesional</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let liq of item.liquidations">
+                                            <td class="text-left">
+                                                {{liq.practiceName}}
+                                            </td>
+                                            <td>{{liq.code}}</td>
+                                            <td>{{liq.medicalInsuranceName}}</td>
+                                            <td>{{liq.professionalName}}</td>
+                                            <td style="white-space: nowrap;">
+                                                <a (click)="rejectPractice(liq)" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Rechazar"><i class="fa fa-times"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <app-paginator [show]="!isLoading" (pageChange)="onPageChange()">
+                </app-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL-->
+<div class="modal modal-styles" id="modalCob" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions">
+    <div class="modal-content">
+        <span class="title center-align">Cargar cantidad abonada</span>
+        <div class="row margin top-s">
+            <div class="input-field col s12">
+                <input id="cobro" [(ngModel)]="payment" (keyup)="onKeyUp($event)" type="number" min="0" class="validate" required>
+                <label for="cobro">Cargar Pago:</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="waves-effect waves-light btn btn-form center red" (click)="closeModal()">Cancelar</button>
+        <button-submit [btntext]="'Confirmar'" data-dismiss="modal"
+                       (formSubmit)="collectLiquidation()"
+                       [isLoading]="isSaving"
+                       [btnDisabled]="!paymentValid"
+                       [loadingGlobal]="true"></button-submit>
+    </div>
+</div>
+<!---->

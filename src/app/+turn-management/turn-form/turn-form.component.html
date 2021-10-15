@@ -1,0 +1,219 @@
+﻿<!-- <div class="row"> -->
+<span class="title center-align">{{(isNew ? 'Nuevo' : 'Modificar')}} Turno
+    <span *ngIf="isNew && !isLoading && !!form">
+        <a [href]="url" target="_blank" class="waves-effect waves-light btn btn-form right blue">Ver contrato</a>
+    </span>
+</span>
+
+<!-- </div> -->
+<loading *ngIf="isLoading"></loading>
+
+<form #f="ngForm" [formGroup]="form" *ngIf="!isLoading">
+    <div class="row">
+        <div class="input-field col s12 m2">
+            <!-- <i class="material-icons prefix">account_circle</i> -->
+            <input id="date" type="text" value="{{formattedDate}}" readonly>
+            <label class="active" for="date">Fecha</label>
+        </div>
+        <div class="input-field col s12 m2">
+            <!-- <i class="material-icons prefix">account_circle</i> -->
+            <input id="time" type="text" value="{{turn.time}}" readonly>
+            <label class="active" for="time">Hora</label>
+        </div>
+        <div class="input-field col s12 m3">
+            <!-- <i class="material-icons prefix">account_circle</i> -->
+            <input id="medicalOffice" type="text" value="{{turn.medicalOffice}}" readonly>
+            <label class="active" for="medicalOffice">Consultorio</label>
+        </div>
+        <div class="input-field col s12 m3">
+            <select materialize="material_select" [materializeSelectOptions]="turnStates" name="turnStateNumber"
+                    formControlName="turnStateNumber">
+                <!-- <option value="" disabled selected>Elija una opción</option> -->
+                <option *ngFor="let item of turnStates" [ngValue]="item.number">{{item.name}}</option>
+            </select>
+            <label for="turnStateNumber">Estado</label>
+        </div>
+        <div class="col s12 m2">
+            <!-- <label class="active">Es sobreturno</label> -->
+            <div style="padding-top: 0.7 em">
+                <input type="checkbox" id="uponturn" formControlName="uponTurn" />
+                <label for="uponturn" style="margin-top: 2rem;">Es sobreturno</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12 m3">
+            <!-- <i class="material-icons prefix">account_circle</i> -->
+            <input id="specialtyName" type="text" value="{{turn.specialtyName}}" readonly>
+            <label class="active" for="specialtyName">Especialidad</label>
+        </div>
+        <div class="input-field col s12 m4">
+            <!-- <i class="material-icons prefix">account_circle</i> -->
+            <input id="professionalName" type="text" value="{{turn.professionalName}}" readonly>
+            <label class="active" for="professionalName">Profesional</label>
+        </div>
+        <div class="input-field col s9 m4" [hidden]="showPatientForm">
+            <app-input-search #patientIS
+                              [label]="'Paciente'"
+                              [form]="form"
+                              [formControlNameIS]="'patientNumber'"
+                              [requiredIS]="true"
+                              [readonlyIS]="!isNew"
+                              [readonlyValue]="turn.patientName"
+                              (valueChange)="onChangePatient()">
+            </app-input-search>
+        </div>
+        <div class="input-field col s3 m1" *ngIf="!showPatientForm && isNew">
+            <button type="button" class="btn-floating btn-small waves-effect waves-light center blue" title="Crear nuevo paciente" (click)="openPatientForm()">
+                <i class="fa fa-plus"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <patient-form *ngIf="showPatientForm"
+                      (formChange)="validatePatientForm($event)"
+                      (listPMIChange)="reloadPMICombo()">
+        </patient-form>
+
+        <div class="center-align" *ngIf="showPatientForm">
+            <button type="button" class="waves-effect waves-light btn btn-form center blue lighten-1"
+                    (click)="cancelPatient()" style="margin-bottom: 1.5rem; margin-top: 1.5rem;">
+                Cancelar paciente
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- <div class="input-field col s12 m6" *ngIf="!showPatientForm">
+            <select materialize="material_select" [materializeSelectOptions]="medicalInsurances" name="medicalInsuranceNumber"
+                formControlName="medicalInsuranceNumber" (change)="onChangeMedicalInsurance()">
+                <option value="" disabled selected>Elija una opción</option>
+                <option *ngFor="let item of medicalInsurances" [ngValue]="item.number">{{item.name}}</option>
+            </select>
+            <label for="medicalInsuranceNumber">Obra Social</label>
+            <app-control-error-message [form]="f" [control]="{key: 'medicalInsuranceNumber'}"></app-control-error-message>
+        </div> -->
+        <div class="input-field col s12 m4" *ngIf="!showPatientForm">
+            <input-auto-complete [label]="'Obra Social'" [requiredIAC]="true"
+                                 [form]="form" [formControlNameIAC]="'medicalInsuranceNumber'"
+                                 [isLoading]="loadingMInsuranceIAC"
+                                 [source]="medicalInsurances"
+                                 (valueChange)="onChangeMedicalInsurance()">
+            </input-auto-complete>
+        </div>
+        <div class="input-field col s12 m4" *ngIf="showPatientForm">
+            <input-auto-complete [label]="'Obra Social'" [requiredIAC]="true"
+                                 [form]="form" [formControlNameIAC]="'medicalInsuranceNumber'"
+                                 [source]="listPMI"
+                                 [displayPropertyName]="'socialName'"
+                                 [valuePropertyName]="'socialNumber'"
+                                 (valueChange)="onChangeMedicalInsurance()">
+            </input-auto-complete>
+        </div>
+
+        <div class="input-field col s12 m4">
+            <input-auto-complete [label]="'Práctica'" [requiredIAC]="true"
+                                 [form]="form" [formControlNameIAC]="'practiceNumber'"
+                                 [source]="practices" [isLoading]="loadingPracticeIAC">
+            </input-auto-complete>
+        </div>
+        <div class="input-field col s12 m2">
+            <input id="coinsurance" type="number" class="validate" formControlName="coinsurancePaymented">
+            <label class="active" for="coinsurance">Coseguro</label>
+        </div>
+        <!-- <div class="input-field col s12 m6">
+            <select materialize="material_select" [materializeSelectOptions]="practices" name="practiceNumber" formControlName="practiceNumber">
+                <option value="" disabled selected>Elija una opción</option>
+                <option *ngFor="let item of practices" [ngValue]="item.number">{{item.name}}</option>
+            </select>
+            <label for="practiceNumber">Práctica</label>
+            <app-control-error-message [form]="f" [control]="{key: 'practiceNumber'}"></app-control-error-message>
+        </div> -->
+        <!-- <div class="col s12 m2">
+            <label class="active">Cobrar Coseguro</label>
+            <div style="padding-top: 0.7rem">
+                <input formControlName="coinsuranceFac" type="radio" id="cofac1" [value]="true" />
+                <label style="padding-right: 9%;" for="cofac1">Si</label>
+                <input formControlName="coinsuranceFac" type="radio" id="cofac2" [value]="false" />
+                <label for="cofac2">No</label>
+            </div>
+        </div>-->
+
+    </div>
+    <div class="row margin top-1">
+        <div class="input-field col s12 m12">
+            <textarea id="authorizationCode" formControlName="authorizationCode" type="text" class="materialize-textarea validate" maxlength="15"></textarea>
+            <label for="authorizationCode">Codigo de Autorizacion</label>
+        </div>
+    </div>
+
+    <div class="row margin top-1">
+        <div class="input-field col s12 m12">
+            <textarea id="observation" formControlName="observation" type="text" class="materialize-textarea validate" maxlength="300"></textarea>
+            <label for="observation">Observación</label>
+        </div>
+    </div>
+
+    <div class="row center-align">
+        <button type="button" class="waves-effect waves-light btn btn-form center"
+                [disabled]="!this.selectedPatient" (click)="openModal()">
+            Historial de turnos
+        </button>
+        <button *ngIf="!isSaving" type="submit" [disabled]="!f.form.valid || !statusPatientForm || !listPMIValid" class="waves-effect waves-light btn btn-form center blue"
+                (click)="saveTurn()">
+            Guardar
+        </button>
+        <button *ngIf="isSaving" class="waves-effect waves-light btn btn-form center blue" disabled>
+            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+            Guardando
+        </button>
+        <button type="button" class="waves-effect waves-light btn btn-form center red"
+                (click)="onCancelButton()">
+            Cancelar
+        </button>
+    </div>
+</form>
+
+<!-- Modal structure centered  -->
+<div id="modalConsultar" class="modal modal-fixed-footer modal-styles" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions">
+    <div class="modal-header">
+        <span class="card-title center-align">{{this.patientIS?.selected?.name}}</span>
+    </div>
+    <div class="modal-content">
+        <table class="highlight">
+            <thead align="center">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Práctica</th>
+                    <th>Observación</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of patientTurns">
+                    <td>{{item.date | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{item.time | slice:0:5}}</td>
+                    <td>{{item.practice}}</td>
+                    <td>{{item.observation}}</td>
+                    <td>{{item.turnState}}</td>
+                </tr>
+                <tr *ngIf="!patientTurns?.length">
+                    <td style="text-align: center;" colspan="5">Paciente no registra turnos en los ultimos dos meses.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="waves-effect waves-light btn btn-form center red" (click)="closeModal()">Cerrar</button>
+    </div>
+</div>
+
+<app-modal-confirm [title]="isNew ? 'Editar' : 'Alta'"
+                   [message]="'¿Desea regresar sin guardar los cambios?'"
+                   [openModalSubject]="openModalDiscardSubject"
+                   (agree)="discardChanges()">
+</app-modal-confirm>

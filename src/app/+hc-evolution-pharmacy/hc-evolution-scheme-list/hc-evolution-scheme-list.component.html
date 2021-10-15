@@ -1,0 +1,15 @@
+﻿<app-dynamic-table [sourceService]="hcEvolutionSchemeService"
+                   [columns]="hcEvolutionSchemeService.columns"
+                   [disableButtonFloating]="true"
+                   [hideActions]="true"
+                   [reloadingData]="reloadingData"
+                   [selectedEnabled]="true"
+                   (actionClick)="onActionClick($event)"
+                   (selectedChange)="selectedChange($event)"
+                   (reloadingDataChange)="updateReloadingData($event)">
+</app-dynamic-table>
+<app-modal-confirm [title]="'Eliminar Esquema'"
+                   [message]="'¿Desea eliminar el esquema?'"
+                   [openModalSubject]="modalDeleteSubject"
+                   (agree)="deleteScheme()">
+</app-modal-confirm>

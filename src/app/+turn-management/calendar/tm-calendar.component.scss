@@ -1,0 +1,50 @@
+/* START - styles for box-legend */
+.center-box-legend {
+    display: flex;
+    justify-content: center;
+}
+
+.icon-legend {
+    float: left;
+    margin-right: 1rem;
+}
+
+.box-legend {
+    margin-bottom: 1rem !important;
+    border-color: #cacaca;
+    border-style: solid;
+    border-width: 1px;
+    padding: 5px;
+}
+/* END - styles for box-legend */
+
+/* START - styles for full-calendar */
+:host /deep/ .fc-header-toolbar h2 {
+    font-size: 2.5rem;
+}
+
+:host /deep/ .fc-state-default {
+    background-color: #14a597 !important;
+    background-image: none !important;
+    border: none !important;
+    border-radius: 2px !important;
+    color: #fff !important;
+    margin: 1px !important;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2) !important;
+
+    &:hover {
+        background-color: #1ecab9 !important;
+    }
+}
+
+:host /deep/ .fc-state-disabled {
+    background-color: #9a9c9c  !important;
+    &:hover {
+        background-color: #9a9c9c  !important;
+    }
+}
+
+:host /deep/ table {
+    border-bottom: inherit !important;
+}
+/* END - styles for full-calendar */

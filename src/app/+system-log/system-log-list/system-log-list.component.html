@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Archivos Logs del Sistema</span>
+        <loading *ngIf="isLoading"></loading>
+        <table class="centered" *ngIf="!isLoading">
+          <thead>
+            <tr>
+              <th class="text-left">Nombre</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let item of dataSource" class="hoverable">
+            <tr class="center-align">
+              <td class="text-left">{{item}}</td>
+              <td style="white-space: nowrap;">
+                <a (click)="actionReport({e:$event,i:item})" materialize="tooltip" data-position="bottom"
+                  data-delay="50" data-tooltip="Descargar"><i class="fa fa-download"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <app-paginator [show]="!isLoading" (pageChange)="onPageChange()">
+        </app-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<iframe id="downloader" hidden></iframe>

@@ -1,0 +1,28 @@
+<div class="row">
+	<div class="col s12">
+		<span class="card-title center-align">Esquemas de Medicacion del Paciente</span>
+		<div class="row">
+			<div id="pharmacySchemes" class="col s12">
+				<hc-evolution-scheme-list #schemesListComponent 
+					(actionClick)="onActionScheme($event)" 
+					(actionSelected)="onActionSelected($event)">
+				</hc-evolution-scheme-list>
+			</div>
+		</div>
+		<div class="row" *ngIf="showDetailScheme">
+			<app-dynamic-table [sourceService]="pharmacySchemeItemService" 
+							[columns]="pharmacySchemeItemService.columns" 
+							[disabledDetail]="true"
+							[disableButtonFloating]="true"
+							[hideActions]="isReadOnlySchemeItems" 
+							[reloadingData]="reloadingSchemeItems" 
+							[title]="'Listado de Medicamentos del último esquema'" 
+							(actionClick)="onActionMedicamentClick($event)"
+							(reloadingDataChange)="updateReloadingSchemeItems($event)">
+			</app-dynamic-table>
+		</div>
+		<div class="row left-align">
+			<button class="waves-effect waves-light btn blue center-align" (click)="viewBack()">Atras</button>
+		</div>
+	</div>
+</div>

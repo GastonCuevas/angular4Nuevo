@@ -1,0 +1,38 @@
+.filter {
+    margin-bottom: 1rem;
+}
+
+.filter-header {
+    height: 1.5rem;
+    border-bottom: 1px solid #cccccc;
+}
+
+.filter-header .title-filter{
+    background: white;
+    position: relative;
+    top: 2px;
+    color: #c7c7c7;
+    margin-right: .5rem;
+    font-weight: 500;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.filter-header .icon-filter {
+    position: relative;
+    top: 9px;
+    color: rgba(4, 121, 110, 0.68);
+}
+
+.filter-header .btn-expand {
+    top: 2px;
+    float: right;
+    right: 9px;
+}
+
+.filter-form {
+    border: 1px solid #cccccc;
+    border-top: none;
+    padding: 0.6rem;
+    padding-top: 1.5rem;
+}

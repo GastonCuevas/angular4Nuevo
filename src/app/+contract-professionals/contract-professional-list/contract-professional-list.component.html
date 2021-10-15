@@ -1,0 +1,24 @@
+<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<app-dynamic-table [sourceService]="contractProfessionalService"
+								   [title]="!professional ? 'Contratos Profesionales' : 'Contratos del Profesional: ' + professional.professionalAccount.name"
+								   [columns]="columns"
+								   [disabledDetail]="true"
+								   [disabledDelete]="true"
+                                   [enabledPrint]="true"
+								   [enabledClone]="true"
+								   [permissionCode]="'ABMPROCONT'"
+								   (actionClick)="onActionClick($event)">
+				</app-dynamic-table>
+
+				<div class="center-align" *ngIf="!!contractProfessionalService.professionalId">
+					<button type="button" class="waves-effect waves-light btn btn-form center" (click)="onReturn()">Volver</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<app-intelligent-report #iReport>
+</app-intelligent-report>

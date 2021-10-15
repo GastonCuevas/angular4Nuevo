@@ -1,0 +1,167 @@
+<div *ngIf="withDocHtml" class="card">
+    <div class="card-content" style="padding-bottom: 5rem;">
+        <span class="card-title center-align" style="margin-bottom: 1.5rem !important;">{{exportationDetailSelect.name}}</span>
+        <ckeditor id="ckeditorPrint"
+            [(ngModel)]="stringHtml"
+            [config]="config"
+            [readonly]="true"
+            (ready)="onReady($event)"
+            debounce="500">
+        </ckeditor>
+    </div>
+</div>
+
+<div hidden>
+    <div id="dynamicComponent" #dynamicComponent  class="card">
+        <div class="card-content" *ngIf="sourceData">
+            <dynamic [html]="docHtmlString" [dataSource]="sourceData"></dynamic>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!withDocHtml" class="card">
+    <div class="card-content" style="padding-bottom: 3rem;">
+        <span class="card-title center-align" style="margin-bottom: 1.5rem !important;">{{exportationDetailSelect.name}}</span>
+        <table id="tableHTML" class="bordered centered responsive-table striped">
+            <thead>
+                <tr>
+                    <th class="center-align" *ngFor="let column of columns">
+                        {{column.header}}
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngIf="!sourceData || sourceData.length <= 0">
+                    <td> No hay elementos para mostrar.</td>
+                </tr>
+
+                <tr *ngFor="let data of sourceData">
+                    <td *ngFor="let column of columns" [ngSwitch]="column.type">
+                        <span *ngSwitchDefault>
+                            {{getPropByString(data, column.property)}}
+                        </span>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+        <div class="row" *ngIf="!isLoading && queryPaginator && paginator.totalItems > 10">
+            <div class="input-field left">
+                <select materialize="material_select" [(ngModel)]="paginator.pageSize" (change)="selectPageSize()">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <label>Mostrar</label>
+            </div>
+            <ul class="pagination right" *ngIf="paginator.totalItems > paginator.pageSize && !isLoading">
+                <li [class.disabled]="paginator.currentPage == 1" [class.waves-effect]="paginator.currentPage != 1">
+                    <a (click)="previousPage()">
+                        <i class="material-icons">chevron_left</i>
+                    </a>
+                </li>
+                <span *ngFor="let page of pages">
+                    <li [class.active]="page == paginator.currentPage" class="waves-effect" *ngIf="paginator.currentPage - adjacentPagesCount > 1 && page == 1">
+                        <a (click)="selectPage(page)">{{page}}</a>
+                    </li>
+                    <li *ngIf="paginator.currentPage - adjacentPagesCount > 1 && page == 1">
+                        <a>...</a>
+                    </li>
+                    <li [class.active]="page == paginator.currentPage" class="waves-effect" *ngIf="page >= paginator.currentPage - adjacentPagesCount && page <= paginator.currentPage + adjacentPagesCount">
+                        <a (click)="selectPage(page)">{{page}}</a>
+                    </li>
+                    <li *ngIf="paginator.currentPage + adjacentPagesCount < pages.length && page == pages.length">
+                        <a>...</a>
+                    </li>
+                    <li [class.active]="page == paginator.currentPage" class="waves-effect" *ngIf="paginator.currentPage + adjacentPagesCount < pages.length && page == pages.length">
+                        <a (click)="selectPage(page)">{{page}}</a>
+                    </li>
+                </span>
+
+                <li [class.disabled]="paginator.currentPage == pages.length" [class.waves-effect]="paginator.currentPage != pages.length">
+                    <a (click)="nextPage()">
+                        <i class="material-icons">chevron_right</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="fixed-action-btn vertcal">
+    <a class="btn-floating btn-large red">
+        <i class="large material-icons">menu</i>
+    </a>
+    <ul>
+        <li><a onclick="document.getElementById('ckeditorPrint').getElementsByTagName('iframe')[0].contentWindow.print();"  *ngIf="showBtnToExport && withDocHtml" materialize="tooltip" class="btn-floating light-blue btn tooltipped" data-position="left" data-delay="50" data-tooltip="Imprimir o Guardar PDF"><i class="material-icons">print</i></a></li>
+        <li><a (click)="printReportPDF()"  *ngIf="showBtnToExport && !withDocHtml" materialize="tooltip" class="btn-floating light-blue btn tooltipped" data-position="left" data-delay="50" data-tooltip="Imprimir"><i class="material-icons">print</i></a></li>
+        <li><a (click)="openModal1()" *ngIf="showBtnToExport" materialize="tooltip" class="btn-floating  blue-grey lighten-3 btn tooltipped" data-position="left" data-delay="50" data-tooltip="Enviar por E-mail"><i class="material-icons">contact_mail</i></a></li>
+        <li><a (click)="downloadReportPDF()" id="downloadPDF" *ngIf="showBtnToExport && !withDocHtml" materialize="tooltip" class="btn-floating orange btn tooltipped" data-position="left" data-delay="50" data-tooltip="Descargar PDF"><i class="material-icons">picture_as_pdf</i></a></li>
+        <li><a (click)="downloadReportTXT()" *ngIf="typeDownload == '1' && showBtnToExport" id="downloadTXT" materialize="tooltip" class="btn-floating red btn tooltipped" data-position="left" data-delay="50" data-tooltip="Descargar TXT"><i class="material-icons">file_download</i></a></li>
+        <li><a (click)="downloadReportCSV()" *ngIf="typeDownload == '2' && showBtnToExport" id="downloadCSV" materialize="tooltip" class="btn-floating yellow btn tooltipped" data-position="left" data-delay="50" data-tooltip="Descargar CSV"><i class="material-icons">file_download</i></a></li>
+        <li><a (click)="downloadReportXLSX()" *ngIf="typeDownload == '3' && showBtnToExport" id="downloadXLSX"  materialize="tooltip" class="btn-floating green btn tooltipped" data-position="left" data-delay="50" data-tooltip="Descargar XLSX"><i class="material-icons">file_download</i></a></li>
+        <li><a (click)="showListReports()"  materialize="tooltip" class="btn-floating blue btn tooltipped" data-position="left" data-delay="50" data-tooltip="Nueva Consulta"><i class="material-icons">fiber_new</i></a></li>
+    </ul>
+</div>
+
+<!-- Modal Structure -->
+<div id="modal1" class="modal bottom-sheet" materialize="modal" [materializeParams]="model1Params" [materializeActions]="modalActions1">
+    <div class="modal-content">
+        <h4>Enviar Reporte por E-mail</h4>
+        <form #formMail="ngForm" (ngSubmit)="sendToMail()">
+            <div class="row">
+                <div class="input-field col s6">
+                    <label>Email:</label>
+                    <input type="email" name="addres" #addres="ngModel" [(ngModel)]="address" class="validate" maxlength="50" [pattern]="emailPattern" required/>
+                    <span *ngIf="addres.invalid && (addres.dirty || addres.touched)">El e-mail es incorrecto</span>
+                </div>
+                <div class="input-field col s6">
+                    <label>Asunto:</label>
+                    <input type="text" name="subject" #subject="ngModel" [(ngModel)]="subjects" class="validate" required maxlength="30"/>
+                    <span *ngIf="subject.touched && !subject.valid">Se requiere asunto</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field">
+                    <label>Mensaje:</label>
+                    <textarea name="content" class="materialize-textarea" #content="ngModel" [(ngModel)]="contents" maxlength="240"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <button class="modal-action modal-close waves-light btn waves-effect blue btn-flat" [disabled]="!formMail.form.valid" type="submit">Enviar</button>
+                <button class="waves-effect waves-light btn red btn-flat" (click)="closeModal1()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+</div>
+
+
+<table id="table" class="bordered centered responsive-table striped hide">
+    <thead>
+        <tr>
+            <th class="center-align" *ngFor="let column of columns">
+                {{column.header}}
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngIf="!sourceDataAux || sourceDataAux.length <= 0">
+            <td> No hay elementos para mostrar.</td>
+        </tr>
+
+        <tr *ngFor="let data of sourceDataAux">
+            <td *ngFor="let column of columns" [ngSwitch]="column.type">
+                <span *ngSwitchDefault>
+                    {{getPropByString(data, column.property)}}
+                </span>
+            </td>
+
+        </tr>
+    </tbody>
+</table>

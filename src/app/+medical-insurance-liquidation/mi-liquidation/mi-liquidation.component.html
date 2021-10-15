@@ -1,0 +1,149 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="title center-align">Liquidación de O.S.</span>
+                <app-practices-to-liquidate (selectionEE)="onChangeOfSelection()" (filterChange)="onChangeOfSelection()">
+                </app-practices-to-liquidate>
+                <span class="title center-align">Medicamentos</span>
+                <table><thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                    </tr> </thead>
+                    <tbody *ngIf="!!medicinesLiquidate.length">
+                        <tr *ngFor="let m of medicinesLiquidate">
+                            <td>{{m.description}}</td>
+                            <td>${{m.price}}</td>
+                            <td>{{m.quantity}}</td>
+                            <td>${{m.total}}</td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="!medicinesLiquidate.length">
+                        <tr>
+                            <td colspan="6" style="text-align: center;">
+                                No hay elementos para mostrar.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col s12">
+                        <blockquote *ngIf="!validLiquidation" class="blockquote-info">
+                            Para poder liquidar debe tener por lo menos una práctica seleccionada.
+                        </blockquote>
+                        <blockquote class="blockquote-info">
+                            Si no selecciona el código alternativo el sistema liquidará según código INO.
+                        </blockquote>
+                    </div>
+                    <div class="col s12 margin bottom-s">
+                        <span>
+                            <input id="codeAlt" type="checkbox" (change)="onCheckboxChange($event.target.checked)">
+                            <label for="codeAlt" style="position: absolute;">Liquidar con Código alternativo</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="row margin top-s">
+                    <div class="col s12 m8 labels">
+                        <span class="label"> Prácticas a Liquidar: </span> {{itemsSelectedToLiquidate}}
+                        <span class="label" style="margin-left: 2rem;"> Prácticas a Reliquidar: </span> {{itemsSelectedToReLiquidate}}
+                    </div>
+                    <div class="col s12 m4 right-align">
+                        <button-submit [btntext]="'Liquidar'" [btnDisabled]="!validLiquidation" (formSubmit)="openModal()"></button-submit>
+                        <button type="button" class="waves-effect waves-light btn btn-form center red" (click)="reset()">
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--MODAL-->
+    <div class="modal modal-styles" id="modalLiqu" materialize="modal" [materializeParams]="[{dismissible: false}]"
+         [materializeActions]="modalActions">
+        <div class="modal-content">
+            <span class="title center-align">Conceptos de Liquidación</span>
+            <div class="row margin top-s">
+                <div class="row">
+                    <form #f="ngForm" [formGroup]="form" *ngIf="!!form" (ngSubmit)="loadLiquidationConcept()">
+                        <div class="row">
+                            <div class="input-field col s12 m4">
+                                <input-auto-complete #conceptIAC
+                                                     [label]="'Concepto'"
+                                                     [requiredIAC]="true"
+                                                     [form]="form"
+                                                     [formControlNameIAC]="'conceptId'"
+                                                     [isLoading]="loadingConceptIAC"
+                                                     [source]="concepts"
+                                                     [displayPropertyName]="'description'"
+                                                     (valueChange)="onChangeSelectedConcept($event)">
+                                </input-auto-complete>
+                            </div>
+                            <div class="input-field col s12 m2">
+                                <input id="price" formControlName="price" type="number" readonly>
+                                <label for="price" [class.active]="form.value.price">Precio</label>
+                            </div>
+                            <div class="input-field col s12 m2">
+                                <input id="count" [ngClass]="form.value.count > 0 ? 'valid' : 'invalid'" formControlName="count" type="number" min="0" step="1" required>
+                                <label for="count" [class.active]="!!form.value.count || form.value.count === 0">Cantidad</label>
+                                <app-control-error-message [form]="f" [control]="{key:'count'}"></app-control-error-message>
+                            </div>
+                            <div class="col s12 m2" style="margin-top: 1.8rem;">
+                                <input id="subtract" type="checkbox" formControlName="subtract" />
+                                <label for="subtract">Restar</label>
+                            </div>
+                            <button-submit class="input-field col s12 m2" [btntext]="'Agregar'" [btnType]="'submit'" [btnDisabled]="!form.valid">
+                            </button-submit>
+                        </div>
+                    </form>
+                </div>
+                <div class="col s12">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Descripción</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Total</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="!!liquidationConcepts.length">
+                            <tr *ngFor="let m of liquidationConcepts">
+                                <td>{{m.conceptCode}}</td>
+                                <td>{{m.conceptDescription}}</td>
+                                <td>${{m.price}}</td>
+                                <td>{{m.count}}</td>
+                                <td>${{m.total}}</td>
+                                <td>
+                                    <a (click)="deleteConcept(m)" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Eliminar">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="!liquidationConcepts.length">
+                            <tr>
+                                <td colspan="6" style="text-align: center;">
+                                    No hay elementos para mostrar.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="waves-effect waves-light btn btn-form center red" (click)="closeModal()">Cancelar</button>
+            <button-submit [btntext]="'Confirmar'" data-dismiss="modal" (formSubmit)="liquidateMI()" [isLoading]="isSaving" [loadingGlobal]="true"></button-submit>
+        </div>
+    </div>
+
+</div>
+<!-- Modal Structure -->
+
+<app-intelligent-report #iReport>
+</app-intelligent-report>

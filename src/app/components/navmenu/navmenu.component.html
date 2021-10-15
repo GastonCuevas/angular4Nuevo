@@ -1,0 +1,125 @@
+<header>
+    <div class="navbar-fixed">
+        <nav [style.background-color]="look.lookConfig?.backgroundColorHeader || 'cyan'">
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a  href="#" data-activates="slide-out"  class="button-collapse show-on-large" >
+                        <i class="material-icons">menu</i>
+                    </a>
+                    <ul class="left hide-on-small-only">
+                        <li>
+                            <a routerLink="/" class="valign-wrapper" (click)="goToHome()">
+                                <img [src]="look.lookConfig.imageLogo || logo"
+                                    alt="logo" [ngStyle]="{'max-height': '64px', 'max-width': '64px' }" class="responsive-img">
+                                <span class="logotext" style="font-weight: bold; padding-left: 5px;"
+                                    [style.color]="look.lookConfig?.fontColorHeader"
+                                    [style.font-family]="look.lookConfig?.fontFamilyHeader">
+                                    {{applicationTitle}}
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="right hide-on-med-and-up">
+                        <li>
+                            <a routerLink="/" class="valign-wrapper" (click)="goToHome()">
+                                <span class="logotext"
+                                      [style.color]="look.lookConfig?.fontColorHeader"
+                                      [style.font-family]="look.lookConfig?.fontFamilyHeader"
+                                      style="font-weight: bold; padding-right: 5px;">
+                                    {{applicationTitle}}
+                                </span>
+                                <img [src]="look.lookConfig.imageLogo || logo" alt="logo" class="responsive-img" [ngStyle]="{'max-height': '50px', 'max-width': '50px' }">
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="line-separator hide-on-small-only"></div>
+                    <a href="" class="hide-on-med-and-down btn-flat disabled" *ngIf="first">{{first}}</a>
+                    <a href="" class="hide-on-med-and-down btn-flat breadcrumb disabled" *ngIf="second">{{second}}</a>
+                    <a href="" class="hide-on-med-and-down btn-flat breadcrumb disabled" *ngIf="third">{{third}}</a>
+
+                    <ul class="right hide-on-small-only">
+                        <li>
+                            <a href="" [style.color]="look.lookConfig?.fontColorHeader"
+                                [style.font-family]="look.lookConfig?.fontFamilyHeader">
+                                <span class="fa-lg">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                </span>
+                                {{ user.given_name}}
+                            </a>
+                        </li>
+                        <li>
+                            <a (click)="logOut()" [style.color]="look.lookConfig?.fontColorHeader"
+                                [style.font-family]="look.lookConfig?.fontFamilyHeader">
+                                Cerrar Sesi&oacute;n
+                                <span class="fa-lg">
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+<ul id="slide-out" class="side-nav" style="font-weight: bold"
+    [style.background-color]="look.lookConfig?.backgroundColorMenu || 'white'"
+    [style.color]="look.lookConfig?.fontColorMenu || 'black'"
+    [style.font-family]="look.lookConfig?.fontFamilyMenu">
+    <li class="cyan side-nav-user hide-on-med-and-up">
+        <span class="fa-lg">
+            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+        </span>
+        {{ user.given_name}}
+    </li>
+    <li class="no-padding">
+        <ul materialize="collapsible" class="collapsible" data-collapsible="accordion">
+            <li class="tree" *ngFor="let node of nodes">
+                <div class="collapsible-header">
+                    <span class="fa-stack fa-lg">
+                        <i *ngFor="let icon of node.icon" [ngClass]="icon" aria-hidden="true"></i>
+                    </span>
+                    <span class="truncate">{{node.name}}</span>
+                </div>
+                <div class="collapsible-body" [style.background-color]="'inherit'">
+                    <ul materialize="collapsible" class="collapsible" [style.background-color]="'inherit'" data-collapsible="accordion">
+                        <li class="branch" *ngFor="let child of node.children" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <div class="collapsible-header">
+                                <span class="fa-stack fa-lg">
+                                    <i *ngFor="let icon of child.icon" [ngClass]="icon" aria-hidden="true"></i>
+                                </span>
+                                <span class="truncate">{{child.name}}</span>
+                            </div>
+                            <div class="collapsible-body" [style.background-color]="'inherit'">
+                                <ul>
+                                    <li class="branch li-link" *ngFor="let leaf of child.leaves" [ngClass]="{'active': isActive(leaf.webmnu)}">
+                                        <a routerLink="{{leaf.webmnu}}" (click)="changePage(node.name, child.name, leaf.label)" materialize="tooltip"
+                                            data-position="right" data-delay="50" [attr.data-tooltip]="leaf.descri" [ngClass]="{'not-active': isNotImpl(leaf.webmnu)}">
+                                            <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                            <span class="truncate">{{leaf.label}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul [style.background-color]="'inherit'">
+                        <li class="branch li-link" *ngFor="let leaf of node.leaves" [ngClass]="{'active': isActive(leaf.webmnu)}">
+                            <a routerLink="{{leaf.webmnu}}" (click)="changePage(node.name, leaf.label)" materialize="tooltip" data-position="right"
+                                data-delay="50" [attr.data-tooltip]="leaf.descri" [ngClass]="{'not-active': isNotImpl(leaf.webmnu)}">
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                <span class="truncate">{{leaf.label}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </li>
+    <li class="side-nav-bottom hide-on-med-and-up" (click)="logOut()">
+            <span class="fa-lg">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+            </span>
+            Cerrar Sesi&oacute;n
+    </li>
+</ul>

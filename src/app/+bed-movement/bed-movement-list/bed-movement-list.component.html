@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Camas</span>
+                <br/>
+                <app-dynamic-filter *ngIf="controlsToFilter" [controls]="controlsToFilter" (filterChange)="onFilterChange($event)">
+                </app-dynamic-filter>
+
+                <div class="row" *ngIf="!isLoading">
+                    <bed-card [bed]="bed" *ngFor="let bed of bedMovements"></bed-card>
+                </div>
+
+                <app-paginator [show]="!isLoading" [pageSize]="8" [pageSizes]="[8, 16, 24, 32, 40]" (pageChange)="onPageChange()">
+                </app-paginator>
+            </div>
+        </div>
+    </div>
+</div>

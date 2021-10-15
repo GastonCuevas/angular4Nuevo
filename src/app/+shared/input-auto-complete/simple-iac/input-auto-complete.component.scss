@@ -1,0 +1,21 @@
+.icon-iac {
+    position: relative;
+    margin-top: -3.5rem;
+    float: right;
+    color: #a5a5a57d;
+    font-size: 21px;
+    cursor: pointer;
+}
+
+.clear:hover {
+    color: #ffb4b4;
+}
+
+.class-by-iac input:disabled {
+    border-bottom: 1px solid #9e9e9e !important;
+    color: inherit !important;
+}
+
+.class-by-iac input.invalid:disabled {
+    border-bottom: 1px solid #f44336 !important;
+}

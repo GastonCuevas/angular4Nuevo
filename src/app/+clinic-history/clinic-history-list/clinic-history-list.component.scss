@@ -1,0 +1,53 @@
+/* START - styles for table */
+.print i:hover {
+    color: #00BCD4;
+    cursor: pointer;
+}
+
+table>tbody>tr>td>a {
+    color: #a2a2a2;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+}
+
+table>tbody>tr>td>a:hover {
+    color: #00BCD4;
+    cursor: pointer;
+}
+
+table {
+    position: relative;
+    border-bottom: 1px solid #d0d0d0;
+}
+
+table>.btn-floating {
+    position: absolute;
+    right: 8px;
+    float: right;
+    top: 32px;
+    font-size: 20px;
+}
+/* END - styles for table */
+
+.text-left {
+    text-align: left !important;
+}
+
+.row-patient {
+    background-color: #dededec9;
+    padding: 1px;
+    padding-top: 10px;
+    cursor: pointer;
+}
+.row-card{
+    // background-color: #8077fcfa;
+    display: flex;
+    border: 1px solid #cccccc;
+    padding: 0.5em 0;
+    // padding-top: 10px;
+    // cursor: pointer;
+}
+.span-text{
+    margin-left: 1em;
+}

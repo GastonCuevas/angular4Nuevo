@@ -1,0 +1,30 @@
+.fa {
+    color: #c1c1c1;
+}
+
+.fa-money:hover {
+    color: #00BCD4;
+}
+
+.fa-times:hover {
+    color: red;
+}
+
+table > tbody > tr > td > a {
+    color: #a2a2a2;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+}
+
+table > tbody > tr > td > a:hover {
+    color: #00BCD4;
+    cursor: pointer;
+}
+
+.row-liquidation {
+    background-color: #e4e4e4;
+    padding: 1px;
+    padding-top: 10px;
+    cursor: pointer;
+}

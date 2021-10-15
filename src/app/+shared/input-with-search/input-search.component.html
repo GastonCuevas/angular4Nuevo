@@ -1,0 +1,72 @@
+<!-- Modal structure centered  -->
+<div id="modalSearch" class="modal modal-fixed-footer modal-styles" materialize="modal" [materializeParams]="[{dismissible: false}]"
+    [materializeActions]="modalActions">
+    <div class="modal-header">
+        <span class="card-title center-align"> Seleccione {{label}}</span>
+    </div>
+    <div class="modal-content">
+        <loading *ngIf="isLoading"></loading>
+        <div class="row">
+            <div *ngIf="showFilters" class="input-field col s12 m12">
+                <input [type]="filterAux.filterType" [(ngModel)]="filterAux.value"
+                    (keyup)="changeInput()">
+                <label class="active" >Ingrese para buscar</label>
+            </div>
+            <div class="col s12 divtable">
+                <table class="highlight table-sortable centered" *ngIf="!isLoading">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let c of columns, let i = index" [class]="selectedClass(c)" (click)="changeSorting(c)" [class.hide-on-small-only]="c.hideInMobile"
+                                [style.text-align]="i == 0 ? 'left' : ''">
+                                {{c.header}}
+                            </th>
+                            <!-- <th class="center-align"></th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        <tr *ngFor="let data of dataSource, let i = index" (click)="select(i, data)" [style.background]="i === currentRow ? '#47bff58a' : ''">
+                            <td *ngFor="let c of columns, let j = index" [class.hide-on-small-only]="c.hideInMobile" [style.text-align]="j == 0 ? 'left' : ''">
+                                {{data[c.property]}}
+                            </td>
+                            <!-- <td class="center-align">
+                                <a (click)="select(data)" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Seleccionar" >
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <app-paginator [show]="!isLoading" (pageChange)="onPageChange()">
+            </app-paginator>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" [disabled]="!selected" class="waves-effect waves-light btn btn-form center blue" (click)="onAgree()">Aceptar</button>
+        <button type="button" class="waves-effect waves-light btn btn-form center red" (click)="closeModal()">Cancelar</button>
+    </div>
+</div>
+
+<div #ff="ngForm" class="" [formGroup]="form" *ngIf="!readonlyIS">
+    <input [id]="formControlNameIS" type="text" [disabled]="disabledIS" required="{{requiredIS}}" [readonly]="selected" [class.valid]="validClass"
+        [class.invalid]="invalidClass" [(ngModel)]="valueAux" [ngModelOptions]="{standalone: true}" (keydown.enter)="onKeydownEnter($event)"
+        (blur)="validate($event.target.value)"
+        autocomplete="off">
+    <i class="material-icons icon-iac clear" (click)="clearInput()" *ngIf="selected && !disabledIS">highlight_off</i>
+    <i class="material-icons icon-iac search" aria-hidden="true" *ngIf="!selected && !disabledIS && !isLoadingInput" (click)="openSearch()"
+        materialize="tooltip" data-position="buttom" data-delay="50" data-tooltip="Buscar">search</i>
+    <i class="fa fa-spinner fa-spin icon-iac" aria-hidden="true" *ngIf="isLoadingInput" materialize="tooltip" data-position="buttom" data-delay="50" data-tooltip="Cargando">
+    </i>
+    <label [attr.for]="formControlNameIS" [class.active]="valueAux">{{label}}</label>
+    <app-control-error-message [form]="ff" [control]="{key: formControlNameIS}"></app-control-error-message>
+</div>
+
+<div *ngIf="readonlyIS">
+    <input [id]="formControlNameIS" type="text" [value]="readonlyValue" readonly>
+    <label class="active" [attr.for]="formControlNameIS">{{label}}</label>
+</div>
+
+<!-- placeholder="Presione buscar y seleccione" -->
+<!-- [readonly]="selected" -->

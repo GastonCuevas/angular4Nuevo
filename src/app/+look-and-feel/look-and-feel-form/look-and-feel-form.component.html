@@ -1,0 +1,79 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title center-align">{{(!isEdit ? 'Nuevo' : 'Editar')}} estilo de una Sección</span>
+                <loading *ngIf="isLoading"></loading>
+                <form #f="ngForm" [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!isLoading && !!form">
+                    <div class="row margin top-s">
+                        <div class="col s12 m3 margin bottom-s" [hidden]="!haveImageLogo">
+                            <div class="cover">
+                                <img id="imgSRC" class="responsive-img" [src]="srcImage" *ngIf="srcImage">
+                            </div>
+                            <div class="file-field">
+                                <input id="file-input" type="file" (change)="selected($event)" style="display: none" accept="image/*">
+                                <div class="btn cyan button-upload-image" (click)="clickFile()">
+                                    <span>Imagen</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12" [class.m9]="haveImageLogo">
+                            <div class="input-field col s12 m6">
+                                <input id="section" formControlName="section" type="text" readonly>
+                                <label for="section" class="active">Sección</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <iac-color
+                                    [label]="'Seleccione fuente'" [requiredIAC]="true"
+                                    [form]="form" [formControlNameIAC]="'fontFamily'"
+                                    [maxNumList]="15" [functionForData]="functionForFontFamilies">
+                                </iac-color>
+                            </div>
+                            <div class="input-color col s12 m6" >
+                                <div class="div-container"
+                                    [cpCancelButton]="true" [cpCancelButtonText]="'Cancelar'" [cpCancelButtonClass]= "'waves-effect waves-light btn small red'"
+                                    [cpPosition]="'bottom'" [cpOutputFormat] = "'hex'"
+                                    [(colorPicker)]="lookAndFeel.fontColor">
+                                    <label >Cambiar color de fuente: </label>
+                                    <a class="btn-floating black pulse-hover">
+                                        <i class="material-icons" [style.color]="lookAndFeel.fontColor || 'white'">
+                                            arrow_drop_down_circle
+                                        </i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="input-color col s12 m6" >
+                                <div class="div-container"
+                                    [cpCancelButton]="true" [cpCancelButtonText]="'Cancelar'" [cpCancelButtonClass]= "'waves-effect waves-light btn small red'"
+                                    [cpPosition]="'bottom'" [cpOutputFormat] = "'hex'"
+                                    [(colorPicker)]="lookAndFeel.backgroundColor">
+                                    <label >Cambiar color de Fondo: </label>
+                                    <a class="btn-floating black pulse-hover">
+                                        <i class="material-icons" [style.color]="lookAndFeel.backgroundColor || 'blue'">
+                                            arrow_drop_down_circle
+                                        </i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row center-align margin top-xs">
+                        <button-submit
+                            [btntext]="'Guardar'" [btnDisabled]="!form.valid"
+                            [btnType]="'submit'" [isLoading]="isSaving" [loadingGlobal]="true">
+                        </button-submit>
+                        <button type="button" *ngIf="code != 'LOGINWEB'" class="waves-effect waves-light btn btn-form cyan" (click)="onPreview()">Vista Previa</button>
+                        <button type="button" class="waves-effect waves-light btn btn-form center red" (click)="onCancelButton()">Cancelar</button>
+                    </div>
+                </form>
+                <app-not-found *ngIf="!isLoading && !form" [returnPath]="'/sisarchivos/lookandfeel'"></app-not-found>
+            </div>
+        </div>
+    </div>
+</div>
+<app-modal-confirm
+    [title]="lookAndFeel.code ? 'Editar' : 'Alta'"
+    [message]="'¿Desea regresar sin guardar los cambios?'"
+    [openModalSubject]="openModalDiscardSubject"
+    (agree)="discardChanges()">
+</app-modal-confirm>

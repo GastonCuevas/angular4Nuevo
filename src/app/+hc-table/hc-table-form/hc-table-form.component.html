@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content" *ngIf="!isNew">
+                <span class="card-title center-align">{{title}}</span>
+                <br />
+                <loading *ngIf="isLoading"></loading>
+                <form #formHcTable="ngForm" [formGroup]="form" (ngSubmit)="onSubmit($event)" *ngIf="!isLoading && !!form && !isNew">
+                    <div class="row">
+                        <div class="input-field">
+                            <input id="name" formControlName="name" type="text" class="validate" maxlength="80" />
+                            <label [class.active]="hcTable.name" for="name">Nombre</label>
+                        </div>
+                        <!-- <app-control-error-message [form]="formHcTable" [control]="{key:'name', minlength: 4}"></app-control-error-message> -->
+                    </div>
+                    <div class="row">
+                        <div class="input-field">
+                            <textarea id="description" name="description" formControlName="description" class="materialize-textarea" maxlength="1042"></textarea>
+                            <label for="description">Descripcion</label>
+                        </div>
+                    </div>
+                    <div *ngIf="isEdit">
+                        <div class="row">
+                            <span class="col s12 sub-title">Items de Tablas de Historia Clinica:</span>
+                        </div>
+                        <app-dynamic-table [sourceService]="hcTableItemService" [columns]="columns"
+                                           [paginator]="paginator" [disabledDetail]="true" [disableButtonFloating]="true" [reloadingData]="reloadingData"
+                                           (actionClick)="onActionClick($event)" (reloadingDataChange)="updateReloadingData($event)">
+                        </app-dynamic-table>
+                        <app-modal-confirm [title]="'Eliminar item de tabla de historia clinica'"
+                                           [message]="'Desea eliminar la tabla de historia clinica?'"
+                                           [openModalSubject]="deleteModalSubject"
+                                           (agree)="onDeleteConfirm()">
+                        </app-modal-confirm>
+                    </div>
+                    <br />
+                    <div class="row center-align">
+                        <button type="submit" [disabled]="!formHcTable.form.valid" class="waves-effect waves-light btn btn-form center blue">Guardar</button>
+                        <button type="button" class="waves-effect waves-light btn btn-form center red" (click)="onCancelButton()">Cancelar</button>
+                    </div>
+                </form>
+                <div *ngIf="!isLoading && !form">
+                    <div class="center-align" style="margin-bottom: 50px;margin-top: 20px;">
+                        <span style="font-weight: bold;">NO HAY DATOS PARA MOSTRAR</span>
+                    </div>
+                    <div class="center-align">
+                        <a [routerLink]="['/archivos/tablasHc']" class="waves-effect waves-light btn center-align red lighten-1">Cerrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-modal-confirm [title]="isEdit ? 'Editar' : 'Alta'" [message]="'Desea regresar sin guardar los cambios?'" [openModalSubject]="openModalSubject"
+                   (agree)="onAgree()">
+</app-modal-confirm>

@@ -1,0 +1,69 @@
+textarea {
+    font-family: monospace;
+    height: auto;
+}
+
+.color-text-mark {
+    background-color: #0277bd  ;
+}
+
+.pre-txt {
+    overflow: unset;
+    line-height: 1;
+}
+
+.card-content-txt {
+    height: 400px;
+    overflow: auto;
+}
+
+.card-title-custom {
+    font-size: 20px;
+}
+
+.a input[type=number]:not(.browser-default):focus:not([readonly]),
+    {
+    border-bottom: 1px solid white;
+    box-shadow: 0 1px 0 0 white;
+}
+
+.a input[type=number]:not(.browser-default) {
+    border-bottom: 1px solid white;
+}
+
+.card-file{
+    border: 2px solid #E5E5E5;
+}
+.icon-upload {
+    font-size: 50px;
+    color: #CCC;
+}
+
+.upload-file-content {
+    margin: 40px;
+}
+
+#file-input {
+     position: absolute ;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0; 
+    cursor: pointer;
+    z-index: 5;
+}
+.row-separator{
+    height: 100px;
+}
+.progressbar{
+    height: 25px;
+}
+.progress{
+    background-color: transparent;
+}
+.progress .indeterminate {
+    background-color: white;
+}

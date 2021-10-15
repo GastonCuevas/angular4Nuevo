@@ -1,0 +1,48 @@
+
+<span class="card-title center-align">Nueva Obra Social de Paciente</span>
+<br>
+<loading *ngIf="isLoading"></loading>
+
+<form #fPMI="ngForm" [formGroup]="form" *ngIf="!isLoading && !!form">
+    <div class="row">
+        <div class="input-field col s12 m4">
+            <input-auto-complete #medicalInsuranceIAC
+                                [label]="'Obra Social'"
+                                [requiredIAC]="true"
+                                [form]="form"
+                                [formControlNameIAC]="'socialNumber'"
+                                [source]="medicalInsurances">
+            </input-auto-complete>
+        </div>
+        <div class="input-field col s12 m4">
+            <input id="carnetNumber" formControlName="carnetNumber" type="text" class="validate" minlength="4"
+                    maxlength="40" name="carnetNumber">
+            <label for="carnetNumber" [class.active]="fPMI.value.carnetNumber">Nro. de Carnet</label>
+            <app-control-error-message [form]="fPMI" [control]="{key:'carnetNumber', minlength: 4}"></app-control-error-message>
+        </div>
+        <div class="input-field col s12 m2">
+            <input formControlName="fDueDate" name="fDueDate" [attr.data-value]="form.value.fDueDate" type="text"
+                    class="datepicker" materialize="pickadate" [materializeParams]="[datePickerOptions]">
+            <label for="fDueDate">Vencimiento</label>
+            <app-control-error-message [form]="fPMI" [control]="{key:'fDueDate'}"></app-control-error-message>
+        </div>
+        <div class="col s12 m2" style="margin-top: 2rem">
+            <input type="checkbox" id="byDefault" formControlName="byDefault" />
+            <label for="byDefault">Por defecto</label>
+        </div>
+    </div>
+
+    <div class="row center-align">
+        <button type="button" [disabled]="!fPMI.form.valid" class="waves-effect waves-light btn btn-form center blue"
+            (click)="onSubmit()">Guardar</button>
+        <button type="button" class="waves-effect waves-light btn btn-form center red"
+            (click)="onCancelButton()">Cancelar</button>
+    </div>
+</form>
+
+<app-modal-confirm
+    [title]="isNew ? 'Editar' : 'Alta'"
+    [message]="'¿Desea regresar sin guardar los cambios?'"
+    [openModalSubject]="openModalDiscardSubject"
+    (agree)="discardChanges()">
+</app-modal-confirm>

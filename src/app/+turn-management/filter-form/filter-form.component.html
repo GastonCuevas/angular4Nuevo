@@ -1,0 +1,63 @@
+<form #f="ngForm" [formGroup]="form">
+    <div class="row">
+        <div class="input-field col s12 m6 l4">
+            <!-- <input-auto-complete
+                [label]="'Practica'" [requiredIAC]="true"
+                [form]="form" [formControlNameIAC]="'specialty'"
+                [functionForData]="functionForSpecialties"
+                (valueChange)="specialtyChange($event)">
+            </input-auto-complete> -->
+            <input-auto-complete 
+                [label]="'Práctica'" [requiredIAC]="true"
+                [form]="form" [formControlNameIAC]="'practiceNumber'"
+                [functionForData]="functionForPractices"
+                [isLoading]="loadingPracticeIAC"
+                (valueChange)="practiceChange($event)">
+            </input-auto-complete>
+        </div>
+        <div class="input-field col s12 m6 l4">
+            <iac-with-validation
+                [label]="'Profesional'" [requiredIAC]="true"
+                [form]="form" [formControlNameIAC]="'professional'"
+                [textForNoResults]="'La practica no contiene profesionales asignados.'"
+                [isDependent]="!selectedFilter.practiceNumber" [msgForDependent]="'Seleccione una practica para cargar los profesionales.'"
+                [legendValidState]="'Contrato vigente'" [legendInvalidState]="'Contrato vencido'"
+                [errorForInvalidItem]="'El profesional no tiene contrato vigente.'"
+                [source]="professionals" [isLoading]="loadingProfessionalIAC"
+                (valueChange)="professionalChange($event)">
+            </iac-with-validation>
+        </div>
+        <div class="input-field col s12 m6 l4">
+            <input-auto-complete
+                [label]="'Especialidad'"
+                [form]="form" [formControlNameIAC]="'specialty'"
+                [functionForData]="functionForSpecialties"
+                (valueChange)="specialtyChange($event)">
+            </input-auto-complete>
+        </div>
+        <div class="input-field col s12 m6 l2">
+            <select materialize="material_select" [materializeSelectOptions]="medicalOffices" formControlName="medicalOffice">
+                <option value="" selected>Sin definir</option>
+                <option *ngFor="let item of medicalOffices" [value]="item">{{item}}</option>
+            </select>
+            <label for="medicalOffice">Consultorio</label>
+            <!-- <app-control-error-message [form]="f" [control]="{key: 'medicalOffice'}"></app-control-error-message> -->
+        </div>
+        <div class="input-field col s12 m6 l2">
+            <select materialize="material_select" [materializeSelectOptions]="types" formControlName="type">
+                <option value="" selected>Todos</option>
+                <option *ngFor="let item of types" [ngValue]="item.value">{{item.name}}</option>
+            </select>
+            <label for="type">Tipo</label>
+        </div>
+    </div>
+
+    <div class="row center-align margin bottom-xs top-xs">
+        <button-submit
+            [btntext]="'Consultar'" [btnDisabled]="!form.valid"
+            [isLoading]="isConsulting" [loadingGlobal]="true"
+            (formSubmit)="onSubmit()">
+        </button-submit>
+        <consultation-modal></consultation-modal>
+    </div>
+</form>

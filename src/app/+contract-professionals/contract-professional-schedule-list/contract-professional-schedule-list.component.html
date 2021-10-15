@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="card-content">
+        <br />
+        <table class="table highlight centered">
+            <a class="btn-floating btn-small waves-effect waves-light" (click)="onActionClick('new')" style="top: 37px;">
+                <i class="fa fa-plus"></i>
+            </a>
+
+            <thead>
+                <tr>
+                    <th>Dia de la Semana</th>
+                    <th>Hora Desde</th>
+                    <th>Hora Hasta</th>
+                    <th>Duracion</th>
+                    <th>Consultorio</th>
+                    <th>Especialidad</th>
+                    <th>Tiene turnos?</th>
+                    <th class="text-center">
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let item of professionalSchedules">
+                <tr *ngFor="let schedule of item.schedules; let idx = index">
+                    <td [attr.rowspan]="item.schedules.length" *ngIf="idx <= 0" class="style-day">
+                        <span>{{schedule.weekdayName}}</span>
+                    </td>
+                    <td class="style-row-day">
+                        <span>{{schedule.hourFrom}}</span>
+                    </td>
+                    <td class="style-row-day">
+                        <span>{{schedule.hourTo}}</span>
+                    </td>
+                    <td class="style-row-day">
+                        <span>{{schedule.time}}</span>
+                    </td>
+                    <td class="style-row-day">
+                        <span>{{schedule.consultingRoom}}</span>
+                    </td>
+                    <td class="style-row-day">
+                        <span>{{schedule.specialtyName}}</span>
+                    </td>
+                    <td class="style-row-day">
+                        <span>{{schedule.withTurns ? 'Si' : 'No'}}</span>
+                    </td>
+                    <td class="text-center style-row-day">
+                        <a (click)="onActionClick('edit', schedule)" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Editar">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <a (click)="deleteClick(schedule)" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Eliminar">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <app-modal-confirm [title]="'Eliminar el horario '" [message]="'¿Desea eliminar el horario del contrato?'" [openModalSubject]="deleteModalScheduleSubject"
+        (agree)="onDeleteScheduleConfirm($event)">
+    </app-modal-confirm>
+</div>

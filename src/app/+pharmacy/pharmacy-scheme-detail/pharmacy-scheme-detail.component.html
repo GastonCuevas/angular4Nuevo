@@ -1,0 +1,35 @@
+﻿<div class="col s12 div-scheme" *ngIf="isActive">
+    <span class="title center-align">Detalle</span>
+    <table>
+        <thead>
+            <tr>
+                <th>Cod. Art.</th>
+                <th>Descripción</th>
+                <th class="col-deposit">Depósito</th>
+                <th class="col-quantity">Cantidad</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="!!detail.length">
+            <tr *ngFor="let m of detail">
+                <td>{{m.articleCode}}</td>
+                <td>{{m.articleName}}</td>
+                <td class="col-deposit">
+                    <select 
+                        [(ngModel)]="m.depos"  materialize="material_select" >
+                        <option *ngFor="let a of deposits" [ngValue]="a.number">{{a.name}}</option>
+                    </select>
+                </td>
+                <td class="col-quantity">
+                    <input class="{{getClassInput(m)}} center" type="number" [(ngModel)]="m.quantity" [value]="m.quantity" (change)="updateSumatory(m)" [disabled]="isLoading" />
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="!detail.length">
+            <tr>
+                <td colspan="6" style="text-align: center;">
+                    Seleccione un esquema para mostrar.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

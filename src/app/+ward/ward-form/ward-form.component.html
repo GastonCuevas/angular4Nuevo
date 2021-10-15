@@ -1,0 +1,73 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title center-align">{{title}}</span>
+                <br />
+                <loading *ngIf="isLoading"></loading>
+                <form #formWard="ngForm" [formGroup]="form" (ngSubmit)="onSubmit($event)" *ngIf="!isLoading && !!form">
+                    <div class="row">
+                        <div class="input-field col s12 m12">
+                            <input id="name" formControlName="name" type="text" class="validate" maxlength="80" />
+                            <label [class.active]="ward.name" for="name">Nombre</label>
+                            <app-control-error-message [form]="formWard" [control]="{key:'name'}"></app-control-error-message>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <!-- <input formControlName="wardSectorName" type="text" required id="wardSectorName" auto-complete
+                            [source]="auxListWardSectors"
+                            [value]="wardSectorName"
+                            (valueChanged)="customCallbackWardSector($event)"
+                            (input)="wardSectorName=$event.target.value"
+                            placeholder="" max-num-list="10" />
+                            <label for="wardSectorName" [class.active]="form.value.wardSectorName">Sector</label> -->
+                            <input-auto-complete [label]="'Sector'" [requiredIAC]="true" [form]="form"
+                                                 [formControlNameIAC]="'wardSectorName'" [valuePropertyName]="'name'"
+                                                 [readonlyIAC]="false" [readonlyValue]="ward.sectorId"
+                                                 [source]="wardSectors" (valueChange)="selectedSector($event)">
+                            </input-auto-complete>
+                        </div>
+
+                        <div class="input-field col s12 m6">
+                            <!-- <input formControlName="wardTypeName" type="text" required id="wardTypeName" auto-complete
+                            [source]="auxListWardTypes"
+                            [value]="wardTypeName"
+                            (valueChanged)="customCallbackWardType($event)"
+                            (input)="wardTypeName=$event.target.value"
+                            placeholder="" max-num-list="10" />
+                            <label for="wardTypeName" [class.active]="form.value.wardTypeName">Tipo</label> -->
+                            <input-auto-complete [label]="'Tipo'" [requiredIAC]="true" [form]="form"
+                                                 [formControlNameIAC]="'wardTypeName'" [valuePropertyName]="'name'"
+                                                 [readonlyIAC]="false" [readonlyValue]="ward.typeId"
+                                                 [source]="wardTypes" (valueChange)="selectedType($event)">
+                            </input-auto-complete>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m3">
+                            <input type="checkbox" id="disabled" formControlName="disabled" />
+                            <label for="disabled">Esta habilitado</label>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row center-align">
+                        <button type="submit" [disabled]="!formWard.form.valid" class="waves-effect waves-light btn btn-form center cyan " style="z-index: 0 !important">Guardar</button>
+                        <button type="button" class="waves-effect waves-light btn btn-form center red lighten-1" (click)="onCancelButton()" style="z-index: 0 !important">Cancelar</button>
+                    </div>
+                </form>
+                <div *ngIf="!isLoading && !form">
+                    <div class="center-align" style="margin-bottom: 50px;margin-top: 20px;">
+                        <span style="font-weight: bold;">NO HAY DATOS PARA MOSTRAR</span>
+                    </div>
+                    <div class="center-align">
+                        <a [routerLink]="['/camas/camas']" class="waves-effect waves-light btn center-align red lighten-1">Cerrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-modal-confirm [title]="isEdit ? 'Editar' : 'Alta'" [message]="'Desea regresar sin guardar los cambios?'" [openModalSubject]="openModalSubject"
+                   (agree)="onAgree()">
+</app-modal-confirm>

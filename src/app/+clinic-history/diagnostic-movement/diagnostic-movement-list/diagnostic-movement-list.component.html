@@ -1,0 +1,16 @@
+<app-dynamic-table
+    [sourceService]="diagnosticMovementService"
+    [columns]="diagnosticMovementService.columns"
+    [paginator]="{currentPage: 1, pageSize: 100, totalItems: 0}"
+    [disabledDetail]="true"
+    [disableButtonFloating]="true"
+    [hideActions]="readOnly"
+    (actionClick)="onDiagnosticActionClick($event)">
+</app-dynamic-table>
+
+<app-modal-confirm
+    [title]="'Eliminar Diagnóstico'"
+    [message]="'¿Desea eliminar el diagnóstico?'"
+    [openModalSubject]="openModalDeleteSubject"
+    (agree)="deleteDiagnostic()">
+</app-modal-confirm>

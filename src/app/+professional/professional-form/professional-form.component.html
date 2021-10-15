@@ -1,0 +1,310 @@
+﻿<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<div class="row">
+					<div class="col s7">
+						<span class="card-title right-align">{{(isEdit ? 'Editar' : 'Nuevo')}} Profesional</span>
+					</div>
+				</div>
+				<loading *ngIf="isLoading"></loading>
+
+				<form #f="ngForm" [formGroup]="form" (ngSubmit)="saveProfessional()" *ngIf="!isLoading && !!form">
+					<ul materialize="collapsible" class="collapsible" data-collapsible="expandable">
+						<li>
+							<div class="collapsible-header active blue lighten-2 white-text">
+								<i class="material-icons">account_circle</i>
+								<span class="full-width">Datos personales</span>
+								<i class="material-icons less">expand_less</i>
+								<i class="material-icons more">expand_more</i>
+							</div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="col s3">
+										<div class="cover">
+											<img id="imgSRC" class="responsive-img" [src]="src" *ngIf="src && !isLoadingImage">
+											<loading *ngIf="isLoadingImage"></loading>
+										</div>
+										<div class="file-field">
+											<input id="file-input" type="file" (change)="selected($event)" style="display: none" accept="image/*">
+											<div class="btn cyan button-upload-image" (click)="onClickFile()">
+												<span>Imagen</span>
+											</div>
+										</div>
+									</div>
+									<div class="col s9 row">
+										<div class="input-field col s12 m6">
+											<input id="surname" class="validate" formControlName="surname" type="text" minlength="4" maxlength="35" required>
+											<label for="surname" [class.active]="form.value.surname">Apellido</label>
+											<app-control-error-message [form]="f" [control]="{key:'surname', minlength: 4}"></app-control-error-message>
+										</div>
+										<div class="input-field col s12 m6">
+											<input id="name" class="validate" formControlName="name" type="text" minlength="4" maxlength="35" required>
+											<label for="name" [class.active]="form.value.name">Nombre</label>
+											<app-control-error-message [form]="f" [control]="{key:'name', minlength: 4}"></app-control-error-message>
+										</div>
+										<div class="input-field col s12 m4">
+											<select formControlName="identi" materialize="material_select" [materializeSelectOptions]="identifiers" (change)="onChangeIdenti()"
+											    required>
+												<option value="" disabled selected>Elija una opción</option>
+												<option *ngFor="let iden of identifiers" [value]="iden.number">{{iden.name}}</option>
+											</select>
+											<label>Tipo</label>
+											<app-control-error-message [show]="!form.value.identi  && form.value.identi != 0"></app-control-error-message>
+										</div>
+										<div class="input-field col s12 m4">
+											<input id="cuit" class="validate" formControlName="cuit" type="text" maxlength="13" required>
+											<label for="cuit" [class.active]="form.value.cuit">{{cuitLabel}}</label>
+											<app-control-error-message [form]="f" [control]="{key:'cuit'}"></app-control-error-message>
+										</div>
+										<div class="input-field col s12 m4">
+											<input id="birthDate" type="text" class="datepicker" formControlName="birthDate" materialize="pickadate" [materializeParams]="[datePickerOptions]"
+											    [attr.data-value]="form.value.birthDate" />
+											<label for="birthDate" [class.active]="form.value.birthDate">Fecha de Nacimiento</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text">
+								<i class="material-icons">place</i>
+								<span class="full-width">Datos de ubicación</span>
+								<i class="material-icons less">expand_less</i>
+								<i class="material-icons more">expand_more</i>
+							</div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m6">
+										<input id="address" class="validate" formControlName="address" type="text" maxlength="40">
+										<label for="address" [class.active]="form.value.address">Dirección</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<input id="quarter" class="validate" formControlName="quarter" type="text" maxlength="40">
+										<label for="quarter" [class.active]="form.value.quarter">Barrio</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<input-auto-complete [label]="'Provincia'"
+										  [requiredIAC]="true"
+										   [form]="form" 
+											[formControlNameIAC]="'province'"
+											[functionForData]="functionForProvinces"
+											(valueChange)="onProvinceChange($event)">
+										</input-auto-complete>
+									</div>
+									<div class="input-field col s12 m4">
+										<input-auto-complete [label]="'Localidad'" 
+													  [requiredIAC]="true" 
+													   [form]="form"
+														[formControlNameIAC]="'locality'"  
+														[source]="localities"
+														[isLoading]="loadingLocalityIAC"														> 
+										</input-auto-complete>
+									</div>
+									<div class="input-field col s12 m4">
+										<select formControlName="zone" materialize="material_select" [materializeSelectOptions]="zones" required>
+											<option value="" disabled selected>Elija una opción</option>
+											<option *ngFor="let zon of zones" [value]="zon.number">{{zon.name}}</option>
+										</select>
+										<label>Zona</label>
+										<app-control-error-message [show]="!form.value.zone"></app-control-error-message>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text">
+								<i class="material-icons">perm_phone_msg</i>
+								<span class="full-width">Datos de contacto</span>
+								<i class="material-icons less">expand_less</i>
+								<i class="material-icons more">expand_more</i>
+							</div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m4">
+										<input id="fax" type="text" formControlName="fax" class="validate" maxlength="40">
+										<label [class.active]="form.value.fax" for="fax">Fax</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<input id="phone" type="text" formControlName="phone" class="validate" maxlength="40">
+										<label [class.active]="form.value.phone" for="phone">Teléfono</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<input id="movil" type="text" formControlName="movil" class="validate" maxlength="40">
+										<label [class.active]="form.value.movil" for="movil">Celular</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<input id="mail" type="email" formControlName="mail" class="validate" maxlength="50" [pattern]="emailPattern">
+										<label [class.active]="form.value.mail" for="mail">E-mail</label>
+										<app-control-error-message [form]="f" [control]="{key:'mail', type:'email'}"></app-control-error-message>
+									</div>
+									<div class="input-field col s12 m6">
+										<input id="www" type="text" formControlName="www" class="validate" maxlength="40">
+										<label [class.active]="form.value.www" for="www">Página Web</label>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text">
+								<i class="material-icons">assignment_ind</i>
+								<span class="full-width">Datos de profesional</span>
+								<i class="material-icons less">expand_less</i>
+								<i class="material-icons more">expand_more</i>
+							</div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m4">
+										<input id="enrollment" formControlName="enrollment" type="number" class="validate">
+										<label [class.active]="form.value.enrollment" for="enrollment">Matrícula</label>
+										<app-control-error-message [form]="f" [control]="{key:'enrollment'}"></app-control-error-message>
+									</div>
+									<div class="input-field col s12 m4">
+										<input id="matesp" type="text" formControlName="matesp" class="validate" maxlength="10">
+										<label [class.active]="form.value.matesp" for="matesp">Matrícula Especial</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<input id="highDate" type="text" class="datepicker" formControlName="highDate" materialize="pickadate" [materializeParams]="[datePickerOptions]"
+										    [attr.data-value]="form.value.highDate">
+										<label for="dateHigh">Fecha de Alta</label>
+									</div>
+									<div class="input-field col s12 m8">
+										<input id="repres" formControlName="repres" type="text" class="validate" maxlength="40">
+										<label [class.active]="form.value.repres" for="repres">Representante</label>
+									</div>
+									<div class="col s12 m4">
+										<label class="active">Esta habilitado</label>
+										<div style="padding-top: 0.7rem">
+											<input formControlName="enabled" type="radio" id="test1" [value]="1" />
+											<label style="padding-right: 9%;" for="test1">Si</label>
+											<input formControlName="enabled" type="radio" id="test2" [value]="0" />
+											<label for="test2">No</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li *ngIf="isEdit">
+							<div class="collapsible-header blue lighten-2 white-text">
+								<i class="material-icons">account_balance</i>
+								<span class="full-width">Datos de Contratos</span>
+								<i class="material-icons less">expand_less</i>
+								<i class="material-icons more">expand_more</i>
+							</div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div *ngIf="!showContractOsView">
+										<app-dynamic-table [sourceService]="contractProfessionalService"
+														   [columns]="contractProfessionalService.columns"
+														   [disabledDetail]=true
+														   [disabledDelete]=true
+														   [disableButtonFloating]="true" [hideFilters]="true"
+														   (actionClick)="onActionClick($event)">
+										</app-dynamic-table>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text">
+								<i class="material-icons">broken_image</i>
+								<span class="full-width">Datos contables</span>
+								<i class="material-icons less">expand_less</i>
+								<i class="material-icons more">expand_more</i>
+							</div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s4">
+										<select formControlName="ivaReg" materialize="material_select" [materializeSelectOptions]="regIvas" required>
+											<option value="" disabled selected>Elija una opción</option>
+											<option *ngFor="let iva of regIvas" [value]="iva.number">{{iva.name}}</option>
+										</select>
+										<label>Reg. Iva</label>
+										<app-control-error-message [show]="!form.value.ivaReg"></app-control-error-message>
+									</div>
+									<div class="input-field col s4">
+										<select formControlName="ibrReg" materialize="material_select" [materializeSelectOptions]="regIbrs" required>
+											<option value="" disabled selected>Elija una opción</option>
+											<option *ngFor="let regi of regIbrs" [ngValue]="regi.number">{{regi.name}}</option>
+										</select>
+										<label>Reg. Ibr</label>
+										<app-control-error-message [show]="!form.value.ibrReg"></app-control-error-message>
+									</div>
+									<div class="input-field col s4">
+										<input id="ingbru" class="validate" type="text" formControlName="ingbru" maxlength="20">
+										<label [class.active]="form.value.ingbru" for="ingbru">Ingresos Brutos</label>
+										<app-control-error-message [form]="f" [control]="{key:'ingbru'}"></app-control-error-message>
+									</div>
+									<div class="input-field col s4">
+										<input-auto-complete
+											[label]="'Plan Cuenta'" [requiredIAC]="true"
+											[form]="form" [formControlNameIAC]="'accountNumber'"
+											[functionForData]="functionForAccountPl" [displayPropertyName]="'description'" [valuePropertyName]="'account'" >
+									  	</input-auto-complete>
+									</div>
+									<div class="input-field col s4">
+										<select formControlName="aliibr" materialize="material_select" [materializeSelectOptions]="grossinAliquots" required>
+											<option value="" disabled selected>Elija una opción</option>
+											<option *ngFor="let gross of grossinAliquots" [ngValue]="gross.number">{{gross.name}}</option>
+										</select>
+										<label>Alicuota Ibr</label>
+										<app-control-error-message [show]="!form.value.aliibr && form.value.aliibr != 0"></app-control-error-message>
+									</div>
+									<div class="input-field col s4">
+										<select formControlName="category" materialize="material_select" [materializeSelectOptions]="categories" required>
+											<option value="" disabled selected>Elija una opción</option>
+											<option *ngFor="let cat of categories" [ngValue]="cat.number">{{cat.name}}</option>
+										</select>
+										<label>Categoria</label>
+										<app-control-error-message [show]="!form.value.category"></app-control-error-message>
+									</div>
+									<div class="row">
+										<div class="input-field col s6">
+											<input id="bank" type="text" formControlName="bank" class="validate" maxlength="40">
+											<label [class.active]="form.value.bank" for="bank">Banco</label>
+										</div>
+										<div class="input-field col s6">
+											<input id="cbu" type="text" formControlName="cbu" class="validate" maxlength="25">
+											<label [class.active]="form.value.cbu" for="cbu">CBU</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text">
+								<i class="material-icons">playlist_add</i>
+								<span class="full-width">Datos adicionales</span>
+								<i class="material-icons less">expand_less</i>
+								<i class="material-icons more">expand_more</i>
+							</div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m6">
+										<input type="text" id="observation" formControlName="observation" class="validate" maxlength="1024" />
+										<label [class.active]="form.value.observation" for="observation">Observación</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<input formControlName="cause" type="text" id="cause" class="materialize-textarea" maxlength="50" />
+										<label [class.active]="form.value.cause" for="cause">Causa</label>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+					<div class="row center-align">
+						<button-submit
+							[btntext]="'Guardar'" [loadingGlobal]="true"
+							[btnType]="'submit'" [btnDisabled]="!form.valid"  [isLoading]="isSaving" >
+						</button-submit>
+						<button type="button" class="waves-effect waves-light btn btn-form center red z-index-0" (click)="onCancelButton()">Cancelar</button>
+					</div>
+				</form>
+				<app-not-found *ngIf="!isLoading && !form" returnPath="/gestionProfesionales/profesionales"></app-not-found>
+			</div>
+		</div>
+	</div>
+	<app-modal-confirm [title]="isEdit ? 'Editar' : 'Alta'" [message]="'¿Desea regresar sin guardar los cambios?'" [openModalSubject]="openModalSubject"
+	    (agree)="onAgree()">
+	</app-modal-confirm>
+</div>

@@ -1,0 +1,258 @@
+<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title center-align">{{(!id ? 'Nueva' : 'Editar')}} Obra Social</span>
+				<loading *ngIf="isLoading"></loading>
+
+				<form #f="ngForm" [formGroup]="form" (ngSubmit)="saveMedicalInsurance()" *ngIf="!isLoading && !!form">
+					<ul materialize="collapsible" class="collapsible" data-collapsible="expandable">
+						<li>
+							<div class="collapsible-header active blue lighten-2 white-text"><i class="material-icons">account_circle</i><span class="full-width">Datos personales</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m4">
+										<input id="name" class="validate" formControlName="name" type="text" minlength="4" maxlength="40" required>
+										<label for="name" [class.active]="form.value.name">Razón Social</label>
+										<app-control-error-message [form]="f" [control]="{key:'name', minlength: 4}"></app-control-error-message>
+									</div>
+									<div class="input-field col s12 m4">
+										<input id="denomination" class="validate" formControlName="denomination" type="text" maxlength="40">
+										<label for="denomination" [class.active]="form.value.denomination ">Denominación</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<input id="repres" class="validate" formControlName="repres" type="text" maxlength="40">
+										<label for="repres" [class.active]="form.value.repres">Representante</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<select formControlName="identi" materialize="material_select" [materializeSelectOptions]="identifiers" (change)="onChangeIdenti()" required>
+											<option value="" disabled selected>Elija una opción</option>
+											<option *ngFor="let iden of identifiers" [value]="iden.number">{{iden.name}}</option>
+										</select>
+										<label>Tipo</label>
+										<app-control-error-message [show]="!form.value.identi && form.value.identi != 0"></app-control-error-message>
+									</div>
+									<div class="input-field col s12 m4">
+										<input id="cuit" class="validate" formControlName="cuit" type="text" maxlength="13" required>
+										<label for="cuit" [class.active]="form.value.cuit">{{cuitLabel}}</label>
+										<app-control-error-message [form]="f" [control]="{key:'cuit'}"></app-control-error-message>
+									</div>
+									<!-- <div class="col s12 m4">
+										<label class="active">Habilitado</label>
+										<div style="padding-top: 0.7rem">
+											<input formControlName="enabled" type="radio" id="test1" [value]="1" />
+											<label style="padding-right: 9%;" for="test1">Si</label>
+											<input formControlName="enabled" type="radio" id="test2" [value]="0" />
+											<label for="test2">No</label>
+										</div>
+									</div> -->
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text"><i class="material-icons">place</i><span class="full-width">Datos de ubicación</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m6">
+										<input name="address" id="address" type="text" class="validate" formControlName="address" maxlength="40">
+										<label for="address" [class.active]="form.value.address">Dirección</label>
+									</div>
+									<div class="input-field  col s12 m6">
+										<input name="quarter" id="quarter" type="text" formControlName="quarter" class="validate" maxlength="40">
+										<label for="quarter" [class.active]="form.value.quarter">Barrio</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<input-auto-complete [label]="'Provincia'" 
+										 [requiredIAC]="true"
+										[form]="form"
+										[functionForData]="functionForProvinces"
+										[formControlNameIAC]="'province'"
+										 (valueChange)="onProvinceChange($event)">
+									   </input-auto-complete>
+									</div>
+									<div class="input-field col s12 m4">
+										<input-auto-complete [label]="'Localidad'" 
+											[requiredIAC]="true" 
+											 [form]="form"
+											[formControlNameIAC]="'locality'" 
+											 [isLoading]="loadingLocalityIAC"
+											[source]="localities" >
+										</input-auto-complete>
+									</div>
+									<div class="input-field col s12 m4">
+										<select formControlName="zone" materialize="material_select" [materializeSelectOptions]="zones" required>
+											<option value="" disabled selected>Elija una opción</option>
+											<option *ngFor="let opt of zones" [value]="opt.number">{{opt.name}}</option>
+										</select>
+										<label>Zona</label>
+										<app-control-error-message [show]="!form.value.zone"></app-control-error-message>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text"><i class="material-icons">perm_phone_msg</i><span class="full-width">Datos de contacto</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m4">
+										<input id="phone" class="validate" formControlName="phone" type="text" maxlength="40">
+										<label for="phone" [class.active]="form.value.phone">Teléfono</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<input id="movil" class="validate" formControlName="movil" type="text" maxlength="40">
+										<label for="movil" [class.active]="form.value.movil">Celular</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<input id="fax" class="validate" formControlName="fax" type="text" maxlength="40">
+										<label for="fax" [class.active]="form.value.fax">Fax</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<input id="mail" class="validate" formControlName="mail" type="email" maxlength="40" [pattern]="emailPattern">
+										<label for="mail" [class.active]="form.value.mail">E-mail</label>
+										<app-control-error-message [form]="f" [control]="{key:'mail', type:'email'}"></app-control-error-message>
+									</div>
+									<div class="input-field col s12 m6">
+										<input id="www" class="validate" formControlName="www" type="text" maxlength="40">
+										<label for="www" [class.active]="form.value.www">Página Web</label>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text"><i class="material-icons">broken_image</i><span class="full-width">Datos contables</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m4">
+										<select formControlName="category" materialize="material_select" [materializeSelectOptions]="categories" required>
+											<option value="" disabled selected>Elija una opción</option>
+											<option *ngFor="let opt of categories" [value]="opt.number">{{opt.name}}</option>
+										</select>
+										<label>Categoría</label>
+										<app-control-error-message [show]="!form.value.category"></app-control-error-message>
+									</div>
+									<div class="input-field col s12 m4">
+										<input id="percentage" class="validate" formControlName="percentage" type="number">
+										<label for="percentage" [class.active]="form.value.percentage || form.value.percentage == 0">Porcentaje</label>
+										<app-control-error-message [form]="f" [control]="{key:'percentage'}"></app-control-error-message>
+									</div>
+									<div class="input-field  col s12 m4">
+										<select formControlName="ivaReg" materialize="material_select" [materializeSelectOptions]="regIvas" required>
+											<option value="" disabled selected>Elija una opción</option>
+											<option *ngFor="let opt of regIvas" [value]="opt.number">{{opt.name}}</option>
+										</select>
+										<label>Reg. Iva.</label>
+										<app-control-error-message [show]="!form.value.ivaReg"></app-control-error-message>
+									</div>
+									<div class="input-field col s12 m4">
+										<select formControlName="ibrReg" materialize="material_select" [materializeSelectOptions]="regIbrs" required>
+											<option value="" disabled selected>Elija una opción</option>
+											<option *ngFor="let opt of regIbrs" [value]="opt.number">{{opt.name}}</option>
+										</select>
+										<label>Reg. Ibr.</label>
+										<app-control-error-message [show]="!form.value.ibrReg"></app-control-error-message>
+									</div>
+									<div class="input-field  col s12 m4">
+										<input-auto-complete [label]="'Cuenta'" [requiredIAC]="true"  [form]="form"
+										[formControlNameIAC]="'accountNumber'"
+										[readonlyIAC]="false" [readonlyValue]="medicalInsurance.medicalInsuranceAccount.accountNumber"
+										[source]="accountPl" [displayPropertyName]="'description'" [valuePropertyName]="'account'" >
+									  </input-auto-complete>
+									</div>
+									<div class="input-field  col s12 m4">
+										<input id="ingbru" class="validate" formControlName="ingbru" type="text">
+										<label for="ingbru" [class.active]="form.value.ingbru">Ing. Bru.</label>
+									</div>
+									<div class="input-field col s12">
+										<textarea id="observation" formControlName="observation" class="materialize-textarea" maxlength="1024"></textarea>
+										<label for="observation" [class.active]="form.value.observation">Observación</label>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li *ngIf="id">
+							<div class="collapsible-header blue lighten-2 white-text">
+								<i class="material-icons">account_balance</i>
+								<span class="full-width">Datos de Contratos</span>
+								<i class="material-icons less">expand_less</i>
+								<i class="material-icons more">expand_more</i>
+							</div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div *ngIf="!showContractOsView">
+										<app-dynamic-table [sourceService]="contractOsService" 
+											[columns]="contractOsService.columns" 
+											[disabledDetail]=true
+											[disabledDelete]=true
+											[disableButtonFloating]="true" [hideFilters]="true" 
+											(actionClick)="onActionClick($event)">
+										</app-dynamic-table>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text"><i class="material-icons">perm_phone_msg</i><span class="full-width">Datos de Representantes</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m6">
+										<input id="agent1" class="validate" formControlName="agent1" type="text" maxlength="70">
+										<label for="agent1" [class.active]="form.value.agent1">Representante N° 1</label>
+										<app-control-error-message [form]="f" [control]="{key:'agent1'}"></app-control-error-message>
+									</div>
+									<div class="input-field col s12 m6">
+										<input id="agentPhone1" class="validate" formControlName="agentPhone1" type="text" maxlength="15">
+										<label for="agentPhone1" [class.active]="form.value.agentPhone1">Teléfono</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="input-field col s12 m6">
+										<input id="agent2" class="validate" formControlName="agent2" type="text" maxlength="70">
+										<label for="agent2" [class.active]="form.value.agent2">Representante N° 2</label>
+										<app-control-error-message [form]="f" [control]="{key:'agent2'}"></app-control-error-message>
+									</div>
+									<div class="input-field col s12 m6">
+										<input id="agentPhone2" class="validate" formControlName="agentPhone2" type="text" maxlength="15">
+										<label for="agentPhone2" [class.active]="form.value.agentPhone2">Teléfono</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="input-field col s12 m6">
+										<input id="agent3" class="validate" formControlName="agent3" type="text" maxlength="70">
+										<label for="agent3" [class.active]="form.value.agent3">Representante N° 3</label>
+										<app-control-error-message [form]="f" [control]="{key:'agent3'}"></app-control-error-message>
+									</div>
+									<div class="input-field col s12 m6">
+										<input id="agentPhone3" class="validate" formControlName="agentPhone3" type="text" maxlength="15">
+										<label for="agentPhone3" [class.active]="form.value.agentPhone3">Teléfono</label>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+					<div class="row center-align">
+							<button-submit
+								[btnType]="'submit'" [btntext]="'Guardar'" [btntextLoading]="'Guardando'"
+							    [btnDisabled]="!form.valid"  [isLoading]="loading" >
+					    	</button-submit>
+						<!-- <button type="submit" [disabled]="!f.form.valid" class="waves-effect waves-light btn btn-form center blue z-index-0">Guardar</button> -->
+						<!-- <button type="submit" [disabled]="!f.form.valid || !isLoadAccount || !isLoadProvince || !isLoadLocality " class="waves-effect waves-light btn btn-form center blue z-index-0">Guardar</button> -->
+						<button type="button" class="waves-effect waves-light btn btn-form center red z-index-0" (click)="onCancelButton()">Cancelar</button>
+					</div>
+				</form>
+				<div *ngIf="!isLoading && !form">
+					<div class="center-align" style="margin-bottom: 50px;margin-top: 20px;">
+						<span style="font-weight: bold;">NO HAY DATOS PARA MOSTRAR</span>
+					</div>
+					<div class="center-align">
+						<a [routerLink]="['/archivos/obraSocial']" class="waves-effect waves-light btn center-align red lighten-1">Cerrar</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<app-modal-confirm [title]="!!id ? 'Editar' : 'Alta'"
+					   [message]="'¿Desea regresar sin guardar los cambios?'"
+					   [openModalSubject]="openModalSubject"
+					   (agree)="onAgree()">
+	</app-modal-confirm>
+</div>

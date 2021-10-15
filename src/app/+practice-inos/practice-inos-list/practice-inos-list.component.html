@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <a class="waves-effect waves-light btn" (click)="uploadFile()" style="position: absolute; right: 30px;"><i class="material-icons right">cloud_upload</i>Importar EXCEL</a>
+                <app-dynamic-table 
+                    [sourceService]="practiceInosService" 
+                    [title]="'Prácticas Ino y otras'" 
+                    [columns]="columns"
+                    [paginator]="paginator" 
+                    [permissionCode]="'ABMINOS'"
+                    [reloadingData]="reloadingData" (actionClick)="onActionClick($event)" (reloadingDataChange)="updateReloadingData($event)">
+                </app-dynamic-table>
+            </div>
+        </div>
+    </div>
+    <app-modal-confirm [title]="'Eliminar Práctica INOS'" [message]="'¿Desea eliminar la práctica INOS?'"
+        [openModalSubject]="deleteModalSubject" (agree)="onDeleteConfirm()">
+    </app-modal-confirm>
+</div>

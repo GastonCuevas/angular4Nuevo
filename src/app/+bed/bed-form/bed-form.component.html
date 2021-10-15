@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content" *ngIf="!isNewBed">
+                <span class="card-title center-align">{{title}}</span>
+                <br />
+                <loading *ngIf="isLoading"></loading>
+                <form #formBed="ngForm" [formGroup]="form" (ngSubmit)="onSubmit($event)" *ngIf="!isLoading && !!form">
+                    <div class="row">
+                        <div class="input-field col s12 m12">
+                            <input id="name" formControlName="name" type="text" class="validate" maxlength="80" />
+                            <label [class.active]="bed.name" for="name">Nombre</label>
+                            <app-control-error-message [form]="formBed" [control]="{key:'name'}"></app-control-error-message>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <input type="text" id="bedTypeName" auto-complete
+                                   formControlName="bedTypeName"
+                                   [source]="auxListBedTypes"
+                                   [value]="bedTypeName"
+                                   (valueChanged)="customCallbackBedType($event)"
+                                   (input)="bedTypeName=$event.target.value"
+                                   placeholder=""
+                                   max-num-list="10" />
+                            <label for="bedTypeName" [class.active]="form.value.bedTypeName">Tipo</label>
+                            <app-control-error-message [form]="formBed" [control]="{key:'bedTypeName'}"></app-control-error-message>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="wardName" auto-complete type="text"
+                                   formControlName="wardName"
+                                   [source]="auxListWards"
+                                   [value]="wardName"
+                                   (valueChanged)="customCallbackWard($event)"
+                                   (input)="wardName=$event.target.value"
+                                   placeholder="" max-num-list="10" />
+                            <label for="wardName" [class.active]="form.value.wardName">Sala</label>
+                            <app-control-error-message [form]="formBed" [control]="{key:'wardName'}"></app-control-error-message>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row center-align">
+                        <button type="submit" [disabled]="!formBed.form.valid" class="waves-effect waves-light btn btn-form center cyan " style="z-index: 0 !important">Guardar</button>
+                        <button type="button" class="waves-effect waves-light btn btn-form center red lighten-1" (click)="onCancelButton()" style="z-index: 0 !important">Cancelar</button>
+                    </div>
+                </form>
+                <div *ngIf="!isLoading && !form">
+                    <div class="center-align" style="margin-bottom: 50px;margin-top: 20px;">
+                        <span style="font-weight: bold;">NO HAY DATOS PARA MOSTRAR</span>
+                    </div>
+                    <div class="center-align">
+                        <a [routerLink]="['/camas/camas']" class="waves-effect waves-light btn center-align red lighten-1">Cerrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-modal-confirm [title]="isEdit ? 'Editar' : 'Alta'" [message]="'Desea regresar sin guardar los cambios?'" [openModalSubject]="openModalSubject"
+                   (agree)="onAgree()">
+</app-modal-confirm>

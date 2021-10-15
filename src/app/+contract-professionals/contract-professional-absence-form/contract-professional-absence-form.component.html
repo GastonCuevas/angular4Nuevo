@@ -1,0 +1,61 @@
+<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title center-align">Ausencia registrada</span>
+				<form #formProfessionalContractAbsence="ngForm" [formGroup]="form" (ngSubmit)="onSubmitAbsence()">
+					<div class="row">
+						<div class="input-field col s12 m2">
+							<input #dateFrom formControlName="dateFrom" name="dateFrom" id="dateFrom" 
+							[disabled]="!isNew"
+							[attr.data-value]="form.value.dateFrom" required
+								   type="text" class="datepicker" materialize="pickadate" [materializeParams]="[datePickerOptionsFrom]" 
+								   (input)="changeDateFrom()">
+							<label for="dateFrom">Fecha desde</label>
+							<app-control-error-message [form]="formProfessionalContractAbsence" [control]="{key:'dateFrom'}"></app-control-error-message>
+						</div>
+						<div class="input-field col s12 m2">
+							<input #dateTo formControlName="dateTo" name="dateTo" id="dateTo" [attr.data-value]="form.value.dateTo" required
+								   type="text" class="datepicker" materialize="pickadate" [materializeParams]="[datePickerOptionsTo]">
+							<label for="dateTo">Fecha hasta</label>
+							<app-control-error-message [form]="formProfessionalContractAbsence" [control]="{key:'dateTo'}"></app-control-error-message>
+						</div>
+						<div class="input-field col s12 m8">
+							<input-auto-complete 
+								[label]="'Motivo'" 
+								[requiredIAC]="true" 
+								[form]="form" 
+								[formControlNameIAC]="'motive'" 
+								[functionForData]="functionMotives"
+								(valueChange)="onChangeIAC($event)"
+								>
+                            </input-auto-complete>
+                            <!-- <input type="text" id="motive" name="motive" formControlName="motive"  maxlength="100" required/>
+							<label for="motive" [class.active]="form.value.motive">Motivo</label>
+							<app-control-error-message [form]="formProfessionalContractAbsence" [control]="{key:'motive'}"></app-control-error-message> -->
+                        </div>
+                        <div class="input-field col s12">
+                            <textarea id="observation" name="observation" formControlName="observation" class="materialize-textarea" maxlength="100"></textarea>
+                            <label for="observation" [class.active]="form.value.observation">Observación</label>
+						</div>
+					</div>
+					<div class="row center-align">
+						<button type="submit" [disabled]="!formProfessionalContractAbsence.form.valid" class="waves-effect waves-light btn btn-form center blue">Guardar</button>
+						<button type="button" class="waves-effect waves-light btn btn-form center red" (click)="onCancelButton()">Cancelar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<app-modal-confirm [title]="!!isNew ? 'Editar' : 'Alta'"
+				   [message]="'¿Desea regresar sin guardar los cambios?'"
+				   [openModalSubject]="openModalSubject"
+				   (agree)="onAgree()">
+</app-modal-confirm>
+
+<app-modal-confirm [title]="'El Profesional tiene turnos otorgados'"
+				   [message]="'¿Desea continuar y guardar los cambios?'"
+				   [openModalSubject]="openModalWarning"
+				   (agree)="onAgreeWarningAbsence()">
+</app-modal-confirm>
