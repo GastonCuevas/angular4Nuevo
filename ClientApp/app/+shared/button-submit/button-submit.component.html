@@ -1,8 +1,0 @@
-<button *ngIf="!isLoading || loadingGlobal" [type]="btnType" [disabled]="btnDisabled" (click)="onSubmit()"
-    class="waves-effect waves-light btn btn-form center classes {{color}}">
-    {{btntext}}
-</button>
-<button *ngIf="isLoading && !loadingGlobal" class="waves-effect waves-light btn btn-form center blue" disabled>
-    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
-    {{btntextLoading}}
-</button>
