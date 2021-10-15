@@ -1,0 +1,27 @@
+<!-- Modal Trigger -->
+<!-- <a class="waves-effect waves-light btn modal-trigger" (click)="openModal()">Modal</a> -->
+
+<!-- Modal Structure -->
+<div id="modalConfirm" *ngIf="!centered" class="modal modal-styles" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+    <div class="modal-content">
+        <h5>{{ title }}</h5>
+        <p>{{ message }}</p>
+    </div>
+    <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-teal btn-flat" (click)="onAgree()">{{primaryBtnTxt}}</a>
+        <a class="waves-effect waves-red btn-flat" (click)="closeModal()">{{secondaryBtnTxt}}</a>
+    </div>
+</div>
+
+<!-- Modal structure centered  -->
+<div id="modalConfirm" *ngIf="centered" class="modal modal-styles" materialize="modal" [style.width]="width" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+    <div class="modal-content center-align">
+        <h5>{{ title }}</h5>
+        <p>{{ message }}</p>
+        <!-- <hr class="hr-style"> -->
+        <div class="row" style="margin-bottom: 0px; margin-top: 1.5rem;">
+            <a class="modal-action modal-close waves-effect waves-teal btn-flat hover-teal" (click)="onAgree()">{{primaryBtnTxt}}</a>
+            <a class="waves-effect waves-red btn-flat hover-red" (click)="closeModal()">{{secondaryBtnTxt}}</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="row">
+    <form class="{{formClass}}" (submit)="onSubmit()" [formGroup]="form">
+        <div class="row">
+                <app-dynamic-form-control *ngFor="let ctrl of controls" 
+                    [control]="ctrl"
+                    [form]="form"
+                    [isDetail]="isDetail"
+                    >
+                </app-dynamic-form-control>
+        </div>
+        <div class="row center-align container-form">
+            <button *ngIf="!isLoading && !isDetail" type="submit" class="waves-effect waves-light btn btn-form center blue" [disabled]="!form.valid || !enabledSubmitBtn">{{btnTextSubmit}}</button>
+            <button *ngIf="isLoading" type="submit" class="waves-effect waves-light btn btn-form center blue" disabled>
+                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+            </button>
+            <button *ngIf="btnText" type="button" class="waves-effect waves-light btn btn-form center red lighten-1" (click)="onReturn()">{{btnText}}</button>
+        </div>
+        <div class="red-text center-align" *ngIf="errorSumary">{{errorSumary}}</div>
+    </form>
+</div>

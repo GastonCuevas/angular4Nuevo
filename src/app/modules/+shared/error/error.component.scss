@@ -1,0 +1,11 @@
+.error-box{
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.error-message{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

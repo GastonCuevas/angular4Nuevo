@@ -1,0 +1,66 @@
+<div class="filter" [hidden]="!show">
+    <div class="center-align filter-header">
+        <span class="title-filter">
+            <i class="material-icons icon-filter">search</i>
+            Filtros para Búsqueda
+        </span>
+        <a *ngIf="showFilterForm" class="btn-floating btn-small waves-effect waves-light btn-expand" (click)="showFilterForm = !showFilterForm"
+            materialize="tooltip" data-position="rigth" data-delay="50" data-tooltip="Ocultar filtros">
+            <i class="material-icons">expand_less</i>
+        </a>
+        <a *ngIf="!showFilterForm" class="btn-floating btn-small waves-effect waves-light btn-expand" (click)="showFilterForm = !showFilterForm"
+            materialize="tooltip" data-position="rigth" data-delay="50" data-tooltip="Mostrar filtros">
+            <i class="material-icons">expand_more</i>
+        </a>
+    </div>
+
+    <div class="row filter-form hoverable" [hidden]="!showFilterForm">
+        <form #f="ngForm"  [formGroup]="form" class="{{formClass}}">
+            <div class="row">
+                <div *ngFor="let control of controls"  [ngSwitch]="control.type" >
+                    <div *ngSwitchCase="'select'" class="input-field {{control.class}}">
+                        <select [id]="control.key" [formControlName]="control.key" materialize="material_select" [materializeSelectOptions]="control.options"
+                            (change)="onFilterChange()">
+                            <option *ngFor="let opt of control.options" [ngValue]="opt.number">{{opt.name}}</option>
+                        </select>
+                        <label>{{control.label}}</label>
+                        <app-control-error-message [form]="f" [control]="control"></app-control-error-message>
+                    </div>
+
+                    <div *ngSwitchCase="'autocomplete'" class="input-field {{control.class}}">
+                        <input-auto-complete
+                            [label]="control.label"
+                            [form]="form"
+                            [formControlNameIAC]="control.key"
+                            [placeholder]="control.placeholder || 'Escriba y seleccione para filtrar'"
+                            [functionForData]="control.functionForData"
+                            (valueChange)="onFilterChange()">
+                        </input-auto-complete>
+                    </div>
+
+                    <div *ngSwitchCase="'date'" class="input-field {{control.class}}">
+                        <input [id]="control.key" placeholder="{{control.placeholder || 'Seleccione fecha'}}" [formControlName]="control.key" type="text"
+                            class="datepicker" materialize="pickadate" [materializeParams]="[control.datePickerOptions]">
+                        <label [attr.for]="control.key" [class.active]="form.value[control.key]">{{control.label}}</label>
+                        <app-control-error-message [form]="f" [control]="control"></app-control-error-message>
+                    </div>
+
+                    <div *ngIf="control.type === 'name' || control.type === 'text' || control.type === 'email' || control.type === 'password' || control.type === 'number'" class="input-field {{control.class}}">
+                        <input [id]="control.key" placeholder="Escriba para filtrar" class="validate"
+                            [formControlName]="control.key" [type]="control.type === 'name' ? 'text' : control.type" (keyup)="changeInput()">
+                        <label [attr.for]="control.key" class="active">{{control.label}}</label>
+                        <app-control-error-message [form]="f" [control]="control"></app-control-error-message>
+                    </div>
+
+                    <div *ngSwitchCase="'checkbox'"class="{{control.class}}">
+                        <input [type]="control.type" [id]="control.key" [checked]="control.value" (change)="onFilterChange()"/>
+                        <label [attr.for]="control.key" style="position: absolute;"></label>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="withSubmit" class="row center-align">
+                <button type="button" [disabled]="!form.valid" class="waves-effect waves-light btn btn-form" (click)="onSubmit()">Buscar</button>
+            </div>
+        </form>
+    </div>
+</div>

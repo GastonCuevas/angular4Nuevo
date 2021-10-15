@@ -1,0 +1,65 @@
+<div #f="ngForm" [formGroup]="form" [ngSwitch]="control.type">
+
+    <div *ngSwitchCase="'select'" class="input-field {{control.class}}">
+        <select [id]="control.key" [formControlName]="control.key" materialize="material_select" [materializeSelectOptions]="control.options" >
+            <option value="" disabled selected>Seleccione una Opción</option>
+            <option *ngFor="let opt of control.options" [value]="opt.number">{{opt.name}}</option>
+        </select>
+        <label>{{control.label}}</label>
+        <app-control-error-message [form]="f" [control]="control"></app-control-error-message>
+    </div>
+
+    <div *ngSwitchCase="'autocomplete'" class="input-field {{control.class}}">
+        <input-auto-complete
+            [label]="control.label" [requiredIAC]="control.required"
+            [form]="form" [formControlNameIAC]="control.key"
+            [source]="control.options"
+            [functionForData]="control.functionForData"
+            >
+        </input-auto-complete>
+    </div>
+
+    <!-- <div class="input-field {{control.class}}">
+        <p *ngSwitchCase="'checkbox'" [attr.for]="control.key">
+            <input #ck (change)="control.value = ck.checked" [formControlName]="control.key" [type]="control.type" [id]="control.key"
+            />
+            <label [attr.for]="control.key">{{control.label}}</label>
+        </p>
+    </div> -->
+
+    <div *ngSwitchCase="'radio'" class="{{control.class}}">
+        <label class="active">{{control.label}}</label>
+        <div style="padding-top: 0.7rem">
+            <input [formControlName]="control.key" type="radio" id="option1" [value]="1" />
+            <label style="padding-right: 9%;" for="option1">Si</label>
+            <input [formControlName]="control.key" type="radio" id="option2" [value]="0" />
+            <label for="option2">No</label>
+        </div>
+    </div>
+
+    <div *ngIf="control.type === 'text' || control.type === 'email' || control.type === 'password' || control.type === 'number'" class="input-field {{control.class}}">
+        <input [id]="control.key" class="validate" [formControlName]="control.key"
+            [type]="control.type" required={{control.required}} [attr.disabled]="isDetail ? '' : null">
+        <label [attr.for]="control.key" [class.active]="form.value[control.key]">{{control.label}}</label>
+        <app-control-error-message [form]="f" [control]="control"></app-control-error-message>
+    </div>
+
+    <div *ngSwitchCase="'date'" class="input-field {{control.class}}">
+        <input [id]="control.key" class="datepicker" [formControlName]="control.key" type="text" materialize="pickadate" [materializeParams]="[control.datePickerOptions]">
+        <label [attr.for]="control.key" [class.active]="form.value[control.key]">{{control.label}}</label>
+        <app-control-error-message [form]="f" [control]="control"></app-control-error-message>
+    </div>
+
+    <div *ngSwitchCase="'time'" class="input-field {{control.class}}">
+        <input [id]="control.key" class="timepicker" [formControlName]="control.key" type="text" materialize="pickatime" [materializeParams]="[control.timePickerOptions]">
+        <label [attr.for]="control.key" [class.active]="form.value[control.key]">{{control.label}}</label>
+        <app-control-error-message [form]="f" [control]="control"></app-control-error-message>
+    </div>
+
+    <div *ngSwitchCase="'memo'" class="input-field {{control.class}}">
+        <textarea [id]="control.key" name="observation" [formControlName]="control.key" type="text" class="materialize-textarea" maxlength="1024" style="margin-top: 15px;"></textarea>
+        <label [attr.for]="control.key" [class.active]="form.value[control.key]">{{control.label}}</label>
+        <app-control-error-message [form]="f" [control]="control"></app-control-error-message>
+    </div>
+
+</div>

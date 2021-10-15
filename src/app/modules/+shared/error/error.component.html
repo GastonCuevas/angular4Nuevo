@@ -1,0 +1,19 @@
+<div [hidden]="!show" class="center-align margin top-s bottom-s">
+    <div class="error-box">
+        <div class="error-icon">
+            <span [hidden]="type!=='lock'"><i class="large material-icons">lock</i></span>
+            <span [hidden]="type!=='error'"><i class="large material-icons">error_outline</i></span>
+        </div>
+        <div class="error-message">
+            <h6 class="margin bottom-s" style="font-weight: bold;">{{title}}</h6>
+            <span class="helper-text" data-error="wrong" data-success="right">{{subtitle}}</span>
+        </div>
+        <div class="error-icon">
+            <span [hidden]="type!=='lock'"><i class="large material-icons">lock</i></span>
+            <span [hidden]="type!=='error'"><i class="large material-icons">error_outline</i></span>
+        </div>
+    </div>
+    <div class="error-button" [hidden]="!buttonshow">
+        <a [routerLink]="[returnPath]" class="waves-effect waves-light btn red lighten-1">{{txtButton}}</a>
+    </div>
+</div>
