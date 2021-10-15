@@ -1,0 +1,138 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title center-align">{{(!!id ? 'Editar' : 'Nuevo')}} Usuario</span>
+                <br />
+                <loading *ngIf="isLoading"></loading>
+
+                <form #formUser="ngForm" [formGroup]="form" (ngSubmit)="save()" *ngIf="!isLoading && !!form" (keydown.enter)="$event.preventDefault()">
+                    <div class="row">
+                        <div class="input-field col s12 m4">
+                            <input formControlName="login" id="login" name="login" type="text" class="validate" required maxlength="10">
+                            <label for="login" [class.active]="form.value.login">Usuario</label>
+                            <app-control-error-message [form]="formUser" [control]="{key:'login'}"></app-control-error-message>
+                        </div>
+                        <div class="input-field col s12 m4" formGroupName="passwords">
+                            <input name="password" id="password" type="password" formControlName="password" class="validate" [attr.required]="!id ? true : null" maxlength="16" />
+                            <label [class.active]="form.value.passwords.password" for="password">Contrase&ntilde;a</label>
+                            <app-control-error-message [form]="formUser" [control]="{key:'passwords.password'}"></app-control-error-message>
+                        </div>
+                        <div class="input-field col s12 m4" formGroupName="passwords">
+                            <input name="confirmPassword" id="confirmPassword" type="password" formControlName="confirmPassword" class="validate" [class.invalid]="form.controls.passwords.hasError('areEqual')" maxlength="16" />
+                            <label [class.active]="form.value.passwords.confirmPassword" for="confirmPassword">Repetir Contrase&ntilde;a</label>
+                            <app-control-error-message [show]="form.controls.passwords.hasError('areEqual')" [message]="'Las contrase&ntilde;as no coinciden'" [form]="formUser" [control]="{key:'passwords.confirmPassword'}"></app-control-error-message>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <input formControlName="name" id="name" name="name" type="text" class="validate" required maxlength="40">
+                            <label for="name" [class.active]="form.value.name">Nombre</label>
+                            <app-control-error-message [form]="formUser" [control]="{key:'name'}"></app-control-error-message>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input name="email" id="email" type="email" formControlName="email" class="validate" maxlength="40" [pattern]="emailPattern">
+                            <label [class.active]="form.value.email" for="mail">E-mail</label>
+                            <app-control-error-message [form]="formUser" [control]="{key:'email', type:'email'}"></app-control-error-message>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m3">
+                            <input type="checkbox" id="enabled" formControlName="enabled" />
+                            <label for="enabled">Esta habilitado</label>
+                        </div>
+                        <div class="col s12 m3">
+                            <input type="checkbox" id="isRoot" formControlName="isRoot" />
+                            <label for="isRoot">Es super usuario</label>
+                        </div>
+                    </div>
+                    <div *ngIf="!form.value.isRoot">
+
+                        <div class="divider"></div>
+                        <div class="row">
+                            <span class="col s12 sub-title">Grupos:</span>
+                            <div *ngFor="let group of groups" class="col s6 m4 l4 xl3">
+                                <input type="checkbox" id="group-{{group.number}}" (change)="switchGroup($event, group)" [checked]="verifyCheck(group)" />
+                                <label for="group-{{group.number}}">{{group.name}}</label>
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="row">
+                            <span class="col s12 sub-title">Casos de uso:</span>
+                            <div class="col s8">
+                                <input type="text" required
+                                       id="useCase" auto-complete [source]="auxListUseCases"
+                                       [value]="nameUseCase"
+                                       (valueChanged)="customCallbackUseCase($event)"
+                                       (blur)="validateNameUseCase($event.target.value)"
+                                       (input)="nameUseCase=$event.target.value"
+                                       placeholder="Caso de uso"
+                                       max-num-list="10" />
+                            </div>
+                            <div class="col s4">
+                                <button type="button" class="waves-effect waves-light btn btn-form center blue" (click)="addUseCaseWithActions()" [disabled]="!isLoadedUseCase">Agregar</button>
+                            </div>
+                        </div>
+                        <table class="highlight" id="table">
+                            <thead>
+                                <tr>
+                                    <th>Permisos</th>
+                                    <th width="5%"></th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let item of actionUseCases, let i = index">
+                                <tr class="row-father">
+                                    <td>
+                                        <ng-container>
+                                            <input type="checkbox" [id]="item.useCase + '-' + i" [class]="'checkbox-' + item.useCase" (change)="onCheckboxItemChange(item, $event.target.checked)"
+                                                   [checked]="item.enabled" />
+                                            <label [attr.for]="item.useCase + '-' + i" style="position: absolute;">{{item.name}}</label>
+                                        </ng-container>
+
+                                        <span class="right" (click)="showOrHideActions(item)" *ngIf="item.actions.length">
+                                            <i *ngIf="!item.hiddenActions" class="material-icons less">expand_less</i>
+                                            <i *ngIf="item.hiddenActions" class="material-icons more">expand_more</i>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a (click)="deleteUseCases(item)" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Eliminar">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let e of item.actions, let j = index" [hidden]="item.hiddenActions">
+                                    <td>
+                                        <ng-container>
+                                            <input class="row-item" type="checkbox" [id]="e.code + '-' + j" (change)="onCheckboxSubItemChange(e, $event.target.checked)"
+                                                   [checked]="e.enabled" />
+                                            <label [attr.for]="e.code + '-' + j" style="position: absolute;">{{e.name}}</label>
+                                        </ng-container>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <br />
+                    <div class="row center-align">
+                        <button type="submit" [disabled]="!formUser.form.valid" class="waves-effect waves-light btn btn-form center blue z-index-0">Guardar</button>
+                        <button type="button" class="waves-effect waves-light btn btn-form center red z-index-0" (click)="onCancelButton()">Cancelar</button>
+                    </div>
+                </form>
+                <div *ngIf="!isLoading && !form">
+                    <div class="center-align" style="margin-bottom: 50px;margin-top: 20px;">
+                        <span style="font-weight: bold;">NO HAY DATOS PARA MOSTRAR</span>
+                    </div>
+                    <div class="center-align">
+                        <a [routerLink]="['/administrador/usuarios']" class="waves-effect waves-light btn center-align red lighten-1">Cerrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-modal-confirm [title]="!!id ? 'Editar' : 'Alta'"
+                   [message]="'¿Desea regresar sin guardar los cambios?'"
+                   [openModalSubject]="openModalSubject"
+                   (agree)="onAgree()">
+</app-modal-confirm>

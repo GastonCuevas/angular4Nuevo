@@ -1,0 +1,17 @@
+<span class="card-title">Total de Medicamentos</span>
+<table class="highlight" id="table">
+  <thead>
+    <tr>
+      <th>Codigo</th>
+      <th>Nombre</th>   
+      <th>Stock</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of totalMedications">
+      <td>{{item.articleCode}}</td>
+      <td>{{item.articleName}}</td>
+      <td>{{item.quantityWithOutChanges}}</td>
+    </tr>
+  </tbody>
+</table>

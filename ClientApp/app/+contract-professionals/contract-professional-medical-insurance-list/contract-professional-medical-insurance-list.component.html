@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col s12">
+        <div>
+            <br />
+            <table class="table-bordered" class="scrollable">
+                <a class="btn-floating btn-small waves-effect waves-light" (click)="onActionClick('new')" style="top: 37px;">
+                    <i class="fa fa-plus"></i>
+                </a>
+
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Obra Social</th>
+                        <th style="width: 30%;">Practica</th>
+                        <th>Factor</th>
+                        <th>Fijo</th>
+                        <th>Retención (%)</th>
+                        <th>Coseguro (%)</th>
+                        <th>Por Cobrar</th>
+                        <th class="text-center">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let item of professionalMedicalInsurances">
+                    <tr>
+                        <td>
+                            <span>{{item.medicalInsuranceName}}</span>
+                        </td>
+                        <td>
+                            <span>{{item.practiceName}}</span>
+                        </td>
+                        <td>
+                            <span>{{item.factor}}</span>
+                        </td>
+                        <td>
+                            <span>{{item.fixed}}</span>
+                        </td>
+                        <td>
+                            <span>{{item.retention}}%</span>
+                        </td>
+                        <td>
+                            <span>{{item.coinsurancePercentage}}%</span>
+                        </td>
+                        <td class="center-align">
+                            <input type="checkbox" [checked]="item.porcob" id="porcob" disabled>
+                            <label for="porcob"></label>
+                        </td>
+                        <td class="text-center">
+                            <a (click)="onActionClick('edit', item)" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Editar">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <a (click)="deleteClick(item)" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Eliminar">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <app-modal-confirm [title]="'Eliminar Practica de Obra Social Asociada'" [message]="'¿Desea eliminar la practica de la obra social asociada?'"
+        [openModalSubject]="deleteModalScheduleSubject" (agree)="onDeleteScheduleConfirm($event)">
+    </app-modal-confirm>
+</div>

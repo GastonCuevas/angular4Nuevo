@@ -1,0 +1,36 @@
+<div class="row">
+    <form>
+        <div class="card card col s8 offset-s2">
+            <div class="card-content" *ngIf="isLoad">
+                <div class="card-title center-align">Entrada de Exportación <strong>{{exportationEntry.name}}</strong></div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">description</i>
+                        <input id="key" type="text" value="{{exportationEntry.key}}" readonly>
+                        <label class="active" for="key">Key</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">description</i>
+                        <input value="{{typeName}}" id="type" type="text" readonly>
+                        <label class="active" for="type">Tipo</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s4" *ngIf="isBuscador">
+                        <i class="material-icons prefix">description</i>
+                        <input value="{{exportationEntry.tableFo}}" id="tableFo" type="text" readonly>
+                        <label class="active" for="tableFo">TableFo</label>
+                    </div>
+                    <div class="input-field col s4" *ngIf="isBuscador">
+                        <i class="material-icons prefix">description</i>
+                        <input value="{{exportationEntry.fieldFo}}" id="fieldFo" type="text" readonly>
+                        <label class="active" for="fieldFo">FieldFo</label>
+                    </div>
+                </div>
+                <div class="row center-align">
+                    <a [routerLink]="['/sistema/exportaciones/formulario/'+expedientNumber]" class="waves-effect waves-light btn blue center-align">Atras</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,40 @@
+:host /deep/ table {
+    overflow-y: overlay;
+    max-height: 400px;
+    //display: block;
+    position: relative;
+}
+
+td {
+    padding: 0px;
+}
+
+.col-quantity {
+    width: 110px;
+    text-align: center;
+}
+
+.col-deposit {
+    width: 300px;
+    text-align: center;
+}
+
+.select-deposit{
+width: 80%;
+}
+
+.col-quantity input {
+    width: 70%;
+}
+
+.div-scheme {
+    border: solid;
+    border-radius: 5px;
+    margin-top: 20px;
+    border-color: #e1dfdf;
+    padding-bottom: 20px;
+}
+
+.txt-quantity{
+    background-color: #2312!important;
+}

@@ -1,0 +1,142 @@
+<div class="row">
+  <div class="col s12">
+    <div class="card">
+      <div  class="card-content">
+          <span class="card-title center-align">Registración de Consumo de Medicación</span>
+          <div class="row">
+              <div class="input-field col s12 m6">
+                  <input id="patientName" [ngModel]="scheme.patientName" [ngModelOptions]="{standalone: true}" type="text" readonly>
+                  <label for="patientName" [class.active]="scheme.patientName">Paciente</label>
+              </div>
+              <div class="input-field col s12 m6">
+                  <input id="professionalName" [ngModel]="scheme.professionalName" [ngModelOptions]="{standalone: true}" type="text" readonly>
+                  <label for="professionalName" [class.active]="scheme.professionalName">Profesional</label>
+              </div>
+              <div class="input-field col s12 m6">
+                  <input id="dateIni" [ngModel]="scheme.dateIni | date:'dd/MM/yyyy'" [ngModelOptions]="{standalone: true}" type="text" readonly>
+                  <label for="dateIni" [class.active]="scheme.dateIni">Fecha inicio</label>
+              </div>
+              <div class="input-field col s12 m6">
+                  <input id="dateEnd" [ngModel]="scheme.dateEnd | date:'dd/MM/yyyy'" [ngModelOptions]="{standalone: true}" type="text" readonly>
+                  <label for="dateEnd" [class.active]="scheme.dateEnd">Fecha fin</label>
+              </div>
+              <div class="input-field col s12 m12">
+                  <input id="observation" [ngModel]="scheme.observation" [ngModelOptions]="{standalone: true}" type="text" readonly>
+                  <label for="observation" [class.active]="scheme.observation">Observación</label>
+              </div>
+          </div>
+        
+
+        <div class="row">
+          <div class="col s12 m12 pages">
+            <ul class="pagination">
+                <li [class.disabled]="!paginator.hasPreviousPage" [class.waves-effect]="paginator.hasPreviousPage">
+                    <a (click)="previousDate()">
+                        <i class="material-icons">chevron_left</i>
+                    </a>
+                </li>
+                <li>
+                    <div class="input-field col s12 m12" style="margin-top:0">
+                        <input #selectedDate id="selectedDate" [ngModel]="scheme.selectedDate" [attr.data-value]="scheme.selectedDate"
+                            required type="text" class="datepicker" materialize="pickadate" [materializeParams]="[datePickerOptions]"
+                            (input)="onSelect($event)">
+                        <label for="selectedDate" [class.active]="scheme.selectedDate">Fecha</label>
+                    </div>
+                </li>
+
+                <li [class.disabled]="!paginator.hasNextPage" [class.waves-effect]="paginator.hasNextPage">
+                    <a (click)="nextDate()">
+                        <i class="material-icons">chevron_right</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+      </div>
+
+      <br/>
+
+
+
+      <div class="row">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+                    <table class="highlight centered">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Medicacion</th>
+                                <th>Hora</th>
+                                <th>Tipo</th>
+                                <th>Deposito</th>
+                                <th>Cantidad</th>
+                                <th>Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="!pharmacySchemesAux[selectedDateToString] || (pharmacySchemesAux[selectedDateToString] && pharmacySchemesAux[selectedDateToString].length <= 0)">
+                                <td [attr.colspan]="6">
+                                    <p class="text-center">No hay elementos para mostrar.</p>
+                                </td>
+                            </tr>
+                            <ng-container *ngFor="let pharmacyScheme of pharmacySchemesAux[selectedDateToString]; let in=index">
+                            <tr>
+                                <td class="text-left">
+                                    <span>{{pharmacyScheme.articleName}}</span>
+                                </td>
+                                <td>
+                                    <span>{{pharmacyScheme.time | slice:0:5}}</span>
+                                </td>
+                                <td>
+                                    <span>{{!!pharmacyScheme.type ? 'S.O.S' : 'GENERAL' }}</span>
+                                </td>
+                                <td>
+                                    <select [(ngModel)]="pharmacyScheme.depos" materialize="material_select">
+                                        <option value="1" selected>Farmacia</option>
+                                        <option value="33" selected>Caja SOS Rojo</option>
+                                        <option value="34" selected>Caja SOS Blanco</option>
+                                        <option value="35" selected>Caja SOS Verde</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input id="quantity" type="number" min="0" name="quantity-{{in}}" [(ngModel)]="pharmacyScheme.quantity" (input)="onChangeQuantity($event, pharmacyScheme.articleCode)">
+                                </td>
+                                <td>
+                                    <input type="text" name="observation-{{in}}" [(ngModel)]="pharmacyScheme.observation">
+                                </td>
+                            </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div id="medicaments" class="col s12">
+          <medication-delivery-total 
+              [reloadResult]="reloadResultMedication"
+              [selectedPatients]="pharmacySchemesAux"
+              [totalMedications]="scheme.medicines"
+              (validDelivery)="setValidDelivery($event)">
+          </medication-delivery-total>
+          <br/>
+        </div> 
+        <div class="row">
+            <div class="col s6 left-align">
+                <button type="button" class="waves-effect waves-light btn btn-form blue-grey" (click)="viewBack()">Atras</button>
+            </div>
+            <div class="col s6 right-align">
+                <button type="button" class="waves-effect waves-light btn btn-form blue z-index-0" (click)="saveHcPharmacyItems()">Registrar</button>
+            </div>
+        </div>
+
+        <app-modal-confirm
+          [title]="'Devolucion'"
+          [message]="'¿Desea eliminar el item de medicamento?'"
+          [openModalSubject]="deleteModalSubject"
+          (agree)="onDeleteConfirm($event)">
+        </app-modal-confirm>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col s12">
+      <div class="card">
+          <div class="card-content">
+              <app-dynamic-table
+                [sourceService]="importDataService"
+                [title]="'Administración de Importaciones'"
+                [columns]="columns"
+                [disableButtonFloating]="true" 
+                [disabledDetail]="true"
+                [paginator]="paginator"
+                [permissionCode]="'ABMIMPORT'"
+                (actionClick)="onActionClick($event)">
+            </app-dynamic-table>
+          </div>
+      </div>
+  </div>
+  <app-modal-confirm
+      [title]="'Eliminar importacion '"
+      [message]="'¿Desea eliminar la importacion?'"
+      [openModalSubject]="deleteModalSubject"
+      (agree)="onDeleteConfirm($event)">
+  </app-modal-confirm>
+</div>

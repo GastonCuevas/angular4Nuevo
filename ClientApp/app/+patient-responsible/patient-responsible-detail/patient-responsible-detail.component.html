@@ -1,0 +1,118 @@
+<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title center-align">Detalle Responsable de Paciente</span>
+				<loading *ngIf="!isLoaded"></loading>
+				<div *ngIf="isLoaded && !!patientResponsible">
+					<ul materialize="collapsible" class="collapsible" data-collapsible="expandable">
+						<li>
+							<div class="collapsible-header active blue lighten-2 white-text"><i class="material-icons">account_circle</i><span class="full-width">Datos personales</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m12">
+										<i class="material-icons prefix">account_circle</i>
+										<input id="name" type="text" value="{{patientResponsible.name}}" readonly>
+										<label for="name" class="active">Nombre</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">cake</i>
+										<input id="birthdate" type="text" [value]="patientResponsible.birthDate || ' '" readonly>
+										<label for="birthdate" class="active">Fecha de Nac.</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">chrome_reader_mode</i>
+										<input id="cuit" type="text" value="{{patientResponsible.cuit}}" readonly>
+										<label for="cuit" class="active">{{patientResponsible.identiAccount.name}}</label>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text"><i class="material-icons">place</i><span class="full-width">Datos de ubicación</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">dehaze</i>
+										<input id="address" type="text" [value]="patientResponsible.address || ' '" readonly>
+										<label for="address" class="active">Dirección</label>
+									</div>
+									<div class="input-field  col s12 m6">
+										<i class="material-icons prefix">dehaze</i>
+										<input id="quarter" type="text" [value]="patientResponsible.quarter || ' '" readonly>
+										<label for="quarter" class="active">Barrio</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">location_on</i>
+										<input id="locality" type="text" value="{{patientResponsible.loc.name}}" readonly />
+										<label for="locality" class="active">Localidad</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">location_on</i>
+										<input id="province" type="text" [value]="province || ' '" readonly>
+										<label for="province" class="active">Provincia</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">location_on</i>
+										<input id="zone" type="text" value="{{patientResponsible.zoneAccount.name}}" readonly />
+										<label for="zone" class="active">Zona</label>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text"><i class="material-icons">perm_phone_msg</i><span class="full-width">Datos de contacto</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">phone</i>
+										<input id="phone" type="text" [value]="patientResponsible.phone || ' '" readonly>
+										<label for="phone" class="active">Teléfono</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">smartphone</i>
+										<input id="movil" type="text" [value]="patientResponsible.movil || ' '" readonly>
+										<label for="movil" class="active">Celular</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">description</i>
+										<input id="fax" type="text" [value]="patientResponsible.fax || ' '" readonly>
+										<label for="fax" class="active">Fax</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">email</i>
+										<input id="mail" type="text" [value]="patientResponsible.mail || ' '" readonly>
+										<label for="mail" class="active">E-mail</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">public</i>
+										<input id="www" type="text" [value]="patientResponsible.www || ' '" readonly>
+										<label for="www" class="active">Página Web</label>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text"><i class="material-icons">playlist_add</i><span class="full-width">Datos adicionales</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m12">
+										<i class="material-icons prefix">dehaze</i>
+										<input id="observation" type="text" [value]="patientResponsible.observation || ' '" readonly>
+										<label for="observation" class="active">Observación</label>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="center-align" *ngIf="isLoaded && !patientResponsible" style="margin-bottom: 50px;margin-top: 20px;">
+					<span style="font-weight: bold;">NO HAY DATOS PARA MOSTRAR</span>
+				</div>
+				<div class="row center-align">
+					<a [routerLink]="['/archivos/pacientesResponsable']" class="waves-effect waves-light btn center-align red lighten-1">Cerrar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

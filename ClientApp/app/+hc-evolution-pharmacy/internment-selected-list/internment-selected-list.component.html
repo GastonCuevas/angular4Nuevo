@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content" [hidden]="showMedicationSchemeForm">
+                <app-dynamic-table [sourceService]="internmentSelectedService"
+                                   [title]="'Registración de Consumo de Medicación'"
+                                   [columns]="columns"
+                                   [controlsToFilter]="controlsToFilter"
+                                   [initialFilter]="initialFilter"
+                                   [disableButtonFloating]="true"
+                                   [disabledNew]="true"
+                                   [disabledDelete]="true"
+                                   [disabledEdit]="true"
+                                   [sort]="{ sortBy: 'patMov.date', ascending: false }"
+                                   [showSelected]="false"
+                                   [selectedEnabled]="false"
+                                   (actionClick)="onActionClick($event)"
+                                   >
+                </app-dynamic-table>
+            </div>
+            <div *ngIf="showMedicationSchemeForm">
+                <patient-schemes (showMedication)="onMedicationShow($event)">
+                </patient-schemes>
+            </div>
+        </div>
+    </div>
+</div>

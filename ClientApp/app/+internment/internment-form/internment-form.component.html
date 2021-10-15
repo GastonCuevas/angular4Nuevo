@@ -1,0 +1,210 @@
+﻿<div class="row">
+	<div class="col s12">
+		<div class="card" [hidden]="showDiagnosticForm || showEvolutionForm || showTreatingProfessionalForm">
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12">
+						<span class="card-title center-align">{{readonlyInternment ? 'Detalle de ' : isNew ? 'Nueva' : 'Editar'}} Internación</span>
+					</div>
+				</div>
+				<br />
+				<loading *ngIf="isLoading"></loading>
+
+				<form #f="ngForm" [formGroup]="form" (ngSubmit)="saveInternment(formControls)" *ngIf="!isLoading && !!form">
+					<div class="row">
+                        <div class="input-field col s7 m2">
+                            <!-- <i class="material-icons prefix">account_circle</i> value="{{formattedDate}}"-->
+                            <input id="admissionDate" formControlName="admissionDate" type="text" value="{{internment.admissionDate}}" class="datepicker" materialize="pickadate" [materializeParams]="[dateOptions]" readonly>
+							<label class="active" for="admissionDate">Fecha</label>
+							<app-control-error-message [form]="f" [control]="{key:'admissionDate'}"></app-control-error-message>
+                        </div>
+                        <div class="input-field col s5 m1">
+                            <!--*ngIf="!isNew"-->
+                            <!-- <i class="material-icons prefix">account_circle</i> -->
+                            <input id="time" formControlName="time" type="text" value="{{internment.time}}" class="timepicker"  materialize="pickatime" [materializeParams]="[timeOptions]" readonly>
+							<label class="active" for="time">Hora</label>
+							<app-control-error-message [form]="f" [control]="{key:'time'}"></app-control-error-message>
+                        </div>
+		
+						
+					</div>
+                    <div class="row">
+                        <div class="input-field col s12 m6" [class.m6]="isNew" [class.m5]="!isNew">
+                            <app-input-search [label]="'Paciente'" [requiredIS]="true"
+                                              [form]="form" [formControlNameIS]="'patientId'"
+                                              [readonlyIS]="!isNew" [readonlyValue]="internment.patientName"
+                                              [columns]="patientColumns"
+                                              [nameMethod]="'getAllPacientes'"
+                                              (valueChange)="onChangePatient()">
+                            </app-input-search>
+                            <span class="msg-error-input right" *ngIf="!isValidInternmentPatient && isNew">Paciente Internado</span>
+                        </div>
+                        <div class="input-field col s12 m6" [class.m6]="isNew" [class.m4]="!isNew">
+                            <input-auto-complete [label]="'Obra social'" [requiredIAC]="true"
+                                                 [form]="form" [formControlNameIAC]="'medicalInsuranceId'"
+                                                 [readonlyIAC]="!isNew" [readonlyValue]="internment.medicalInsuranceName"
+                                                 [source]="medicalInsurances" [isLoading]="loadingMInsuranceIAC"
+                                                 (valueChange)="medicalInsuranceChange()">
+                            </input-auto-complete>
+                        </div>
+                    </div>
+					<div class="row">
+						<div class="input-field  col s12 m6">
+							<input-auto-complete [label]="'Recepcionado por Profesional'"
+												[form]="form"
+												[formControlNameIAC]="'professionalId'"
+												[isLoading]="loadingProfessionalIAC"
+												[source]="professionals"
+												(valueChange)="onChangeProfessional()">
+							</input-auto-complete>
+						</div>
+						<div class="input-field col s12 m6" *ngIf="isNew">
+							<input-auto-complete [label]="'Especialidad'"
+												[form]="form"
+												[formControlNameIAC]="'specialtyId'"
+												[isLoading]="loadingSpecialtyIAC"
+												[source]="specialties"
+												(valueChange)="specialtyChange()">
+							</input-auto-complete>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="input-field col s12 m9">
+							<input-auto-complete [label]="'Práctica'" [requiredIAC]="true"
+												[form]="form" [formControlNameIAC]="'practiceId'"
+												[source]="practices" [isLoading]="loadingPracticeIAC">
+							</input-auto-complete>
+						</div>
+						<div class="input-field col s12 m3">
+							<input-auto-complete [label]="'Cama'" [requiredIAC]="true"
+												[form]="form" [formControlNameIAC]="'bedId'" 
+												[readonlyIAC]="readonlyInternment" [readonlyValue]="internment.bedName"
+												[source]="freeBeds" [isLoading]="loadingBedIAC">
+							</input-auto-complete>
+						</div>
+					</div>
+					<br/>
+                    <div class="row">
+                        <div class="input-field col s12 m9">
+                            <textarea id="observation" name="observation" formControlName="observation" class="materialize-textarea validate" maxlength="1024" style="margin-top: 15px;"></textarea>
+                            <label for="observation" [class.active]="form.value.observation">Observación</label>
+                        </div>
+                        <div class="input-field col s12 m3">
+                            <textarea id="authorizationCode" name="authorizationCode" formControlName="authorizationCode" class="materialize-textarea validate" maxlength="1024" style="margin-top: 15px;"></textarea>
+                            <label for="authorizationCode" [class.active]="form.value.authorizationCode">Codigo de Autorizacion</label>
+                        </div>
+                    </div>
+					<br>
+                    <div class="row">
+                        <div>
+                            <ul class="tabs" materialize="tabs">
+                                <li class="tab col s4" (click)="changeActiveTab('treatingprofessionals')">
+                                    <a [class.active]="activeTab == 'treatingprofessionals'" href="#treatingprofessionals">PROF. TRATANTES</a>
+								</li>
+                                <li class="tab col s4" (click)="changeActiveTab('diagnostics')">
+                                    <a [class.active]="activeTab == 'diagnostics'" href="#diagnostics">DIAGNÓSTICOS</a>
+								</li>
+								<li *ngIf="!isNew" class="tab col s4" (click)="changeActiveTab('evolutions')">
+                                    <a [class.active]="activeTab == 'evolutions'" href="#evolutions">EVOLUCIONES</a>
+                                </li>
+                            </ul>
+                        </div>
+						<div id="treatingprofessionals" class="col s12">
+                            <app-dynamic-table [sourceService]="treatingProfessionalService"
+												[columns]="treatingProfessionalService.columns"
+												[paginator]="{currentPage: 1, pageSize: 100, totalItems: 0}"
+												[disableButtonFloating]="true"
+												[refreshedAllowed]="false"
+												[reloadingData]="reloadingDataProfessional"
+												[disabledDelete]="readonlyInternment"
+												[disabledEdit]="readonlyInternment"
+												[disabledNew]="readonlyInternment"
+												[disabledDetail]="!readonlyInternment"
+												(actionClick)="onActionTreatingProfessionaClick($event)"
+												(reloadingDataChange)="updateReloadingDataProfessional($event)">
+							</app-dynamic-table>
+							<app-modal-confirm [title]="'Eliminar Professional'"
+												[message]="'¿Desea eliminar el professional tratante?'"
+												[openModalSubject]="modalDeleteProfessionalSubject"
+												(agree)="deleteTreatingProfessionalConfirm()">
+							</app-modal-confirm>
+                        </div>
+
+						<div id="diagnostics" class="col s12">
+                            <diagnostic-movement-list
+                                [readOnly]="readonlyInternment"
+                                (actionClick)="onActionDiagnostic($event)">
+                            </diagnostic-movement-list>
+						</div>
+						<div id="evolutions" class="col s12" *ngIf="!isNew">
+                            <app-dynamic-table [sourceService]="hcEvolutionService"
+												[columns]="hcEvolutionService.columns"
+												[paginator]="{currentPage: 1, pageSize: 100, totalItems: 0}"
+												[disableButtonFloating]="true"
+												[refreshedAllowed]="false"
+												[reloadingData]="reloadingDataEvolution"
+												[disabledDelete]="readonlyInternment"
+												[disabledEdit]="readonlyInternment"
+												[disabledNew]="readonlyInternment"
+												[disabledDetail]="!readonlyInternment"
+												(actionClick)="onActionEvolutionClick($event)"
+												(reloadingDataChange)="updateReloadingDataEvolution($event)">
+							</app-dynamic-table>
+							<app-modal-confirm [title]="'Eliminar Evolucion'"
+												[message]="'¿Desea eliminar la evolucion?'"
+												[openModalSubject]="modalDeleteEvolutionSubject"
+												(agree)="deleteEvolutionConfirm()">
+							</app-modal-confirm>
+                        </div>
+                    </div>
+					<br>
+                    <div class="row center-align" *ngIf="!readonlyInternment">
+                        <button *ngIf="!isSaving" type="submit" [disabled]="!f.form.valid || !isValidInternmentPatient" class="waves-effect waves-light btn btn-form center blue z-index-0">Guardar</button>
+                        <button *ngIf="isSaving" type="submit" class="waves-effect waves-light btn btn-form center blue" disabled>
+                            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                            Guardar
+                        </button>
+                        <button *ngIf="!isNew" type="button" [disabled]="isPatientDischarge" class="waves-effect waves-light btn btn-form center green z-index-0" (click)="onDischarge()">Alta Internacion</button>
+                        <button *ngIf="!isNew" type="button" [disabled]="!isPatientDischarge" class="waves-effect waves-light btn btn-form center green z-index-0" (click)="onCancelDischarge()">Cancelar Alta Internacion</button><!--[disabled]="!isPatientDischarge || !isValidCancelDischargeDate" -->
+                        <button type="button" class="waves-effect waves-light btn btn-form center red z-index-0" (click)="onCancelButton()">Cancelar</button>
+                    </div>
+					<div class="row center-align" *ngIf="readonlyInternment">
+                        <button type="button" class="waves-effect waves-light btn btn-form center blue" (click)="discardChanges()">Volver</button>
+                    </div>
+				</form>
+			</div>
+		</div>
+		<div class="card" *ngIf="showDiagnosticForm">
+			<diagnostic-movement-form (close)="closeDiagnosticForm()"></diagnostic-movement-form>
+		</div>
+		<div class="card" *ngIf="showEvolutionForm">
+			<hc-evolution-form
+				[isNewEvolution]="hcEvolutionService.isNew"
+				[hcEvolutionId]="hcEvolutionId"
+				[patientMovementId]="internment.id"
+				[readonly]="readonlyInternment"
+				(closeClick)="hideEvolutionForm()" >
+			</hc-evolution-form>
+		</div>
+
+		<div class="card" *ngIf="showTreatingProfessionalForm">
+			<treating-professional-form
+				[isNewProfessional]="treatingProfessionalService.isNew"
+				(closeClick)="hideTreatingProfessionalForm()" >
+			</treating-professional-form>
+		</div>
+	</div>
+</div>
+
+<app-modal-confirm [title]="isNew ? 'Alta' : 'Editar'"
+					[message]="'¿Desea regresar sin guardar los cambios?'"
+					[openModalSubject]="openModalDiscardSubject"
+					(agree)="discardChanges()">
+</app-modal-confirm>
+
+<internment-high-hospitalization-form 
+	[internment]="internment"
+	(close)="closeHighHospitalizationForm()"
+	[openModalSubject]="openModalHighHospitalizationSubject">
+</internment-high-hospitalization-form>

@@ -1,0 +1,39 @@
+blockquote.blockquote-info {
+    margin: 20px 0;
+    padding-left: 1.2rem;
+    border-left: 5px solid rgba(0, 188, 212, 0.31);
+    color: #989898;
+    font-size: small;
+}
+
+.labels {
+    position: relative;
+    top: 7px;
+    font-size: 1.1rem;
+    & .label {
+        font-weight: 500;
+        margin-right: 9px;
+    }
+}
+
+table > tbody > tr > td > a {
+    color: #e7e7e7;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.fa {
+    color: #c1c1c1;
+}
+
+.fa-trash:hover {
+    color: red;
+}
+
+.modal-content {
+    padding-bottom: 0;
+}
+#modalDevolucion{
+    width: 80%;
+}

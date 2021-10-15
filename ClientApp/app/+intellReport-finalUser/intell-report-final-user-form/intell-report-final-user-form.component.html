@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col s12" *ngIf="true">
+
+        <div class="container" *ngIf="isView">
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-title center-align">IntellReport</div>
+
+                    <div class="row">
+                        <div class="input-field col s8 offset-s2" *ngIf="!isFormLoading">
+                            <select materialize="material_select" [materializeSelectOptions]="typeReports" id="typeReport" required #selectedCategory (change)="onChangeReports(selectedCategory.value)" [(ngModel)]="reportSelectValue" [disabled]="disabledCombo">
+                                <option value="" disabled selected>Elija una opción</option>
+                                <option *ngFor="let rep of typeReports" [value]="rep.number">{{rep.name}}</option>
+                            </select>
+                            <label for="identi">Tipos de Reportes</label>
+                        </div>
+                        <div class="input-field col s8 offset-s2" *ngIf="!loadForm">
+                            <select materialize="material_select" [materializeSelectOptions]="exportationDetails" required #selected  (change)="onChangeSubReports(selected.value)" [(ngModel)]="subReportSelectValue" [disabled]="disabledCombo">
+                                <option value="" disabled selected>Elija una opción</option>
+                                <option *ngFor="let detail of exportationDetails" [value]="detail.number">{{detail.name}}</option>
+                            </select>
+                            <label for="identi">Tipos de Sub-Reportes</label>
+                        </div>
+
+                        <div *ngIf="select">
+                            <app-dynamic-form [hidden]="!showEetries"
+                                [isLoading]="isChecking"
+                                [controls]="inputDataControls"
+                                [btnTextSubmit]="'Siguiente'"
+                                [enabledSubmitBtn]="enabledSubmitBtn"
+                                (formsubmit)="generateView($event)">
+                            </app-dynamic-form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!isView">
+            <app-intell-report-viewHTML *ngIf="reportView"
+                                        (showReports)="showListReports()"
+                                        [title]="'Lista de registros'"
+                                        [typeDownload]="typeDownload"
+                                        [sourceService]="dochtml ? null : _intellReportUserService"
+                                        [paginator]="paginator"
+                                        [sqlParameters]="query"
+                                        [queryPaginator]="queryPaginator"
+                                        [sourceData]="sourceData"
+                                        [columns]="columns"
+                                        [isLoading]="isLoading"
+                                        [exportationDetailSelect]="exportationDetailSelect"
+                                        [showBtnToExport]="showBtnToExport"
+                                    >
+            </app-intell-report-viewHTML>
+            <loading *ngIf="!isLoading"></loading>
+        </div>
+
+        <div class="row center-align">
+            <button type="button" class="waves-effect waves-light btn btn-form center blue lighten-1" (click)="goBack()">Volver</button>
+        </div>
+    
+    </div>
+</div>

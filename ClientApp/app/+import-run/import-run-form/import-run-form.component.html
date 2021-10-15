@@ -1,0 +1,186 @@
+<div class="row">
+    <div class="col m12 s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Importacion de Tablas</span>
+                <div class="card-content">
+                    <form #f="ngForm" (ngSubmit)="onRunImport()" [formGroup]="form">
+                        <div class="row">
+                            <div class="input-field col s12 m5 ">
+                                <input-auto-complete [label]="'Seleccione una tabla'" [requiredIAC]="true" [form]="form"
+                                    [formControlNameIAC]="'importId'" [functionForData]="functionForTables"
+                                    (valueChange)="onTableChange($event)">
+                                </input-auto-complete>
+                            </div>
+
+                            <div class="input-field col s12 m7">
+                                <input id="name" formControlName="name" type="text">
+                                <label for="name" [class.active]="form.value.name">Nombre de Archivo</label>
+                                <app-control-error-message [form]="f" [control]="{key: 'name'}"></app-control-error-message>
+                            </div>
+                        </div>
+                        <!--Radio buttons para seleccionar el tipo de archivo-->
+                        <div class="row">
+                            <div class="col s12 m5">
+                                <div class="row">
+                                    <span>Seleccione el tipo de archivo</span>
+                                    <p class="form-radio-button" *ngFor="let type of fileTypes">
+                                        <input class="with-gap" name="type" required formControlName="type" type="radio"
+                                            id="{{type.type}}" [value]="type.type" />
+                                        <label [for]="type.type">
+                                            <span class="label-reason">{{type.name}}</span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div class="row" *ngIf="importData.importFile != null && importData.importFile.type == 1">
+                                    <span>Seleccione separador</span>
+                                    <p class="form-radio-button" *ngFor="let type of separators">
+                                        <input class="with-gap" name="separator" required formControlName="separator"
+                                            type="radio" id="{{type.name}}" [value]="type.type" />
+                                        <label [for]="type.name">
+                                            <span class="label-reason">{{type.name}}</span>
+                                        </label>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col s12 m7">
+                                <div class="card grey lighten-4">
+                                    <div class="card-content">
+                                        <div class="center-align upload-file-content">
+                                            <i class="material-icons icon-upload">cloud_upload</i>
+                                            <p class="center-align">{{ importData.importFields.length == 0 ? 'Primero seleccione una tabla' :
+                                                 !importData.importFile?.name ? 'Seleccione o arrastre un
+                                                archivo txt, xlsx o csv' : importData.importFile?.name 
+                                                }}
+                                            </p>
+                                            <input *ngIf="importData.importFields.length != 0"  id="file-input" type="file" (change)="onFileChange($event)" multiple="false"
+                                                [accept]="getFileTypeAccepted()" required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Despliega el ingreso de columna txt, posicion, excel -->
+                            <div class="col s12 m5">
+                                <div class="card light-blue darken-2  card-content-txt">
+                                    <div class="card-content white-text">
+
+                                        <span class="card-title card-title-custom">Nombres de
+                                            las columnas</span>
+                                        <div class="progressbar valign-wrapper">
+                                            <div *ngIf="isLoading" class="progress">
+                                                <div class="indeterminate"></div>
+                                            </div>
+                                        </div>
+                                        <table class="centered" id="table">
+
+                                            <thead>
+                                                <tr>
+                                                    <th>Campo</th>
+                                                    <th *ngIf="importData.importFile != null && importData.importFile.type == 0">Desde</th>
+                                                    <th *ngIf="importData.importFile != null && importData.importFile.type == 0">Hasta</th>
+                                                    <th>Orden</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr *ngIf="this.importData.importFields.length == 0">
+                                                    <td [attr.colspan]="3">
+                                                        <p class="center-align">No hay elementos para mostrar.</p>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngFor="let item of importData.importFields; let in = index">
+                                                    <td class="center-align">{{item.name}}</td>
+                                                     <td *ngIf="importData.importFile != null && importData.importFile.type == 0">
+                                                        <div class="input-field a">
+                                                            <input class="center-align" type="number" name="item.from"
+                                                             [formControlName]="item.from" [(ngModel)]="item.from"
+                                                                (keyup)="setColor(item.from, item.to)">
+                                                        </div>
+                                                    </td>
+                                                    <td *ngIf="importData.importFile != null && importData.importFile.type == 0">
+                                                        <div class="input-field a">
+                                                            <input class="center-align" type="number" name="item.to" 
+                                                            [formControlName]="item.to" [(ngModel)]="item.to"
+                                                                (keyup)="setColor(item.from, item.to)">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-field a">
+                                                            <input class="center-align" type="number" name="item.name" [formControlName]="item.name" [(ngModel)]="item.index" >
+                                                        </div>
+                                                    </td> 
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--Despliega el contenido del archivo seleccionado -->
+                            <div class="col s12 m7">
+                                <div class="card light-blue darken-1 card-content-txt">
+                                    <div class="card-content white-text">
+                                        <span class="card-title card-title-custom">Contenido del archivo</span>
+                                        <div class="progressbar valign-wrapper">
+                                            <div *ngIf="isLoading" class="progress">
+                                                <div class="indeterminate"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <!--Contenido del archivo txt-->
+                                            <pre *ngIf="importData.importFile != null && importData.importFile.type == 0" class="white-text pre-txt"
+                                                [innerHtml]="displayText"></pre>
+                                            <!--Contenido del archivo excel o csv-->
+                                            <div *ngIf="importData.importFile != null && (importData.importFile.type == 2 || importData.importFile.type == 1)"
+                                                class="col s12 table-container">
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th *ngFor="let header of headers">
+                                                                {{header}}
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let row of data">
+                                                            <td *ngFor="let val of row">
+                                                                {{val}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <br />
+                            <span>Seleccione modo</span>
+                            <div>
+                                <span *ngFor="let mode of insertModes">
+                                    <input class="with-gap" name="insertMode" required formControlName="insertMode"
+                                        type="radio" id="{{mode.name}}" [value]="mode.value" />
+                                    <label [for]="mode.name">
+                                        <span>{{mode.name}}</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row left-align">
+                            <button [disabled]="!f.form.valid"  type="submit" class="waves-effect waves-light btn btn-form blue"> Importar datos
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

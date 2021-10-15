@@ -1,0 +1,84 @@
+﻿<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title center-align">Detalle del Usuario</span>
+                <br />
+                <loading *ngIf="!isLoad"></loading>
+                <div *ngIf="isLoad && !!user">
+                    <div class="row">
+                        <div class="input-field col s12 m4">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input id="login" type="text" value="{{user.login}}" readonly>
+                            <label for="login" class="active">Usuario</label>
+                        </div>
+                        <div class="input-field col s12 m4">
+                            <i class="material-icons prefix">person_pin</i>
+                            <input id="name" type="text" value="{{user.name}}" readonly>
+                            <label for="name" class="active">Nombre</label>
+                        </div>
+                        <div class="input-field col s12 m4">
+                            <i class="material-icons prefix">email</i>
+                            <input id="email" name="email" type="text" value="{{user.email}}" readonly>
+                            <label for="email" class="active">E-mail</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m3">
+                            <input type="checkbox" id="enabled" [checked]="user.enabled" readonly />
+                            <label for="enabled">Esta habilitado</label>
+                        </div>
+                        <div class="input-field col s12 m3">
+                            <input type="checkbox" id="isRoot" [checked]="user.isRoot" readonly />
+                            <label for="isRoot">Es super usuario</label>
+                        </div>
+                    </div>
+                    <div *ngIf="!user.isRoot">
+                        <div class="divider"></div>
+                        <div class="row">
+                            <span class="col s12 sub-title">Grupos:</span>
+                            <div *ngFor="let group of user.groups" class="col s6 m4 l4 xl3">
+                                <input type="checkbox" id="group-{{group.number}}" checked disabled />
+                                <label for="group-{{group.number}}">{{group.name}}</label>
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="row">
+                            <span class="col s12 sub-title">Casos de uso:</span>
+                        </div>
+                        <table class="highlight" id="table">
+                            <thead>
+                                <tr>
+                                    <th>Activo</th>
+                                    <th>Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngIf="!user.userPermissions.length">
+                                    <td colspan="2"> No hay elementos para mostrar.</td>
+                                </tr>
+                                <tr *ngFor="let item of user.userPermissions">
+                                    <td>
+                                        <div class="switch">
+                                            <label>
+                                                <input type="checkbox" [checked]="item.enabled" disabled>
+                                                <span class="lever"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td><span>{{item.description}}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="center-align" *ngIf="isLoad && !user" style="margin-bottom: 50px;margin-top: 20px;">
+                    <span style="font-weight: bold;">NO HAY DATOS PARA MOSTRAR</span>
+                </div>
+                <div class="center-align">
+                    <a [routerLink]="['/administrador/usuarios']" class="waves-effect waves-light btn center-align red lighten-1">Cerrar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

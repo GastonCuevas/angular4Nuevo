@@ -1,0 +1,160 @@
+﻿<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title center-align">Detalle de Obra Social</span>
+				<loading *ngIf="!isLoaded"></loading>
+				<div *ngIf="isLoaded && !!medicalInsurance">
+					<ul materialize="collapsible" class="collapsible" data-collapsible="expandable">
+						<li>
+							<div class="collapsible-header active blue lighten-2 white-text"><i class="material-icons">account_circle</i><span class="full-width">Datos personales</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">account_circle</i>
+										<input id="name" type="text" value="{{medicalInsurance.medicalInsuranceAccount.name}}" readonly>
+										<label for="name" class="active">Razón Social</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">person_pin</i>
+										<input id="denomination" type="text" [value]="medicalInsurance.medicalInsuranceAccount.denomination || ' '" readonly>
+										<label for="denomination" class="active">Denominación</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">person_outline</i>
+										<input id="repres" type="text" [value]="medicalInsurance.medicalInsuranceAccount.repres || ' '" readonly>
+										<label for="repres" class="active">Representante</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">chrome_reader_mode</i>
+										<input id="cuit" type="text" value="{{medicalInsurance.medicalInsuranceAccount.cuit}}" readonly>
+										<label for="cuit" class="active">{{medicalInsurance.medicalInsuranceAccount.identiAccount.name}}</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<input name="enabled" [checked]="medicalInsurance.medicalInsuranceAccount.enabled === 1" type="radio" id="test1" />
+										<label style="padding-right: 9%;" for="test1">Si</label>
+										<input name="enabled" [checked]="medicalInsurance.medicalInsuranceAccount.enabled === 0" type="radio" id="test2" />
+										<label for="test2">No</label>
+										<label for="enabled" class="active">Esta habilitado</label>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text"><i class="material-icons">place</i><span class="full-width">Datos de ubicación</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">dehaze</i>
+										<input id="address" type="text" [value]="medicalInsurance.medicalInsuranceAccount.address || ' '" readonly>
+										<label for="address" class="active">Dirección</label>
+									</div>
+									<div class="input-field  col s12 m6">
+										<i class="material-icons prefix">dehaze</i>
+										<input id="quarter" type="text" [value]="medicalInsurance.medicalInsuranceAccount.quarter || ' '" readonly>
+										<label for="quarter" class="active">Barrio</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">location_on</i>
+										<input id="locality" type="text" value="{{medicalInsurance.medicalInsuranceAccount.loc.name}}" readonly />
+										<label for="locality" class="active">Localidad</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">location_on</i>
+										<input id="province" type="text" [value]="province || ' '" readonly>
+										<label for="province" class="active">Provincia</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">location_on</i>
+										<input id="zone" type="text" value="{{medicalInsurance.medicalInsuranceAccount.zoneAccount.name}}" readonly />
+										<label for="zone" class="active">Zona</label>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text"><i class="material-icons">perm_phone_msg</i><span class="full-width">Datos de contacto</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">phone</i>
+										<input id="phone" type="text" [value]="medicalInsurance.medicalInsuranceAccount.phone || ' '" readonly>
+										<label for="phone" class="active">Teléfono</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">smartphone</i>
+										<input id="movil" type="text" [value]="medicalInsurance.medicalInsuranceAccount.movil || ' '" readonly>
+										<label for="movil" class="active">Celular</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">description</i>
+										<input id="fax" type="text" [value]="medicalInsurance.medicalInsuranceAccount.fax || ' '" readonly>
+										<label for="fax" class="active">Fax</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">email</i>
+										<input id="mail" type="text" [value]="medicalInsurance.medicalInsuranceAccount.mail || ' '" readonly>
+										<label for="mail" class="active">E-mail</label>
+									</div>
+									<div class="input-field col s12 m6">
+										<i class="material-icons prefix">public</i>
+										<input id="www" type="text" [value]="medicalInsurance.medicalInsuranceAccount.www || ' '" readonly>
+										<label for="www" class="active">Página Web</label>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="collapsible-header blue lighten-2 white-text"><i class="material-icons">broken_image</i><span class="full-width">Datos contables</span><i class="material-icons less">expand_less</i><i class="material-icons more">expand_more</i></div>
+							<div class="collapsible-body">
+								<div class="row">
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">picture_in_picture</i>
+										<input id="category" type="text" value="{{medicalInsurance.medicalInsuranceAccount.categoryAccount.name}}" readonly />
+										<label class="active">Categoría</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">assessment</i>
+										<input id="percentage" type="text" value="{{medicalInsurance.percentage}}" readonly>
+										<label for="percentage" class="active">Porcentaje</label>
+									</div>
+									<div class="input-field  col s12 m4">
+										<i class="material-icons prefix">picture_in_picture</i>
+										<input id="ivaReg" type="text" value="{{medicalInsurance.medicalInsuranceAccount.ivaRegAccount.name}}" readonly>
+										<label for="ivaReg" class="active">Reg. Iva</label>
+									</div>
+									<div class="input-field col s12 m4">
+										<i class="material-icons prefix">picture_in_picture</i>
+										<input id="ibrReg" type="text" value="{{medicalInsurance.medicalInsuranceAccount.ibrRegAccount.name}}" readonly>
+										<label for="ibrReg" class="active">Reg. Ibr.</label>
+									</div>
+									<div class="input-field  col s12 m4">
+										<i class="material-icons prefix">picture_in_picture</i>
+										<input id="accountNumber" type="text" value="{{medicalInsurance.medicalInsuranceAccount.accountNumber}}" readonly>
+										<label for="accountNumber" class="active">Cuenta</label>
+									</div>
+									<div class="input-field  col s12 m4">
+										<i class="material-icons prefix">picture_in_picture</i>
+										<input id="ingbru" type="text" [value]="medicalInsurance.medicalInsuranceAccount.ingbru || ' '" readonly>
+										<label for="ingbru" class="active">Ing. Bru.</label>
+									</div>
+									<div class="input-field col s12">
+										<i class="material-icons prefix">view_comfy</i>
+										<textarea id="observation" [value]="medicalInsurance.medicalInsuranceAccount?.observation" class="materialize-textarea" readonly></textarea>
+										<label for="observation" class="active">Observación</label>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="center-align" *ngIf="isLoaded && !medicalInsurance" style="margin-bottom: 50px;margin-top: 20px;">
+					<span style="font-weight: bold;">NO HAY DATOS PARA MOSTRAR</span>
+				</div>
+				<div class="row center-align">
+					<a [routerLink]="['/archivos/obraSocial']" class="waves-effect waves-light btn center-align red lighten-1">Cerrar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

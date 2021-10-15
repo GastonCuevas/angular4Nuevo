@@ -1,0 +1,47 @@
+<div #modalNew id="modalIntellReport" class="modal modal-styles" materialize="modal"
+ [materializeParams]="[{dismissible: false}]"
+    [materializeActions]="modalPrint">
+    <div class="modal-content container">
+        <h5 class="center-align">Selecionar reporte</h5>
+        <br>
+        <loading *ngIf="isLoading"></loading>
+        <div class="row" *ngIf="!isLoading">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select materialize="material_select" [materializeSelectOptions]="typeReports" required (change)="loadSubreport($event.target.value)"
+                            [(ngModel)]="reportSelectValue" name="report">
+                            <option [ngValue]='null' disabled selected>Elija una opción</option>
+                            <option *ngFor="let type of typeReports" [value]="type.number">{{type.name}}</option>
+                        </select>
+                        <label>Tipos de Reportes</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select materialize="material_select" [materializeSelectOptions]="exportationDetails" required [(ngModel)]="subReportSelectValue"
+                            name="subReport">
+                            <option [ngValue]='null' disabled selected>Elija una opción</option>
+                            <option *ngFor="let detail of exportationDetails" [value]="detail.number">{{detail.name}}</option>
+                        </select>
+                        <label>Tipos de Sub-Reportes</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="center-align">
+                        <button class="waves-effect waves-light btn btn-form center blue" [ngClass]='{"disabled": !(reportSelectValue && subReportSelectValue)}'
+                            type="button" (click)="saveModalNew()">Guardar</button>
+                        <button class="waves-effect waves-light btn btn-form center red" type="button" (click)="cancelModalNew()">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- BOTONES FLOTANTES VERTICAL (EN POSICION ABAJO DERECHA) -->
+<div class="fixed-action-btn vertcal">
+    <a class="btn-floating btn-large light-blue tooltipped" materialize="tooltip" (click)="openPrintModal()" data-position="left" data-delay="50"
+    data-tooltip="Reporte">
+        <i class="material-icons">print</i>
+    </a>
+</div>

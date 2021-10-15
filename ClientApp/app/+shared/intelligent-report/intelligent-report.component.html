@@ -1,0 +1,17 @@
+<div *ngIf="showCKE" hidden>
+    <ckeditor id="ckeditorPrint"
+        [(ngModel)]="htmlForCKE"
+        [config]="config"
+        [readonly]="true"
+        (ready)="onReady($event)"
+        debounce="500">
+    </ckeditor>
+</div>
+<!-- hidden -->
+<div *ngIf="showDynamicComponent" hidden>
+    <app-dynamic-component
+        [html]="htmlForDC"
+        [genericObject]="resultQuery"
+        (afterViewInitEE)="loadCKE($event)">
+    </app-dynamic-component>
+</div>

@@ -1,0 +1,62 @@
+<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title center-align">Detalle de la Internación</span>
+				<br />
+				<loading *ngIf="!isLoaded"></loading>
+				<div *ngIf="isLoaded">
+					<div class="row">
+						<div class="input-field col s7 m2">
+							<i class="material-icons prefix">date_range</i>
+							<input id="date" type="text" value="{{internment.admissionDate}}" readonly>
+							<label class="active" for="date">Fecha</label>
+						</div>
+						<div class="input-field col s5 m2">
+							<i class="material-icons prefix">access_time</i>
+							<input id="time" type="text" value="{{internment.time}}" readonly>
+							<label class="active" for="time">Hora</label>
+						</div>
+						<div class="input-field col s12 m4">
+							<i class="material-icons prefix">account_circle</i>
+							<input id="professional" type="text" value="{{internment.professionalName}}" readonly>
+							<label class="active" for="professional">Profesional</label>
+						</div>
+						<div class="input-field col s12 m4">
+							<i class="material-icons prefix">person</i>
+							<input id="patient" type="text" value="{{internment.patientName}}" readonly>
+							<label class="active" for="patient">Paciente</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-field col s12 m4">
+							<i class="material-icons prefix">menu</i>
+							<input id="medicalInsurance" type="text" value="{{internment.medicalInsuranceName}}" readonly>
+							<label class="active" for="medicalInsurance">O.S.</label>
+						</div>
+						<div class="input-field col s12 m4">
+							<i class="material-icons prefix">label</i>
+							<input id="practice" type="text" value="{{internment.practiceName}}" readonly>
+							<label class="active" for="practice">Práctica</label>
+						</div>
+						<div class="input-field col s12 m4">
+							<i class="material-icons prefix">local_hotel</i>
+							<input id="bed" type="text" value="{{internment.bedName}}" readonly>
+							<label class="active" for="bed">Cama</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-field col s12 m12">
+							<i class="material-icons prefix">menu</i>
+							<textarea id="observation" type="text" value="{{internment.observation}}" class="materialize-textarea validate" readonly></textarea>
+							<label class="active" for="observation">Observación</label>
+						</div>
+					</div>
+				</div>
+				<div class="center-align">
+					<a [routerLink]="['/camas/internaciones']" class="waves-effect waves-light btn center-align red lighten-1">Cerrar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

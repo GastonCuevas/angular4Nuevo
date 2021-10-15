@@ -1,0 +1,67 @@
+<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title center-align">Practicas de Obras sociales con Contrato</span>
+				<form #formProfessionalContractMedicalInsurance="ngForm" [formGroup]="form" (ngSubmit)="onSubmitMedicalInsurance($event)">
+					<div class="row">
+						<div class="input-field col s12 m12">
+							<input-auto-complete 
+								[label]="'Obra Social'" 
+								[requiredIAC]="true" 
+								[form]="form" 
+								[formControlNameIAC]="'medicalInsuranceName'"
+								[functionForData]="functionForMedicalInsurances" 
+								[valuePropertyName]="'name'" 
+								(valueChange)="selectedMedicalInsurance($event)">
+							</input-auto-complete>
+						</div>
+						<div class="input-field col s12 m2">
+							<input type="number" class="validate" formControlName="factor" id="factor" step="0.01" pattern="^[0-9]+(\.[0-9]{1,2})?">
+							<label for="factor" [class.active]="form.value.factor">Factor</label>
+							
+							<app-control-error-message [show]="!formProfessionalContractMedicalInsurance.value.factor ||
+							form.get('factor')?.hasError('min') || form.get('factor')?.hasError('max')"							
+							[message]="form.get('factor')?.hasError('min') || form.get('factor')?.hasError('max') ?
+							'Numero debe ser mayor a 0 y menor que 100' : ''">								
+							</app-control-error-message>
+						</div>
+						<div class="input-field col s12 m2">
+							<input type="number" class="validate" formControlName="fixed" id="fixed">
+							<label for="fixed" [class.active]="form.value.fixed">Fijo</label>
+							<app-control-error-message [form]="formProfessionalContractMedicalInsurance" [control]="{key:'fixed'}"></app-control-error-message>
+						</div>
+						<div class="input-field col s12 m2">
+							<input type="number" class="validate" formControlName="retention" id="retention" min="0" max="100" step="1">
+							<label for="retention" [class.active]="form.value.retention >= 0">Retención</label>
+							<app-control-error-message [form]="formProfessionalContractMedicalInsurance" [control]="{key:'retention'}"></app-control-error-message>
+						</div>
+						<div class="input-field col s12 m2">
+							<input type="number" class="validate" formControlName="coinsurancePercentage" id="coinsurancePercentage" step="0.1" pattern="^[0-9]+(\.[0-9]{1,2})?">
+							<label for="coinsurancePercentage" [class.active]="form.value.coinsurancePercentage >= 0">% Coseguro</label>
+							<app-control-error-message [form]="formProfessionalContractMedicalInsurance" [control]="{key:'coinsurancePercentage'}"></app-control-error-message>
+						</div>
+						<div class="col s12 m4" style="margin-top: 10px;">
+							<input type="checkbox" id="porcob" formControlName="porcob" />
+							<label for="porcob" [class.active]="form.value.porcob">Por Cobrar</label>
+						</div>
+						
+					</div>
+					<div *ngIf="professionalContractMedicalInsurance.medicalInsuranceNumber" class="row">
+						<practices-to-check class="practicestable"
+							[osId]="professionalContractMedicalInsurance.medicalInsuranceNumber"
+							(selectionEE)="onChangeOfSelection($event)">
+						</practices-to-check>
+					</div>
+					<div class="row center-align">
+						<button type="submit" [disabled]="!formProfessionalContractMedicalInsurance.form.valid || !isAnyPracticeSelected" class="waves-effect waves-light btn btn-form center blue z-index-0">Guardar</button>
+						<button type="button" class="waves-effect waves-light btn btn-form center red z-index-0" (click)="onCancelButton()">Cancelar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<app-modal-confirm [title]="!!isNew ? 'Editar' : 'Alta'" [message]="'¿Desea regresar sin guardar los cambios?'" [openModalSubject]="openModalSubject"
+    (agree)="onAgree()">
+</app-modal-confirm>

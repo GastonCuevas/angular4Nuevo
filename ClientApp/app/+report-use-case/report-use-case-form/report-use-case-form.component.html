@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title center-align">{{title}}</span>
+                <br />
+                <loading *ngIf="isLoading"></loading>
+
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input id="description" type="text" class="validate" disabled="true" name="description" [(ngModel)]="reportUseCase.description" />
+                                <label for="description" [class.active]="reportUseCase.description">Descripción</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input id="code" type="text" class="validate" disabled="true" name="code" [(ngModel)]="reportUseCase.code" />
+                                <label for="code" [class.active]="reportUseCase.code">Código</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <select materialize="material_select" [materializeSelectOptions]="typeReports" required (change)="loadSubreport($event.target.value)"
+                                        [(ngModel)]="reportSelectValue" name="report">
+                                    <option [ngValue]='null' disabled selected>Elija una opción</option>
+                                    <option *ngFor="let type of typeReports" [value]="type.number">{{type.name}}</option>
+                                </select>
+                                <label>Tipos de Reportes</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <select materialize="material_select" [materializeSelectOptions]="exportationDetails" required [(ngModel)]="subReportSelectValue"
+                                        name="subReport">
+                                    <option [ngValue]='null' disabled selected>Elija una opción</option>
+                                    <option *ngFor="let detail of exportationDetails" [value]="detail.number">{{detail.name}}</option>
+                                </select>
+                                <label>Tipos de Sub-Reportes</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="center-align">
+                                <button class="waves-effect waves-light btn btn-form center blue" [ngClass]='{"disabled": !(reportSelectValue && subReportSelectValue)}'
+                                        type="button" (click)="updateUseCase()">
+                                    Guardar
+                                </button>
+                                <button class="waves-effect waves-light btn btn-form center red" type="button" (click)="onCancelButton()">Cancelar</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div *ngIf="!isLoading && !form">
+                        <div class="center-align" style="margin-bottom: 50px;margin-top: 20px;">
+                            <span style="font-weight: bold;">NO HAY DATOS PARA MOSTRAR</span>
+                        </div>
+                        <div class="center-align">
+                            <a [routerLink]="['/sistema/reportUsec']" class="waves-effect waves-light btn center-align red lighten-1">Cerrar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-modal-confirm [title]="'Editar'" [message]="'Desea regresar sin guardar los cambios?'"
+                   [openModalSubject]="openModalSubject" (agree)="onAgree()">
+</app-modal-confirm>

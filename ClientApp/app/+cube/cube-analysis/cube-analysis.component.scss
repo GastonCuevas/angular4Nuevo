@@ -1,0 +1,191 @@
+
+.card-title {
+    font-weight: 400;
+}
+
+.card-subtitle {
+    display: block;
+    font-size: medium;
+    margin-bottom: 1rem;
+    color: gray;
+}
+
+.container-cubo {
+    overflow-x: overlay;
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+    width: 100%;
+}
+
+
+blockquote.blockquote-info {
+    margin: 20px 0;
+    padding-left: 1.2rem;
+    border-left: 5px solid rgba(0, 188, 212, 0.31);
+    color: #989898;
+    font-size: small;
+}
+
+
+/* START - styles for PivotTable */
+
+:host /deep/ select.pvtAggregator {
+    display: inherit;
+    background-color: #ff000000;
+    width: auto;
+    padding: 0px;
+    border: none;
+    border-bottom: 1.3px solid #ffffff;
+    border-radius: 0px;
+    height: 2rem;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+:host /deep/ select.pvtAggregator option {
+    background-color: #ff000000;
+    color: black;
+    // font-size: 15px;
+    // font-weight: 500;
+}
+
+:host /deep/ select.pvtRenderer {
+    display: none;
+}
+
+:host /deep/ select:focus {
+    outline: 1px solid #ffffff00;
+}
+
+:host /deep/ .pvtRowOrder, :host /deep/ .pvtColOrder {
+    cursor: pointer;
+    width: 18px;
+    margin-left: 10px;
+    display: inline-block;
+    color: white;
+    font-size: 1.2rem;
+}
+
+:host /deep/ .pvtRowOrder:hover, :host /deep/ .pvtColOrder:hover {
+    color: black;
+}
+
+:host /deep/ .pvtAxisContainer, :host /deep/ .pvtVals {
+    border: 1px solid #c5c5c5;
+    background: #0c867a;
+    padding: 8px;
+}
+
+:host /deep/ .pvtRows, :host /deep/ .pvtCols  {
+    border: 1px solid #c5c5c5;
+    background: none;
+    padding: 8px;
+}
+
+:host /deep/ .pvtFilterBox h4 {
+    font-size: 1.5rem;
+}
+
+:host /deep/ .pvtFilterBox input.pvtSearch {
+    height: 2rem;
+    margin-bottom: 1rem;
+}
+
+:host /deep/ .pvtFilterBox input[type='checkbox'] {
+    margin-right: 10px;
+    margin-left: 10px;
+    position: relative;
+    opacity: initial;
+}
+
+:host /deep/ table.pvtTable {
+    // width: auto;
+    width: max-content;
+    overflow-y: overlay;
+    max-height: 300px;
+    display: block;
+    padding-right: 2rem;
+}
+
+:host /deep/ table.pvtTable thead tr th, :host /deep/  table.pvtTable tbody tr th {
+    background-color: #e9ebeb;
+    border: 1px solid #000000;
+    font-size: 8pt;
+    padding: 5px;
+}
+
+:host /deep/  table.pvtUi {
+    margin: 0 auto;
+}
+
+:host /deep/ table {
+    border-bottom: none;
+    width: max-content;
+}
+
+
+// rows de selects no usados
+
+:host /deep/ .pvtAxisContainer.pvtUnused li span.pvtAttr {
+    background: #ffffff;
+    border: 1px solid #000000;
+    padding: 2px 6px 4px 12px;
+    border-radius: 10px;
+}
+
+:host /deep/  .pvtUnused li.pvtPlaceholder {
+    border: 1px dashed #feffff;
+}
+
+:host /deep/ .pvtAxisContainer.pvtCols li.pvtPlaceholder, :host /deep/ .pvtAxisContainer.pvtRows li.pvtPlaceholder {
+    border: 1px dashed grey;
+}
+
+// rows de selects para columnas
+:host /deep/ .pvtAxisContainer.pvtCols li span.pvtAttr, :host /deep/ .pvtAxisContainer.pvtRows li span.pvtAttr {
+    background: #ffffff;
+    border: 1px solid #0c867a;
+    padding: 2px 6px 4px 12px;
+    border-radius: 10px;
+}
+
+
+
+//pvtFilterBox popup
+
+:host /deep/ .pvtFilterBox {
+    z-index: 100;
+    width: 325px;
+    border: 1px solid white;
+    background-color: #fff;
+    position: absolute;
+    text-align: center;
+    box-shadow: 10px 10px 43px -2px rgba(0,0,0,0.58);
+}
+
+:host /deep/ .pvtFilterBox button {
+    background-color: #14a597;
+    border: none;
+    color: #fff;
+    border-radius: 2px;
+    height: 30px;
+    padding: 0 10px;
+    margin: 5px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+
+:host /deep/ .pvtFilterBox button:hover {
+    background-color: #2bbbad;
+}
+
+
+// estilos para los p
+
+:host /deep/ .pvtFilterBox p {
+    margin: 10px auto !important;
+}
+
+
+/* END - styles for PivotTable */
+

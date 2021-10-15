@@ -1,0 +1,20 @@
+<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<app-dynamic-table [sourceService]="_profesionalService"
+								   [title]="'Profesionales'"
+								   [columns]="columns"
+								   [controlsToFilter]="controlsToFilter"
+								   [permissionCode]="'ABMPROFESI'"
+								   (actionClick)="onActionClick($event)">
+				</app-dynamic-table>
+			</div>
+		</div>
+	</div>
+	<app-modal-confirm [title]="'Eliminar Profesional'"
+					   [message]="'¿Desea eliminar el profesional?'"
+					   [openModalSubject]="openModalDeleteSubject"
+					   (agree)="deleteProfessional()">
+	</app-modal-confirm>
+</div>

@@ -1,0 +1,34 @@
+<div class="col s12" *ngIf="isActive">
+    <span class="card-title center-align">Pacientes con esquemas</span>
+    <app-dynamic-table
+        [controlsToFilter]="controlsToFilter" 
+        [sourceService]="pharmacyService"
+        [methodNameForList]="'getPharmacyPatient'" 
+        [columns]="columns" 
+        [hideActions]="true" 
+        [disabledNew]="true"
+        [disableButtonFloating]="true" 
+        [refreshedAllowed]="false" 
+        (filterChange)="onFilterChange()"
+        (allSelectEE)="selectAll($event)" 
+        (actionClick)="onActionClick($event)">
+    </app-dynamic-table>
+    <div class="row">
+        <div class="col m2">
+             <div class="input-field inline">
+            <input #quantity id="quantiy_inline" type="number" class="validate" value="1" (change)="onChangeDays(quantity)" min="1" step="1" required>
+            <label for="quantiy_inline">Dias de entrega:</label>
+            <span class="helper-text" data-error="cantidad no valida"></span>
+        </div>
+        </div>
+       <div class="col m10">
+             <div class="input-field inline">
+            <input id="initialDate" class="datepicker" type="text" materialize="pickadate" [materializeParams]="[datePickerOptions]" [(ngModel)]="initDate">
+            <label for="initialDate">Fecha:</label>
+        </div>
+        <div class="labelDate">
+            <p>Fecha Desde: {{dateFrom}}  Fecha Hasta: {{dateTo}}</p>
+        </div>
+       </div>
+    </div>
+</div>

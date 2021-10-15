@@ -1,0 +1,23 @@
+table>tbody>tr>td>a {
+    color: #e7e7e7;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+}
+
+table>tbody>tr>td>a:hover {
+    color: #00BCD4;
+    cursor: pointer;
+}
+
+table {
+    position: relative;
+}
+
+table>.btn-floating {
+    position: absolute;
+    right: 8px;
+    float: right;
+    top: 32px;
+    font-size: 20px;
+}

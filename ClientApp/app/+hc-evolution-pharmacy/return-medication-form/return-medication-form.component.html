@@ -1,0 +1,25 @@
+<div class="card-content">
+    <span class="card-title center-align">Devolucion de medicación</span>
+    <form #f="ngForm" [formGroup]="form" (ngSubmit)="save()">
+        <div class="row">
+            <div class="input-field col s12 m6">
+                <input id="articleName" class="validate" type="text" formControlName="articleName" readonly>
+                <label for="articleName" [class.active]="form.value.articleName">Articulo</label>
+            </div>
+            <div class="input-field col s12 m6">
+                <input id="quantity" class="validate" type="number" formControlName="quantity" min="1" required>
+                <label for="quantity" [class.active]="form.value.quantity">Cantidad</label>
+                <app-control-error-message [form]="f" [control]="{key:'quantity'}"></app-control-error-message>
+            </div>
+        </div>
+        <div class="row center-align">
+            <button type="submit" [disabled]="!f.form.valid" class="waves-effect waves-light btn btn-form center blue z-index-0">Guardar</button>
+            <button type="button" class="waves-effect waves-light btn btn-form center red z-index-0" (click)="cancel()">Cancelar</button>
+        </div>
+    </form>
+</div>
+<app-modal-confirm [title]="!hcEvolutionPharmacyService.isNew ? 'Editar' : 'Alta'"
+                   [message]="'¿Desea regresar sin guardar los cambios?'"
+                   [openModalSubject]="modalDiscardSubject"
+                   (agree)="closeForm()">
+</app-modal-confirm>

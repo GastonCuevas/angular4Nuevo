@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title center-align">{{title}}</span>
+                <br />
+                <loading *ngIf="isLoading"></loading>
+
+                <form #formPracticeInos="ngForm" [formGroup]="form" (ngSubmit)="onSubmit($event)" *ngIf="!isLoading && !!form">
+                    <div class="row">
+                        <div class="input-field col s5">
+                            <select materialize="material_select" [materializeSelectOptions]="tipos" required name="tipos" formControlName="practiceTypeNumber">
+                                <option value="" disabled selected>Elija una opción</option>
+                                <option *ngFor="let tipo of tipos" [ngValue]="tipo.number">{{tipo.name}}</option>
+                            </select>
+                            <label for="tipo">Tipo de Práctica</label>
+                            <app-control-error-message [show]="!form.value.practiceTypeNumber"></app-control-error-message>
+                        </div>
+                        <div class="input-field col s4">
+                            <input id="code" formControlName="code" type="text" class="validate" maxlength="20" required />
+                            <label for="code" [class.active]="practiceInos.code">Código</label>
+                            <app-control-error-message [show]="!form.value.code"></app-control-error-message>
+                        </div>
+                        <div class="col s3">
+                            <label class="active">Esta deshabilitado</label>
+                            <div style="padding-top: 0.7rem">
+                                <input formControlName="disabled" type="radio" id="test1" [value]="true" />
+                                <label style="padding-right: 9%;" for="test1">Si</label>
+                                <input formControlName="disabled" type="radio" id="test2" [value]="false" />
+                                <label for="test2">No</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="description" formControlName="description" type="text" class="validate" maxlength="100" />
+                            <label for="description" [class.active]="practiceInos.description">Descripción</label>
+                            <app-control-error-message [show]="!form.value.description"></app-control-error-message>
+                        </div>
+                    </div>
+                    <div class="row center-align">
+                        <button type="submit" [disabled]="!formPracticeInos.form.valid" class="waves-effect waves-light btn btn-form center blue">Guardar</button>
+                        <button type="button" class="waves-effect waves-light btn btn-form center red" (click)="onCancelButton()">Cancelar</button>
+                    </div>
+                </form>
+                <div *ngIf="!isLoading && !form">
+                    <div class="center-align" style="margin-bottom: 50px;margin-top: 20px;">
+                        <span style="font-weight: bold;">NO HAY DATOS PARA MOSTRAR</span>
+                    </div>
+                    <div class="center-align">
+                        <a [routerLink]="['/archivos/practicasInos']" class="waves-effect waves-light btn center-align red lighten-1">Cerrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-modal-confirm [title]="isEdit ? 'Editar' : 'Alta'" [message]="'Desea regresar sin guardar los cambios?'" [openModalSubject]="openModalSubject"
+                   (agree)="onAgree()">
+</app-modal-confirm>

@@ -1,0 +1,30 @@
+table>tbody>tr>td>a {
+    color: #a3a2a2;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+  }
+
+table>tbody>tr>td>a:hover {
+    color: #00BCD4;
+    cursor: pointer;
+  }
+
+table {
+    position: relative;
+}
+    
+table>.btn-floating {
+    position: sticky;
+    right: 8px;
+    float: right;
+    top: 32px;
+    font-size: 20px;
+}
+
+.scrollable {
+  width: -webkit-fill-available;
+  overflow-y: overlay;
+  max-height: 300px;
+  display: block;
+}

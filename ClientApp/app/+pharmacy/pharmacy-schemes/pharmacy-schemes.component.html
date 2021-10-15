@@ -1,0 +1,12 @@
+<div class="col s12 m5" *ngIf="isActive">
+    <span class="card-title center-align">Esquemas de Medicación</span>
+    <app-dynamic-table
+        [sourceService]="pharmacyService" 
+        [methodNameForList]="'getPharmacySchemes'" 
+        [columns]="columns"
+        [hideActions]="true" 
+        [disableButtonFloating]="true" 
+        [selectedEnabled]="true"
+        (selectedChange)="selectChange($event)">
+    </app-dynamic-table>
+</div>

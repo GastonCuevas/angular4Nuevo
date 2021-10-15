@@ -1,0 +1,44 @@
+<div class="col s12">
+    <div>
+        <div>
+            <span class="card-title center-align">{{(!isEdit ? 'Nueva' : 'Editar')}} obra social de paciente</span>
+            <br />
+            <loading *ngIf="isLoadingMedicalInsurance"></loading>
+            <form #formPatientMedicalInsurance="ngForm" [formGroup]="form" (ngSubmit)="onSubmit($event)" *ngIf="!isLoadingMedicalInsurance && !!form">
+                <div class="row">
+                    <div class="input-field col s12 m4">
+                        <input-auto-complete [label]="'Obra Social'"
+                                            [form]="form"
+                                            [formControlNameIAC]="'socialNumber'"
+                                            [source]="medicalInsurances"
+                                            [isLoading]="isLoadingMedicalInsurance"
+                                            [disabledIAC]="defaultMedicalInsurance"
+                                            (valueChange)="onChangeMedicalInsurance()">
+                        </input-auto-complete>
+                    </div>
+                    <div class="input-field col s12 m8">
+                        <input id="carnetNumber" formControlName="carnetNumber" type="text" class="validate" maxlength="255" name="carnetNumber" [attr.disabled] = "defaultMedicalInsurance == true ? true : null">
+                        <label for="carnetNumber" [class.active]="patientMedicalInsurance.carnetNumber">Nro. de Carnet</label>
+                    </div>
+                    <div class="input-field col s12 m3">
+                        <input formControlName="expirationDate" name="expirationDate" id="expirationDate" type="text"  [attr.data-value]="form.value.expirationDate" 
+                               class="datepicker" materialize="pickadate" [materializeParams]="[datePickerOptions]" [attr.disabled] = "defaultMedicalInsurance == true ? true : null">
+                        <label for="expirationDate">Fecha de Vencimiento</label>
+                    </div>
+                    <div class="col s12 m3" style="margin-top: 2rem">
+                        <input type="checkbox" id="byDefault" formControlName="byDefault" />
+                        <label for="byDefault">Por defecto</label>
+                    </div>
+                </div>
+                    
+                <div class="row center-align">
+                    <button type="submit" [disabled]="!formPatientMedicalInsurance.form.valid" class="waves-effect waves-light btn btn-form center blue z-index-0">Guardar</button>
+                    <button type="button" class="waves-effect waves-light btn btn-form center red z-index-0" (click)="onCancelButton()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <app-modal-confirm [title]="isEdit ? 'Editar' : 'Alta'" [message]="'Desea regresar sin guardar los cambios?'"
+                       [openModalSubject]="openModalSubject" (agree)="onAgree()">
+    </app-modal-confirm>
+</div>

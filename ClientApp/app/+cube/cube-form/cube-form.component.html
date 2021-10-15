@@ -1,0 +1,69 @@
+<div>
+    <div class="row" *ngIf="!isNew">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+                    <app-dynamic-table
+                        [sourceService]="cubeService"
+                        [title]="'Listado de Analisis Cubos'"
+                        [columns]="columns"
+                        [reloadingData]="reloadingData"
+                        (actionClick)="onActionClick($event)"
+                        (reloadingDataChange)="updateReloadingData($event)">
+                    </app-dynamic-table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card" *ngIf="isNew">
+        <div class="card-content">
+            <span class="card-title center-align">Nuevo Analisis</span>
+            <form #f="ngForm" [formGroup]="form" (ngSubmit)="analizeCube()" *ngIf="!!form">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input-auto-complete
+                            [label]="'Seleccione el tipo de Análisis'"
+                            [form]="form"
+                            [formControlNameIAC]="'cube'"
+                            [valuePropertyName]="'code'"
+                            [functionForData]="sourceParameteres"
+                            (valueChange)="setSelected($event)">
+						</input-auto-complete>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="dateFrom" formControlName="dateFrom" type="text"
+                            class="datepicker" materialize="pickadate" [materializeParams]="[datePickerOptions]">
+                        <label for="dateFrom" [class.active]="form.value.dateFrom">Desde</label>
+                        <app-control-error-message [form]="f" [control]="{key: 'dateFrom'}"></app-control-error-message>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="dateTo" formControlName="dateTo" type="text" *ngIf="showDPOwhitMin"
+                            class="datepicker" materialize="pickadate" [materializeParams]="[datePickerOptionsWhitMin]">
+                            <input id="dateTo" formControlName="dateTo" type="text" *ngIf="!showDPOwhitMin"
+                            class="datepicker" materialize="pickadate" [materializeParams]="[datePickerOptionsWhitMin]">
+                        <label for="dateTo" [class.active]="form.value.dateTo">Hasta</label>
+                        <app-control-error-message [form]="f" [control]="{key: 'dateTo'}"></app-control-error-message>
+                    </div>
+                    <div class="col s12">
+                        <blockquote class="blockquote-info">
+                            Atención al aceptar se cargarán en memoria los datos para el análisis.
+                            Esta operación puede demorar vaios minutos, por favor sea paciente.
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="row center-align">
+                    <button type="submit" [disabled]="!f.form.valid" class="waves-effect waves-light btn btn-form center blue">Aceptar</button>
+                    <button type="button" (click)="onReturn()" class="waves-effect waves-light btn btn-form center blue">Volver</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<app-modal-confirm
+    [title]="'Eliminar Cubo'"
+    [message]="'¿Desea eliminar el informe?'"
+    [openModalSubject]="openModalSubject"
+    (agree)="onAgree()">
+</app-modal-confirm>

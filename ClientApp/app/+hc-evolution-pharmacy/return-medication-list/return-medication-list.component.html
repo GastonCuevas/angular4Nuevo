@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content" [hidden]="showReturnMedicationForm">
+                <app-dynamic-table [sourceService]="returnMedicationService" 
+                          [columns]="returnMedicationService.columns" 
+                          [disableButtonFloating]="true"
+                          [disabledDetail]="true"
+                          [disabledNew]="true"
+                          [reloadingData]="reloadingData" 
+                          [title]="'Devolucion de medicación'" 
+                          (actionClick)="onActionClick($event)"
+                          (reloadingDataChange)="updateReloadingData($event)">
+                </app-dynamic-table>
+  
+                <div class="row">
+                    <div class="col s6 left-align">
+                        <button type="button" class="waves-effect waves-light btn btn-form blue-grey" (click)="viewBack()">Atras</button>
+                    </div>
+                    <div class="col s6 right-align">
+                        <button [disabled]="returnMedicationService.schemesList.length == 0" type="button" class="waves-effect waves-light btn btn-form blue" (click)="returnMedication()">Devolucion</button>
+                    </div>
+                </div>
+            </div>
+            <return-medication-form *ngIf="showReturnMedicationForm" 
+                [pharmacyScheme]="pharmacySchemeItem" 
+                (close)="closeFormArticle()">
+            </return-medication-form>
+        </div>
+    </div>
+    <app-modal-confirm
+        [title]="'Devolucion'"
+        [message]="'¿Desea eliminar el item de medicamento?'"
+        [openModalSubject]="deleteModalSubject"
+        (agree)="onDeleteConfirm($event)">
+    </app-modal-confirm>
+</div>

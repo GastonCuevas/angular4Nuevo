@@ -1,0 +1,160 @@
+<div class="row">
+    <loading *ngIf="isLoading"></loading>
+
+    <div class="col s12" *ngIf="!isLoading">
+        <div class="card" *ngIf="genericObject">
+            <div class="card-content">
+                <span class="card-title center-align">{{getPropByString(genericObject,'Titulo')}}</span>
+
+                <table id="table" class="highlight table-sortable" *ngIf="listObject">
+                    <a *ngIf="!disabledNew" class="btn-floating btn-small waves-effect waves-light" (click)="showDialogNew()" style="top: 37px;" [ngStyle]="{'background-color': 'cyan'}">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                    <thead>
+                        <tr>
+                            <th *ngFor="let f of fields"  [class]="selectedClass(f.value)" (click)="changeSorting(f.value)">
+                                {{f.value}}
+                            </th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="showFilters()">
+                            <td>
+                                <div class="input-field input-filter" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Empieze a escribir para filtrar">
+                                    <!-- <i class="material-icons prefix icon-filter">filter_list</i> -->
+                                    <input [type]="inputType(fields[0].value)" [(ngModel)]="filterByPropertyName" (keyup)="changeInput()">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="listObject.length <= 0">
+                            <td> No hay elementos para mostrar.</td>
+                        </tr>
+                        <tr *ngFor="let item of listObject; trackBy:item.Numero; let i = index" [class.active]="i == selectedRow">
+                            <td *ngFor="let field of fields">
+                                <span *ngIf="!(i == selectedRow)">{{getPropByString(item, field.value.toLowerCase())}}</span>
+                                <input [type]="inputType(field.value)" [value]="getPropByString(auxGenericObject,field.value.toLowerCase())" (input)="setPropByString(auxGenericObject,field.value.toLowerCase(),$event.target.value, true)"
+                                    *ngIf="i == selectedRow">
+                            </td>
+                            <td *ngIf="!(i == selectedRow)" class="action text-center">
+                                <a *ngIf="!disabledEdit" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Editar" (click)="selectRow(i,item)">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a *ngIf="!disabledDelete" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Eliminar" (click)="showDialog('delete',item)">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                            <td *ngIf="(i == selectedRow)" class="edit text-center">
+                                <a materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Aceptar" (click)="showDialog('edit')" [ngClass]="{'not-active': !edited}">
+                                    <i class="fa fa-check be" [ngClass]="{'not-active': !edited,'green-text': edited}"></i>
+                                </a>
+                                <a  materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Cancelar" (click)="cancel()">
+                                    <i class="fa fa-close red-text"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <div class="row">
+                    <div class="col s6" *ngIf="paginator.totalItems > 10">
+                        <div class="input-field inline">
+                            <select materialize="material_select" [(ngModel)]="paginator.pageSize" (change)="selectPageSize()">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <label>Mostrar</label>
+                        </div>
+                    </div>
+                    <div class="col s6 right-align">
+                        <ul class="pagination" *ngIf="paginator.totalItems > paginator.pageSize && !isLoading">
+                            <li [class.disabled]="paginator.currentPage == 1" [class.waves-effect]="paginator.currentPage != 1">
+                                <a (click)="previousPage()">
+                                    <i class="material-icons">chevron_left</i>
+                                </a>
+                            </li>
+
+                            <span *ngFor="let page of pages">
+                                <li [class.active]="page == paginator.currentPage" class="waves-effect" *ngIf="paginator.currentPage - adjacentPagesCount > 1 && page == 1">
+                                    <a (click)="selectPage(page)">{{page}}</a>
+                                </li>
+                                <li *ngIf="paginator.currentPage - adjacentPagesCount > 1 && page == 1">
+                                    <a>...</a>
+                                </li>
+                                <li [class.active]="page == paginator.currentPage" class="waves-effect" *ngIf="page >= paginator.currentPage - adjacentPagesCount && page <= paginator.currentPage + adjacentPagesCount">
+                                    <a (click)="selectPage(page)">{{page}}</a>
+                                </li>
+                                <li *ngIf="paginator.currentPage + adjacentPagesCount < pages.length && page == pages.length">
+                                    <a>...</a>
+                                </li>
+                                <li [class.active]="page == paginator.currentPage" class="waves-effect" *ngIf="paginator.currentPage + adjacentPagesCount < pages.length && page == pages.length">
+                                    <a (click)="selectPage(page)">{{page}}</a>
+                                </li>
+                            </span>
+
+                            <li [class.disabled]="paginator.currentPage == pages.length" [class.waves-effect]="paginator.currentPage != pages.length">
+                                <a (click)="nextPage()">
+                                    <i class="material-icons">chevron_right</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <app-modal-confirm *ngIf="genericObject" [title]="'Eliminar'" [message]="'Desea eliminar el '+getPropByString(genericObject,'Titulo')+'?'"
+            [openModalSubject]="openModalDeleteSubject" (agree)="deleteCommit()">
+        </app-modal-confirm>
+
+        <app-modal-confirm *ngIf="genericObject" [title]="'Editar'" [message]="'¿ Desea Guardar los cambios realizados en '+getPropByString(genericObject,'Titulo')+'?'"
+            [openModalSubject]="openModalEditSubject" (agree)="editCommit()">
+        </app-modal-confirm>
+
+        <app-modal-confirm *ngIf="genericObject" [title]="'Guardar'" [message]="'¿ Desea Guardar el nuevo '+getPropByString(genericObject,'Titulo')+'?'"
+            [openModalSubject]="openModalNewSubject" (agree)="saveCommit()">
+        </app-modal-confirm>
+
+        <app-modal-confirm *ngIf="genericObject" [title]="'Descartar'" [message]="'¿ Desea descartar los cambios realizados ?'"
+            [openModalSubject]="openModalAcceptChange"
+            (agree)="discardChanges()">
+        </app-modal-confirm>
+
+        <app-modal-confirm *ngIf="genericObject" [title]="'Descartar'" [message]="'¿ Desea descartar los cambios realizados ?'"
+            [openModalSubject]="openModalDiscardChange"
+            (agree)="discardChangesInNew()">
+        </app-modal-confirm>
+        <app-modal-confirm *ngIf="genericObject" [title]="'Descartar'" [message]="'¿ Desea descartar los cambios realizados ?'"
+            [openModalSubject]="openModalDiscardChangeInEdit"
+            (agree)="discardChangesInEdit()">
+        </app-modal-confirm>
+
+        <!-- Modal Structure -->
+        <div #modalNew id="modal2" class="modal modal-styles" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions"
+            >
+            <div class="modal-content container" *ngIf="auxNewGenericObject">
+                <h5 class="center-align">{{'Nuevo '+ getPropByString(genericObject,'Titulo')}}</h5>
+                <br />
+                 <form #formDV="ngForm" (ngSubmit)="addItem()" *ngIf="newGeneric">
+                    <div *ngFor="let field of fields" class="input-field">
+                        <input name="name" class="form-control" #name="ngModel" ngModel
+                            [id]="field.property" [type]="inputType(field.value)"
+                            [value]="getPropByString(auxNewGenericObject,field.value)" 
+                            (input)="setPropByString(auxNewGenericObject,field.value,$event.target.value)"
+                            required>
+                        <label [for]="field.property" style="background-color: rgba(255, 255, 255, 0) !important;">{{field.value}}</label>
+						<app-control-error-message [show]="name.invalid && (name.dirty || name.touched)"></app-control-error-message>
+                    </div>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <button class="waves-effect waves-light btn btn-form center blue" type="submit" [disabled]="!formDV.form.valid">Aceptar</button>
+                        <button class="waves-effect waves-light btn btn-form center red" type="button" (click)="cancelModalNew(formDV.form.valid)">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-button-floating *ngIf="!disabledPrint" [item]="item" [sentItem]="true" [tableName]="tableName"></app-button-floating>

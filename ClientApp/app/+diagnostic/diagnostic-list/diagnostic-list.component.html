@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <a class="waves-effect waves-light btn" (click)="onUploadClick()" style="position: absolute; right: 30px;"><i class="material-icons right">cloud_upload</i>Importar Excel</a>
+                <app-dynamic-table
+                    [permissionCode]="'ABMDIAGNOS'"
+                    [title]="'Diagnósticos'"
+                    [sourceService]="diagnosticService"
+                    [(reloadingDataSource)]="reloadingDataSource"
+                    (actionClick)="onActionClick($event)">
+                </app-dynamic-table>
+            </div>
+        </div>
+    </div>
+
+    <app-modal-confirm
+        [title]="'Eliminar Diagnóstico'"
+        [message]="'¿Desea eliminar el diagnóstico?'"
+        [openModalSubject]="openModalDeleteSubject"
+        (agree)="deleteDiagnostic()">
+    </app-modal-confirm>
+</div>

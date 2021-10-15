@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title center-align">{{selectedCube?.name}}</span>
+                <span class="card-subtitle center-align">Desde: {{selectedCube?.dateFrom}} Hasta: {{selectedCube?.dateTo}}</span>
+                <loading *ngIf="isLoading"></loading>
+                <div class="row container-cubo">
+                    <div class="col s12">
+                        <div id="cuboPT"></div>
+                    </div>
+                </div>
+
+                <div class="col s12">
+                    <blockquote class="blockquote-info">
+                        Para poder exportar a exel la tabla debe tener valores cargado.
+                        En el caso que desee imprimir o guardar como pdf, tenga en cuenta que si la tabla tiene demasiadas columnas no se mostrarán todas.
+                    </blockquote>
+                </div>
+
+                <div class="row center-align">
+                    <button type="button" (click)="openModal()" class="waves-effect waves-light btn btn-form center blue">Guardar</button>
+                    <button type="button" (click)="onReturn()" class="waves-effect waves-light btn btn-form center blue">Volver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BOTON FLOTANTE -->
+<div class="fixed-action-btn vertcal">
+    <a class="btn-floating btn-large red">
+        <i class="large material-icons">menu</i>
+    </a>
+    <ul>
+        <li><a (click)="downloadReportXLSX()" id="exportXLSX"  materialize="tooltip" class="btn-floating green btn tooltipped" data-position="left" data-delay="50" data-tooltip="Exportar a Exel"><i class="material-icons">file_download</i></a></li>
+        <li><a (click)="print()"  materialize="tooltip" class="btn-floating light-blue btn tooltipped" data-position="left" data-delay="50" data-tooltip="Imprimir"><i class="material-icons">print</i></a></li>
+        <!-- <li><a (click)="openModal1()" *ngIf="showBtnToExport" materialize="tooltip" class="btn-floating  blue-grey lighten-3 btn tooltipped" data-position="left" data-delay="50" data-tooltip="Enviar por E-mail"><i class="material-icons">contact_mail</i></a></li> -->
+    </ul>
+</div>
+
+<!--MODAL-->
+<div class="modal modal-styles" id="modalCubo" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+    
+    <div class="modal-content">
+        <span class="title center-align">Guardar informe</span>
+        <div class="row margin top-s">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="name" [(ngModel)]="selectedCube.name" type="text">
+                    <label for="name" [class.active]="selectedCube.name">Descripción</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="waves-effect waves-light btn btn-form center red" (click)="closeModal()">Cancelar</button>
+        <button-submit [btntext]="'Guardar'" data-dismiss="modal" (formSubmit)="save()" [isLoading]="isSaving"></button-submit>
+    </div>
+</div>
+<!-- Modal Structure -->

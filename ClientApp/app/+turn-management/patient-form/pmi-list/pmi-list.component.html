@@ -1,0 +1,57 @@
+<span class="card-title center-align">OBRAS SOCIALES </span>
+<br>
+
+<div class="row">
+    <table class="highlight responsive-table">
+        <a class="btn-floating btn-small waves-effect waves-light cyan" (click)="onActionClick('new')" style="top: 33px;">
+            <i class="fa fa-plus"></i>
+        </a>
+
+        <thead>
+            <tr>
+                <th class="">Obra Social</th>
+                <th class="center-align">Nro de carnet</th>
+                <th class="center-align">Fecha de Vencimiento</th>
+                <th class="center-align">Por Defecto</th>
+                <th >Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="dataSource.length <= 0">
+                <td [attr.colspan]="5" class="center-align">
+                    No hay O.S. del paciente cargados.
+                </td>
+            </tr>
+
+            <tr *ngFor="let data of dataSource">
+                <td>{{data.socialName}}</td>
+                <td class="center-align">{{data.carnetNumber}}</td>
+                <td class="center-align">{{data.fDueDate}}</td>
+                <td class="center-align">
+                    <input type="checkbox" class="filled-in" id="byDefault"
+                        [checked]="data.byDefault" disabled/>
+                    <label for="byDefault"></label>
+                </td>
+
+                <td class="">
+                    <a (click)="onActionClick('edit', data)" *ngIf="!data.isParticular" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Editar" >
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <a (click)="onActionClick('delete', data)" *ngIf="!data.isParticular" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Eliminar" >
+                        <i class="fa fa-trash"></i>
+                    </a>
+                    <!-- <a (click)="onActionClick('detail', data)" materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Detalle" >
+                        <i class="fa fa-search-plus"></i>
+                    </a> -->
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <app-modal-confirm [title]="'Eliminar Obra Social de Paciente'"
+        [message]="'¿Desea eliminar la Obra Social del Paciente?'"
+        [openModalSubject]="openModalDeleteSubject"
+        (agree)="deleteItem()">
+    </app-modal-confirm>
+
+</div>

@@ -1,0 +1,247 @@
+﻿<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title center-align">Conceptos</span>
+                <loading *ngIf="isLoading"></loading>
+                <form #f="ngForm" [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!isLoading && !error && !!form">
+                    <ul materialize="collapsible" class="collapsible" data-collapsible="expandable">
+                        <li>
+                            <div class="collapsible-header blue lighten-2 white-text">
+                                <i class="material-icons">perm_phone_msg</i>
+                                <span class="full-width">CONSULTORIO EXTERNO</span>
+                                <i class="material-icons less">expand_less</i>
+                                <i class="material-icons more">expand_more</i>
+                            </div>
+                            <div class="collapsible-body">
+                                <div class="row">
+                                    <div class="input-field col s12 m6">
+                                        <input-auto-complete [label]="'Concepto del contrato'"
+                                                             [form]="form"
+                                                             [displayPropertyName]="'fullDescription'"
+                                                             [formControlNameIAC]="'ambId'"
+                                                             [source]="concepts"
+                                                             [valuePropertyName]="'conceptId'"
+                                                             [isLoading]="loadingConceptIAC"
+                                                             (valueChange)="onChangeSelectedConcept($event)">
+                                        </input-auto-complete>
+                                    </div>
+                                    <div class="input-field col s12 m2">
+                                        <input id="conceptPrice" formControlName="ambPrice" type="number" readonly>
+                                        <label for="conceptPrice" [class.active]="form.value.ambPrice >= 0">Precio x Hs</label>
+                                    </div>
+                                    <div class="input-field col s12 m2">
+                                        <input id="ambCount" class="validate" formControlName="ambCount" type="number" step="1" min="0" (input)="updateAmbDiff()">
+                                        <label for="ambCount" [class.active]="form.value.ambCount >= 0">Cantidad</label>
+                                    </div>
+                                    <div>
+                                        
+                                    </div>
+                                    <div class="input-field col s8 m1">
+                                        {{ambTextConsExt}}
+                                    </div>
+                                    <div class="input-field col s4 m1">
+                                        <!--<label for="ambDiff" [class.active]="form.value.ambDiff >= 0">Diferencia</label>-->
+                                        <input  #diferencia id="ambDiff" formControlName="ambDiff" type="hidden" readonly>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <app-dynamic-table [sourceService]="professionalLiquidationService"
+                                                       [columns]="ambulatoryPracticesColumns"
+                                                       [methodNameForList]="'getAmbulatoryPractices'"
+                                                       [hideActions]="true"
+                                                       [disabledNew]="true"
+                                                       [hideFilters]="true"
+                                                       [disableButtonFloating]="true"
+                                                       [refreshedAllowed]="false">
+                                    </app-dynamic-table>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header blue lighten-2 white-text">
+                                <i class="material-icons">perm_phone_msg</i>
+                                <span class="full-width">INTERNACION</span>
+                                <i class="material-icons less">expand_less</i>
+                                <i class="material-icons more">expand_more</i>
+                            </div>
+                            <div class="collapsible-body">
+                                <div class="row">
+                                    <div class="input-field col s12 m6">
+                                        <input-auto-complete [label]="'Concepto del contrato'"
+                                                             [form]="form"
+                                                             [displayPropertyName]="'fullDescription'"
+                                                             [formControlNameIAC]="'hospId'"
+                                                             [source]="concepts"
+                                                             [valuePropertyName]="'conceptId'"
+                                                             [isLoading]="loadingConceptIAC"
+                                                             (valueChange)="onChangeSelectedInternmentConcept($event)">
+                                        </input-auto-complete>
+                                    </div>
+                                    <div class="input-field col s12 m2">
+                                        <input id="internmentPrice" formControlName="hospPrice" type="number" readonly>
+                                        <label for="internmentPrice" [class.active]="form.value.hospPrice >= 0">Precio x Hs</label>
+                                    </div>
+                                    <div class="input-field col s12 m1">
+                                        <input id="internmentQuantity" class="validate" formControlName="hospCount" type="number" step="1" min="0" (input)="updateHospDiff()">
+                                        <label for="internmentQuantity" [class.active]="form.value.hospCount >= 0">Cantidad</label>
+                                    </div>
+                                    <div class="input-field col s8 m1">
+                                        {{ambTextInternat}}
+                                    </div>
+                                    <div class="input-field col s12 m1">
+                                        <input id="hospDiff" formControlName="hospDiff" type="hidden" readonly>
+                                        <!--<label for="hospDiff" [class.active]="form.value.hospDiff >= 0">Diferencia</label>-->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12 m4">
+                                        <input id="priceHour" type="number" readonly [value]="priceHs">
+                                        <label for="priceHour" [class.active]="priceHs >= 0">Precio por Hora (internación)</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <app-dynamic-table [sourceService]="professionalLiquidationService"
+                                                       [methodNameForList]="'getHospitalizationPractices'"
+                                                       [columns]="hospitalizationPracticesColumns"
+                                                       [hideActions]="true"
+                                                       [disabledNew]="true"
+                                                       [hideFilters]="true"
+                                                       [disableButtonFloating]="true"
+                                                       [refreshedAllowed]="false">
+                                    </app-dynamic-table>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header blue lighten-2 white-text">
+                                <i class="material-icons">perm_phone_msg</i>
+                                <span class="full-width">COORDINACION</span>
+                                <i class="material-icons less">expand_less</i>
+                                <i class="material-icons more">expand_more</i>
+                            </div>
+                            <div class="collapsible-body">
+                                <div class="row">
+                                    <div class="input-field col s12 m4">
+                                        <input id="coordination" type="number" readonly [value]="fixedAmount">
+                                        <label for="coordination" [class.active]="fixedAmount >= 0">Coordinación</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header blue lighten-2 white-text">
+                                <i class="material-icons">perm_phone_msg</i>
+                                <span class="full-width">GUARDIA MEDICA</span>
+                                <i class="material-icons less">expand_less</i>
+                                <i class="material-icons more">expand_more</i>
+                            </div>
+                            <div class="collapsible-body">
+                                <div class="row">
+                                    <div class="input-field col s12 m6">
+                                        <input-auto-complete #conceptMedicalGuardIAC
+                                                             [label]="'Concepto del contrato'"
+                                                             [form]="form"
+                                                             [displayPropertyName]="'fullDescription'"
+                                                             [formControlNameIAC]="'gmId'"
+                                                             [valuePropertyName]="'conceptId'"
+                                                             [source]="concepts"
+                                                             [isLoading]="loadingConceptIAC"
+                                                             (valueChange)="onChangeSelectedConceptMedicalGuard($event)">
+                                        </input-auto-complete>
+                                    </div>
+                                    <div class="input-field col s12 m2">
+                                        <input id="gmPrice" formControlName="gmPrice" type="number" readonly>
+                                        <label for="gmPrice" [class.active]="form.value.gmPrice">Precio</label>
+                                    </div>
+                                    <div class="input-field col s12 m2">
+                                        <input id="gmQuantity" type="number" formControlName="gmCount" step="1" min="0">
+                                        <label for="gmQuantity" [class.active]="form.value.gmCount >= 0">Cantidad</label>
+                                    </div>
+                                    <button-submit class="input-field col s12 m2"
+                                                   [btntext]="'Agregar'"
+                                                   (formSubmit)="addConceptMedicalGuard()">
+                                    </button-submit>
+                                </div>
+                                <div class="row">
+                                    <app-dynamic-table [sourceService]="professionalLiquidationService"
+                                                       [methodNameForList]="'getMedicalGuards'"
+                                                       [columns]="medicalGuardsColumns"
+                                                       [hideActions]="false"
+                                                       [disabledNew]="true"
+                                                       [disableButtonFloating]="true"
+                                                       [disabledDetail]="true"
+                                                       [disabledEdit]="true"
+                                                       [hideFilters]="true"
+                                                       (actionClick)="deleteConceptMedicalGuard($event)">
+                                    </app-dynamic-table>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header blue lighten-2 white-text">
+                                <i class="material-icons">perm_phone_msg</i>
+                                <span class="full-width">DEBITOS ADICIONALES</span>
+                                <i class="material-icons less">expand_less</i>
+                                <i class="material-icons more">expand_more</i>
+                            </div>
+                            <div class="collapsible-body">
+                                <div class="row">
+                                    <div class="input-field col s12 m4">
+                                        <input-auto-complete #conceptDebitIAC
+                                                             [label]="'Concepto de liquidacion'"
+                                                             [form]="form"
+                                                             [displayPropertyName]="'fullDescription'"
+                                                             [formControlNameIAC]="'aId'"
+                                                             [source]="generalConcepts"
+                                                             [isLoading]="loadingGeneralConceptIAC"
+                                                             (valueChange)="onChangeSelectedConceptDebit($event)">
+                                        </input-auto-complete>
+                                    </div>
+                                    <div class="input-field col s12 m2">
+                                        <input id="aPrice" formControlName="aPrice" type="number" readonly>
+                                        <label for="aPrice" [class.active]="form.value.aPrice >= 0">Precio</label>
+                                    </div>
+                                    <div class="input-field col s12 m2">
+                                        <input id="aCount" type="number" formControlName="aCount" step="1" min="0">
+                                        <label for="aCount" [class.active]="form.value.aCount >= 0">Cantidad</label>
+                                    </div>
+                                    <div class="col s12 m2" style="margin-top: 1.8rem;">
+                                        <input id="subtract" type="checkbox" formControlName="aSubtract" />
+                                        <label for="subtract">Restar</label>
+                                    </div>
+                                    <button-submit class="input-field col s12 m2"
+                                                   [btntext]="'Agregar'"
+                                                   (formSubmit)="addConceptDebit()">
+                                    </button-submit>
+                                </div>
+                                <div class="row">
+                                    <app-dynamic-table [sourceService]="professionalLiquidationService"
+                                                       [methodNameForList]="'getAdditionalDebits'"
+                                                       [columns]="additionalDebitsColumns"
+                                                       [hideActions]="false"
+                                                       [disabledNew]="true"
+                                                       [disableButtonFloating]="true"
+                                                       [disabledDetail]="true"
+                                                       [disabledEdit]="true"
+                                                       [hideFilters]="true"
+                                                       (actionClick)="deleteConceptDebit($event)">
+                                    </app-dynamic-table>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="row center-align">
+                        <button-submit [btntext]="'Guardar'"
+                                       [btnType]="'submit'"
+                                       [isLoading]="isSaving"
+                                       [loadingGlobal]="true">
+                        </button-submit>
+                        <button type="button" class="waves-effect waves-light btn btn-form center red z-index-0" (click)="onCancel()">Cancelar</button>
+                    </div>
+                </form>
+                <app-not-found *ngIf="!isLoading && error" returnPath="/liquidacion/profesionales" (closeEvent)="onCancel()"></app-not-found>
+            </div>
+        </div>
+    </div>
+</div>
