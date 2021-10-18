@@ -1,11 +1,7 @@
 import { ContractOsPractice } from './contract-os-practice.model';
 
 export class ContractOs {
-<<<<<<< HEAD
-  number: number;
-=======
   number: number = 0;
->>>>>>> 3cdeefcb8c69834480dfd82b68f95c2ffea635c1
   medicalInsuranceNumber: number;
   medicalInsuranceName: string;
   dateFrom: string;

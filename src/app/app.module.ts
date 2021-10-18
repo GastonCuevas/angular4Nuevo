@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 // import { StoreModule } from '@ngrx/store';
 // import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-// import { AppModuleShared } from './app.module.shared';
+import { AppModuleShared } from './app.module.shared';
 // import { CoreModule } from './+core/core.module';
 import { AppComponent } from './components/app/app.component';
 // import { appReducer } from './app-store';
@@ -50,62 +50,59 @@ import { AppComponent } from './components/app/app.component';
 // import { SystemLogModule } from './+system-log/system-log.module';
 
 @NgModule({
-    bootstrap: [AppComponent],
-    imports: [
-        BrowserModule,
-        // AppModuleShared,
-        // CoreModule.forRoot(),
-        // LoginModule,
-        // StoreModule.provideStore(appReducer),
-        // StoreDevtoolsModule.instrumentOnlyWithExtension(),
+  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppModuleShared,
+    // CoreModule.forRoot(),
+    // LoginModule,
+    // StoreModule.provideStore(appReducer),
+    // StoreDevtoolsModule.instrumentOnlyWithExtension(),
 
-        // UserModule,
-        // PatientModule,
-        // ProfessionalModule,
-        // MedicalInsuranceModule,
-        // DiagnosticModule,
-        // PatientResponsibleModule,
-        // DynamicView,
-        // DynamicViewModule,
-        // ExportationModule,
-        // IntellReportModule,
-        // ExportationDetailModule,
-        // ExportationEntryModule,
-        // PracticeInosModule,
-        // ContractOsModule,
-        // LookAndFeelModule,
-        // ContractProfessionalModule,
-        // ReportUseCaseModule,
-        // ItemPracticeModule,
-        // HcTableModule,
-        // TurnManagementModule,
-        // TurnConsultationModule,
-        // PatienteMedicalInsuranceModule,
-        // BedModule,
-        // HolidayModule,
-        // BedMovementModule,
-        // InternmentModule,
-        // WardModule,
-        // WardSectorModule,
-        // ClinicHistoryModule,
-        // HcEvolutionPharmacyModule,
-        // CubeModule,
-        // ImportDataModule,
-        // MedicalInsuranceLiquidationModule,
-        // ProfessionalLiquidationModule,
-        // ArbolModule,
-        // ImportRunModule,
-        // ConceptModule,
-        // PharmacyModule,
-        // SystemLogModule
-    ],
-    providers: [
-        { provide: 'BASE_URL', useFactory: getBaseUrl }
-    ]
+    // UserModule,
+    // PatientModule,
+    // ProfessionalModule,
+    // MedicalInsuranceModule,
+    // DiagnosticModule,
+    // PatientResponsibleModule,
+    // DynamicView,
+    // DynamicViewModule,
+    // ExportationModule,
+    // IntellReportModule,
+    // ExportationDetailModule,
+    // ExportationEntryModule,
+    // PracticeInosModule,
+    // ContractOsModule,
+    // LookAndFeelModule,
+    // ContractProfessionalModule,
+    // ReportUseCaseModule,
+    // ItemPracticeModule,
+    // HcTableModule,
+    // TurnManagementModule,
+    // TurnConsultationModule,
+    // PatienteMedicalInsuranceModule,
+    // BedModule,
+    // HolidayModule,
+    // BedMovementModule,
+    // InternmentModule,
+    // WardModule,
+    // WardSectorModule,
+    // ClinicHistoryModule,
+    // HcEvolutionPharmacyModule,
+    // CubeModule,
+    // ImportDataModule,
+    // MedicalInsuranceLiquidationModule,
+    // ProfessionalLiquidationModule,
+    // ArbolModule,
+    // ImportRunModule,
+    // ConceptModule,
+    // PharmacyModule,
+    // SystemLogModule
+  ],
+  providers: [{ provide: 'BASE_URL', useFactory: getBaseUrl }],
 })
-export class AppModule {
-}
+export class AppModule {}
 
 export function getBaseUrl() {
-    return document.getElementsByTagName('base')[0].href;
+  return document.getElementsByTagName('base')[0].href;
 }

@@ -28,7 +28,7 @@
     "ngx-color-picker": "^11.0.0",
     "ngx-image2dataurl": "^12.1.0",
     "pivottable": "^2.23.0",
-    "rxjs": "~6.6.0",
+    "rxjs": "^6.6.7",
     "sass-loader": "^12.2.0",
     "style-loader": "^3.3.0",
     "tableexport": "^5.2.0",

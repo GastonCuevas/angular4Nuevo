@@ -12,7 +12,7 @@ export class ImportData {
     id: number = 0,
     table: string,
     modeInsert: number = 0,
-    importFile: ImportDataFile = new ImportDataFile(),
+    importFile: ImportDataFile = new ImportDataFile(0, 0, '', '', 0, ''),
     importFields: Array<ImportDataField> = new Array<ImportDataField>()
   ) {
     this.id = id;

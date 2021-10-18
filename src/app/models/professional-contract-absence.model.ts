@@ -1,24 +1,36 @@
-import { Professional } from "./professional.model";
+import { Professional } from './professional.model';
 
 export class ProfessionalContractAbsence {
-    contractNumber: number;
-    dateFrom: string;
-    dateTo: string;
-    observation?: string;
-    motive?:string;
-    editionDate: string;
-    motiveName: string;
-    professional: Professional;
-    canEdit = false;
+  contractNumber: number;
+  dateFrom: string;
+  dateTo: string;
+  editionDate: string;
+  motiveName: string;
+  professional: Professional;
+  observation?: string;
+  motive?: string;
+  canEdit: boolean;
 
-    constructor(
-        contractNumber?: number,
-        dateFrom?: string,
-        dateTo?: string
-    ) {
-        this.contractNumber = contractNumber || NaN;
-        this.dateFrom = dateFrom || '';
-        this.dateTo = dateTo || '';
-        // this.editionDate = new Date();
-    } 
+  constructor(
+    contractNumber: number = NaN,
+    dateFrom: string = '',
+    dateTo: string = '',
+    editionDate: string,
+    motiveName: string,
+    professional: Professional,
+    observation?: string,
+    motive?: string,
+    canEdit = false
+  ) {
+    this.contractNumber = contractNumber;
+    this.dateFrom = dateFrom;
+    this.dateTo = dateTo;
+    this.editionDate = editionDate;
+    this.motiveName = motiveName;
+    this.professional = professional;
+    this.observation = observation;
+    this.motive = motive;
+    this.canEdit = canEdit;
+    // this.editionDate = new Date();
+  }
 }

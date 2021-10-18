@@ -1,4 +1,9 @@
-export class WardType{
-    number: number;
-    name: string;
+export class WardType {
+  number: number;
+  name: string;
+
+  constructor(number: number, name: string) {
+    this.number = number;
+    this.name = name;
+  }
 }

@@ -1,7 +1,10 @@
 export class LoginUpdatePasswordModel {
-  userNumber: number = 0;
-  password: string = '';
+  userNumber: number;
+  password: string;
   // confirmPassword: string;
 
-  constructor() {}
+  constructor(userNumber: number = 0, password: string = '') {
+    this.userNumber = userNumber;
+    this.password = password;
+  }
 }
