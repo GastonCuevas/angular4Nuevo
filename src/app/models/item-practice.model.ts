@@ -1,18 +1,17 @@
 import { AssignedPracticeType } from './assigned-practice-type.model';
 import { ItemType } from './item-type.model';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 export class ItemPractice {
   numint: number;
   name: string;
   type: number;
+  table?: number;
   description: string;
   bydefault: string;
   option: boolean;
+  itemType: ItemType;
   assignedPractices: Array<AssignedPracticeType>;
   order: number;
-  table?: number;
-  itemType: ItemType;
 
   constructor(
     numint: number = 0,

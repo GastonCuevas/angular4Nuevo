@@ -1,0 +1,10 @@
+<!-- {{(authState$ | async)?.loggedIn |json}} -->
+
+<ng2-toasty [position]="'bottom-right'"></ng2-toasty>
+
+<nav-menu *ngIf="(authState$ | async)?.loggedIn" (handleSideBar)="changeStateSideBar($event)"></nav-menu>
+
+<his-loading-global></his-loading-global>
+<main class="main" [ngClass]="{'main-open' : isOpen, 'main-close' : !isOpen}">
+    <router-outlet></router-outlet>
+</main>

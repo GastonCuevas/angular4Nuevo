@@ -2,6 +2,7 @@ import { MedicalInsurance } from './medical-insurance.model';
 import { Account } from './account.model';
 
 export class PatientMedicalInsurance {
+  number: number;
   carnetNumber: string;
   byDefault: boolean = false;
   expirationDate: string;
@@ -81,7 +82,6 @@ export class PatientMedicalInsurance {
     0
   );
   yesOrNo: string;
-  number?: number;
 
   constructor(
     carnetNumber: string,
@@ -94,7 +94,7 @@ export class PatientMedicalInsurance {
     medicalInsuranceName: string,
     patient: Account,
     yesOrNo: string,
-    number?: number
+    number: number
   ) {
     this.carnetNumber = carnetNumber;
     this.byDefault = byDefault;

@@ -34,13 +34,13 @@ export class HcEvolution {
     this.date = date;
     this.patientMovementId = patientMovementId;
     this.specialtyId = specialtyId;
+    this.specialtyName = specialtyName;
     this.professionalId = professionalId;
     this.professionalName = professionalName;
     this.practiceId = practiceId;
+    this.practiceName = practiceName;
     this.hcItems = hcItems;
     this.hcTables = hcTables;
-    this.specialtyName = specialtyName;
-    this.practiceName = practiceName;
     this.pharmacySchemes = pharmacySchemes;
   }
 }

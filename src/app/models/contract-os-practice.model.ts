@@ -3,26 +3,26 @@ export class ContractOsPractice {
   contractNumber: number;
   practiceNumber: number;
   practiceName: string;
+  code?: string;
+  coinsurance?: number;
   price: number;
   medicalCoverage: number;
   medical: number;
   facturable: boolean;
   coinsuranceFac: boolean;
-  code?: string;
-  coinsurance?: number;
 
   constructor(
     number: number = 0,
     contractNumber: number = 0,
     practiceNumber: number,
     practiceName: string,
+    code?: string,
+    coinsurance?: number,
     price: number = 0,
     medicalCoverage: number = 100,
     medical: number = 0,
     facturable: boolean = true,
-    coinsuranceFac: boolean = true,
-    code?: string,
-    coinsurance?: number
+    coinsuranceFac: boolean = true
   ) {
     this.number = number;
     this.contractNumber = contractNumber;

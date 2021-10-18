@@ -19,9 +19,6 @@ export class ContractProfessional {
   priceHs: number;
 
   constructor(
-    professional: Professional,
-    fixedAmount: number,
-    priceHs: number = 0,
     number?: number,
     professionalNumber?: number,
     professionalName?: string,
@@ -31,7 +28,10 @@ export class ContractProfessional {
     description?: string,
     schedules?: Array<ProfessionalContractSchedule>,
     medicalInsuranceContracts?: Array<ProfessionalContractMedicalInsurance>,
-    absences?: Array<ProfessionalContractAbsence>
+    absences?: Array<ProfessionalContractAbsence>,
+    professional: Professional = new Professional(),
+    fixedAmount: number = 0,
+    priceHs: number = 0
   ) {
     this.number = number || NaN;
     this.professionalNumber = professionalNumber || NaN;

@@ -1,0 +1,225 @@
+$color_tapa_approx: #757575;
+$break-small: 1200px;
+
+%extend_1 {
+    font-size: 0.8em;
+    top: 10px;
+    position: relative;
+    display: block;
+}
+
+
+h1 {
+    &.logo-wrapper {
+        margin: 0;
+    }
+
+    span.logo-text {
+        font-size: 26px;
+        padding-left: 8px;
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.2s linear;
+    }
+}
+
+header {
+    nav {
+        a.btn-flat.disabled {
+            color: #fff !important;
+        }
+
+        .btn-flat {
+            padding: 0 !important;
+        }
+
+        .breadcrumb {
+            color: rgba(255,255,255,0.7) !important;
+        }
+
+        ul a {
+            padding: 0 10px;
+
+            img {
+                width: 60%;
+            }
+        }
+    }
+}
+
+.line-separator {
+    display: inline-block;
+    height: 55px;
+    width: 1px;
+    background: #b5a9a9 !important;
+    vertical-align: middle;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.side-nav {
+    margin-top: 65px !important;
+    height: calc(100% - 65px) !important;
+    padding-bottom: 0 !important;
+
+    .tree {
+        line-height: 48px;
+    }
+
+    .tree ul {
+        padding-left: 1em;
+    }
+
+    .branch {
+        line-height: 40px;
+    }
+
+    .collapsible-header {
+        padding: 0 5px;
+    }
+
+    .collapsible-header i {
+        font-size: 1.3rem;
+        width: inherit !important;
+    }
+
+    .collapsible-body ul {
+        a {
+            font-size: 12px !important;
+            padding: 0 0 0 15px !important;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        li a {
+            i {
+                margin: 0;
+                height: 40px;
+                line-height: 40px;
+                width: 15px;
+            }
+
+            &:hover {
+                text-decoration: none;
+            }
+
+            span.label-icon {
+                @extend %extend_1;
+
+                i {
+                    @extend %extend_1;
+                    font-size: 0.9em;
+                    top: 2px;
+                    display: inline;
+                }
+            }
+        }
+
+        &:not(.collapsible) > li.active, .side-nav.fixed .collapsible-body > ul:not(.collapsible) > li.active {
+            background-color: #00a3d4;
+        }
+    }
+
+    i.special-stack-2x {
+        font-size: 1.3rem !important;
+    }
+
+    i.special-stack-1x {
+        font-size: 0.7rem !important;
+    }
+}
+
+.side-nav-user, .side-nav-bottom {
+    color: white;
+
+    span {
+        padding-left: 15px;
+        padding-right: 5px;
+    }
+}
+
+.side-nav-bottom {
+    border-top: 1px solid rgba(0,0,0,0.14);
+
+    a {
+        padding: 0 15px;
+    }
+}
+
+.not-active {
+    pointer-events: none;
+    cursor: default;
+    color: beige;
+    text-shadow: 1px 1px 2px rgba(50, 50, 50, 1);
+}
+
+@media only screen and (max-width: 600px) {
+    .side-nav {
+        margin-top: 56px !important;
+        height: calc(100% - 56px)!important;
+
+        .tree {
+            line-height: 40px;
+        }
+
+        .branch {
+            line-height: 35px;
+        }
+
+        .collapsible-body ul {
+            a {
+                height: 35px;
+                line-height: 35px;
+            }
+
+            li a {
+                i {
+                    margin: 0;
+                    height: 35px;
+                    line-height: 35px;
+                    width: 15px;
+                }
+            }
+        }
+    }
+
+    .navbar-fixed {
+        z-index: 999;
+    }
+
+}
+
+.side-nav li.active {
+    background-color: inherit !important;
+}
+
+.side-nav li.li-link.active {
+    background-color: #00a3d4 !important;
+}
+
+#sidenav-overlay{
+    display: none !important;
+}
+
+.drag-target{
+    display: none !important;
+}
+
+
+body{
+    overflow: auto !important;
+    width: 100% !important;
+}
+
+@media only screen and (max-width : $break-small) {
+	#sidenav-overlay{
+        display: block !important;
+    }
+    .drag-target{
+        display: block !important;
+    }
+    body{
+        overflow: auto !important;
+        width: 100%;
+    }
+}

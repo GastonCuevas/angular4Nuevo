@@ -1,5 +1,5 @@
 export class InternmentSelected {
-  id: number = 0;
+  id: number;
   admissionDate: string | Date;
   time: string;
   bedName: string;
@@ -10,7 +10,7 @@ export class InternmentSelected {
   hcId: number;
 
   constructor(
-    id: number,
+    id: number = 0,
     admissionDate: string | Date = new Date(),
     time: string,
     bedName: string,

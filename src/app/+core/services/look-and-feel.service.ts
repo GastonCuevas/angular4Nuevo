@@ -1,61 +1,53 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { RequestService } from '.';
+import { RequestService } from './../../+core/services';
 import { LookAndFeel, LookAndFeelConfig } from './../../models';
 import { Sort, Paginator } from '../../+shared/util';
 
 @Injectable()
 export class LookAndFeelService {
-  public baseUrl = 'api/lookAndFeel';
-  lookConfig = new LookAndFeelConfig();
 
-  constructor(private requestService: RequestService) {}
+    public baseUrl = "api/lookAndFeel";
+    lookConfig = new LookAndFeelConfig();
 
-  getAll(paginator: Paginator, filterBy: any, sort: Sort): Observable<any> {
-    let url = `${this.baseUrl}?pageSize=${paginator.pageSize}&pageNumber=${paginator.currentPage}`;
-    if (filterBy) url += `&filterBy=${filterBy}`;
-    if (sort) url += `&orderBy=${sort.sortBy}&ascending=${sort.ascending}`;
-    return this.requestService.get(url);
-  }
+    constructor(private requestService: RequestService) {}
 
-  get(code: string): Observable<any> {
-    return this.requestService.get(`${this.baseUrl}/${code}`);
-  }
+    getAll(paginator: Paginator, filterBy: any, sort: Sort): Observable<any> {
+        let url = `${this.baseUrl}?pageSize=${paginator.pageSize}&pageNumber=${paginator.currentPage}`
+        if (filterBy) url += `&filterBy=${filterBy}`;
+        if (sort) url += `&orderBy=${sort.sortBy}&ascending=${sort.ascending}`;
+        return this.requestService.get(url);
+    }
 
-  save(lookAndFeel: any): Observable<any> {
-    return lookAndFeel.accountNumber != 0
-      ? this.update(lookAndFeel)
-      : this.insert(lookAndFeel);
-  }
+    get(code: string): Observable<any> {
+        return this.requestService.get(`${this.baseUrl}/${code}`);
+    }
 
-  update(lookAndFeel: LookAndFeel): Observable<any> {
-    return this.requestService.put(
-      `${this.baseUrl}/${lookAndFeel.code}`,
-      lookAndFeel
-    );
-  }
+    save(lookAndFeel: any): Observable<any> {
+        return lookAndFeel.accountNumber != 0 ? this.update(lookAndFeel) : this.insert(lookAndFeel);
+    }
 
-  insert(lookAndFeel: LookAndFeel): Observable<any> {
-    return this.requestService.post(`${this.baseUrl}`, lookAndFeel);
-  }
+    update(lookAndFeel: LookAndFeel): Observable<any> {
+        return this.requestService.put(`${this.baseUrl}/${lookAndFeel.code}`, lookAndFeel);
+    }
 
-  uploadImage(code: any, data: any): Observable<any> {
-    return this.requestService.upFileServer(
-      `api/image/config/upload/${code}`,
-      data
-    );
-  }
+    insert(lookAndFeel: LookAndFeel): Observable<any> {
+        return this.requestService.post(`${this.baseUrl}`, lookAndFeel);
+    }
 
-  getLookAndFeel(): Observable<LookAndFeelConfig> {
-    return this.requestService.get(`api/lookandfeel/config`).map((response) => {
-      const newResponse: LookAndFeelConfig =
-        response.model || new LookAndFeelConfig();
-      if (newResponse.imageLogo)
-        newResponse.imageLogo = `data:image/jpeg;base64,${newResponse.imageLogo}`;
-      if (newResponse.imageLogin)
-        newResponse.imageLogin = `data:image/jpeg;base64,${newResponse.imageLogin}`;
-      return newResponse;
-    });
-  }
+    uploadImage(code: any, data: any): Observable<any> {
+        return this.requestService.upFileServer(`api/image/config/upload/${code}`, data);
+    }
+
+    getLookAndFeel(): Observable<LookAndFeelConfig> {
+        return this.requestService.get(`api/lookandfeel/config`)
+            .map(response => {
+                const newResponse: LookAndFeelConfig = response.model || new LookAndFeelConfig;
+                if (newResponse.imageLogo) newResponse.imageLogo = `data:image/jpeg;base64,${newResponse.imageLogo}`;
+                if (newResponse.imageLogin) newResponse.imageLogin = `data:image/jpeg;base64,${newResponse.imageLogin}`;
+                return newResponse;
+            });
+    }
+
 }
