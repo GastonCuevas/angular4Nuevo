@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { LookAndFeelService } from '../+core/services/look-and-feel.service';
 
 //import { AppModuleShared } from '../+shared/index';
 import { LoginFormComponent } from './login-form/login-form.component';
@@ -9,8 +11,9 @@ import { LoginService } from './login.service';
   declarations: [LoginFormComponent],
   imports: [
     //   AppModuleShared,
+    CommonModule,
     LoginRoutingModule,
   ],
-  providers: [LoginService],
+  providers: [LoginService, LookAndFeelService],
 })
 export class LoginModule {}

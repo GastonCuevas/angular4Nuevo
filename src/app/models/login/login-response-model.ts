@@ -1,4 +1,4 @@
-﻿import { AuthTokenModel } from '../../+core/auth/models/auth-tokens-model';
+﻿// import { AuthTokenModel } from '../../+core/auth/models/auth-tokens-model';
 import { LoginResult } from '../../models/login/LoginResult.model';
 
 export class LoginResponseModel {
@@ -6,7 +6,7 @@ export class LoginResponseModel {
   userName: string;
   name: string;
   isRoot: boolean;
-  token: AuthTokenModel;
+  //token: AuthTokenModel;
   status: LoginResult;
 
   constructor(
@@ -14,14 +14,14 @@ export class LoginResponseModel {
     userName: string,
     name: string,
     isRoot: boolean,
-    token: AuthTokenModel,
+    //token: AuthTokenModel,
     status: LoginResult
   ) {
     this.number = number;
     this.userName = userName;
     this.name = name;
     this.isRoot = isRoot;
-    this.token = token;
+    //this.token = token;
     this.status = status;
   }
 }

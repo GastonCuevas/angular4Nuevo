@@ -10,17 +10,17 @@ import {
 
 //import { isListLikeIterable } from '@angular/core/src/change_detection/change_detection_util';
 //import { AppState } from '../app-store';
-import { AuthTokenService } from '../+core/auth/auth-token.service';
-import { UtilityService } from '../+core/services/utility.service';
+// import { AuthTokenService } from '../+core/auth/auth-token.service';
+// import { UtilityService } from '../+core/services/utility.service';
 
 @Injectable()
 export class LoginRouteGuard implements CanActivate {
   constructor(
     //private store: Store<AppState>,
-    private router: Router,
-    private utilityService: UtilityService,
-    private authService: AuthTokenService
-  ) {
+    private router: Router
+  ) // private utilityService: UtilityService,
+  // private authService: AuthTokenService
+  {
     // this.authService.startupTokenRefresh()
   }
 

@@ -24,7 +24,6 @@
     "angular2-materialize": "^15.1.10",
     "moment": "^2.29.1",
     "ng2-ckeditor": "^1.3.4",
-    "ng2-toasty": "^4.0.3",
     "ngx-color-picker": "^11.0.0",
     "ngx-image2dataurl": "^12.1.0",
     "pivottable": "^2.23.0",

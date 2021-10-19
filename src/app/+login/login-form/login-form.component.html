@@ -7,7 +7,7 @@
         <div class="card-content s12" *ngIf="!requiredUpdatePassword">
           <div class="row">
             <div class="col s12 center">
-              <img [src]="look.lookConfig.imageLogin || logo" alt="logo" [ngStyle]="{'max-height': '90px', 'max-width': '90px' }" class="login-image circle responsive-img">
+              <img [src]="look.lookConfig.imageLogin || logo" alt="logo"  class="login-image circle responsive-img">
               <p class="center login-form-text"
                 [style.color]="look.lookConfig?.fontColorLogin || 'black'"
                 [style.font-family]="look.lookConfig?.fontFamilyLogin">
@@ -16,15 +16,15 @@
             </div>
           </div>
           <div class="row login-form-container">
-            <app-dynamic-form (formsubmit)="onLogin($event)" [controls]="loginControls" [btnTextSubmit]="'Ingresar'" [isLoading]="isloading"
-              [errorSumary]="errorMessageForm"></app-dynamic-form>
+            <!-- <app-dynamic-form (formsubmit)="onLogin($event)" [controls]="loginControls" [btnTextSubmit]="'Ingresar'" [isLoading]="isloading"
+              [errorSumary]="errorMessageForm"></app-dynamic-form> -->
           </div>
         </div>
 
         <div class="card-content s12" *ngIf="requiredUpdatePassword">
           <span class="card-title">Confirmar Contraseña</span>
-          <app-dynamic-form (formsubmit)="onUpdatePassword($event)" [controls]="updatePasswordControls" [btnTextSubmit]="'Aceptar'"
-            [validatorFn]="mathPasswordValidator" [isLoading]="isloading" [errorSumary]="errorMessageForm"></app-dynamic-form>
+          <!-- <app-dynamic-form (formsubmit)="onUpdatePassword($event)" [controls]="updatePasswordControls" [btnTextSubmit]="'Aceptar'"
+            [validatorFn]="mathPasswordValidator" [isLoading]="isloading" [errorSumary]="errorMessageForm"></app-dynamic-form> -->
         </div>
       </div>
     </div>
