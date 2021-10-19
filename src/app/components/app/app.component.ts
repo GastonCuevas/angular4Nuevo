@@ -22,12 +22,19 @@ export class AppComponent implements OnInit, OnDestroy {
   result: Observable<number> | null;
 
   constructor(
+    authState$: Observable<AuthState>,
+    permissions: Array<any>,
+    result: Observable<number> | null,
     //public store: Store<AppState>,
     private tokens: AuthTokenService,
     private toasty: ToastyMessageService,
     public look: LookAndFeelService,
     private login: LoginService
-  ) {}
+  ) {
+    this.authState$ = authState$;
+    this.permissions = permissions;
+    this.result = result;
+  }
 
   ngOnInit(): void {
     this.setTokens();
