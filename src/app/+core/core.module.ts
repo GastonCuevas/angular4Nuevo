@@ -11,11 +11,11 @@ import {
 // import { ProfileActions } from './auth/auth-store/profile.actions';
 // import { AuthTokenActions } from './auth/auth-store/auth-token.actions';
 // import { AuthReadyActions } from './auth/auth-store/auth-ready.actions';
-// import { UtilityService } from './services/utility.service';
-// import { StorageService } from './services/storage.service';
+import { UtilityService } from './services/utility.service';
+import { StorageService } from './services/storage.service';
 // import { AuthGuard } from './services/auth-guard.service';
 import { LoginRouteGuard } from './../+login/login-route-guard.service';
-// import { RequestService } from './services/request.service';
+import { RequestService } from './services/request.service';
 // import { ToastyMessageService } from './services/toasty-message.service';
 // import { CommonService } from './services/common.service';
 // import { LoadingGlobalService } from './services/loading-global.service';
@@ -35,7 +35,7 @@ export class CoreModule {
   public static forRoot(): ModuleWithProviders<Route> {
     return {
       ngModule: CoreModule,
-      providers: [LoginRouteGuard],
+      providers: [LoginRouteGuard, RequestService],
     };
   }
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
